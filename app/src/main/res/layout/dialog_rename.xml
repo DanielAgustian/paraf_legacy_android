@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    >
+    <TextView
+        android:id="@+id/tvDialogRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Rename Document"/>
+    <TextView
+        android:id="@+id/tvIsiRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDialogRename"
+        android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:text="Enter a new name for document"
+        />
+    <EditText
+        android:layout_below="@+id/tvIsiRename"
+        android:id="@+id/etRenameDoc"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="20dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:theme="@style/editTextLogin"
+        android:hint="Input your documents name"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="5dp" />
+    <LinearLayout
+
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etRenameDoc"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonWhiteBigger"
+            android:id="@+id/btnCancelRename"
+            android:backgroundTint="@null"
+
+            android:textAllCaps="false"
+            android:text="Cancel"
+            android:layout_gravity="center_vertical"
+
+            android:paddingHorizontal="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonRed"
+            android:id="@+id/btnContinueRename"
+            android:backgroundTint="@null"
+            android:text="Confirm"
+            android:layout_gravity="center_vertical"
+
+            android:layout_marginLeft="10dp"
+
+            android:paddingHorizontal="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="56dp"
+    android:background="@color/colorBackground"
+    tools:context=".view.ui.draft.DraftFragment" >
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+        <LinearLayout
+
+            android:paddingHorizontal="15dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorGrayText"
+                        android:textStyle="bold"
+
+                        android:text="Collaboration"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <EditText
+            android:drawableTint="@color/colorGrayText"
+            android:drawableLeft="@drawable/size_ic_search"
+            android:drawablePadding="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="12sp"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
+            android:background="@drawable/rounded_edittext"
+
+            ></EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="30dp"
+
+            >
+            <com.google.android.material.tabs.TabLayout
+                android:tabStripEnabled="true"
+                app:tabIndicatorColor="@color/colorBackground"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextColor="@color/colorGrayText"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabBackground="@drawable/tab_draft_color"
+                android:id="@+id/tabLayoutCollab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:background="@drawable/rounded_bg"
+            android:id="@+id/vpCollab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</LinearLayout>

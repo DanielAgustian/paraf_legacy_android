@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="15dp"
+
+        tools:context=".view.MainActivity"
+        android:orientation="vertical">
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/colorPrimary"-->
+<!--            android:minHeight="?attr/actionBarSize"-->
+<!--            android:theme="@style/ToolBarLogin"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
+
+            <ImageView
+                android:layout_marginTop="35dp"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:src="@drawable/draw_circle"
+                android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:text="Welcome Back!"
+            android:textColor="@color/colorGrayText"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+                android:id="@+id/tvWelcome2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="25dp"
+                android:text="Stay signed in with your account to make creating sign easier"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorGrayText"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_marginTop="30dp"
+                android:text="Email"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/colorGrayText"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="42dp"
+                android:hint="@string/email_hint"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:theme="@style/editTextLogin"/>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="Password"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/colorGrayText"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:ems="10"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:theme="@style/editTextLogin" />
+
+                    <ImageView
+                        android:id="@+id/show_pass_btn"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:alpha=".5"
+                        android:onClick="ShowHidePass"
+
+                        android:src="@drawable/ic_hide" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                    <CheckBox android:id="@+id/checkbox_meat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Keep Me Signed In"
+                        android:textSize="12sp"
+
+                        android:textColor="@color/colorGrayText"
+                        />
+                    <TextView
+                        android:id="@+id/forgotPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="right"
+                        android:text="Forgot Password?"
+
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        />
+            </RelativeLayout>
+
+            <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:text="Sign In"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:theme="@style/buttonLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch1"></Button>
+
+            <TextView
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="Or continue with"
+                android:textColor="@color/colorGrayText"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <Button
+                    android:layout_weight="0.45"
+                    android:layout_width="0dp"
+                    android:backgroundTint="@color/colorFacebookButton"
+
+                    android:text="Google"
+                    android:paddingHorizontal="25dp"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_google_icon"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    />
+                <Button
+                    android:layout_weight="0.45"
+                    android:layout_width="0dp"
+                    android:backgroundTint="@color/colorBlue"
+                    android:text="Facebook"
+                    android:paddingHorizontal="25dp"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_fb_icon"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="You don't have an account?"
+                    />
+                <TextView
+                    android:id="@+id/tvSignUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign Up"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlue"
+                    />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

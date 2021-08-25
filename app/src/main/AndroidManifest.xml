@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.parafdigitalyokesen">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ParafDigitalYokesen">
+        <activity android:name=".view.ui.profile.child_profile.child_help.FAQActivity"></activity>
+        <activity android:name=".view.ui.profile.child_profile.security.ConfirmPasscode" />
+        <activity android:name=".view.ui.profile.child_profile.security.CreatePasscodeActivity" />
+        <activity android:name=".view.ui.profile.child_profile.MyContact" />
+        <activity android:name=".view.ui.profile.child_profile.child_help.ContactUsActivity" />
+        <activity android:name=".view.ui.profile.child_profile.SecurityPrivacyActivity" />
+        <activity android:name=".view.ui.profile.child_profile.NotificationActivity" />
+        <activity android:name=".view.ui.profile.child_profile.HelpActivity" />
+        <activity android:name=".view.ui.profile.child_profile.ChangePasswordActivity" />
+        <activity android:name=".view.ui.profile.child_profile.MyInformation" />
+        <activity android:name=".view.ui.collab.CollabResultActivity" />
+        <activity android:name=".view.ui.draft.DeclineReason" />
+        <activity android:name=".view.ui.draft.ResultAfterRespond" />
+        <activity android:name=".view.forgot_password.NewPassword" />
+        <activity android:name=".view.forgot_password.VerifyEmailActivity" />
+        <activity android:name=".view.forgot_password.ForgotPassword" />
+        <activity android:name=".view.add_sign.ResultSignature" />
+        <activity android:name=".view.add_sign.ReqSignatureActivity" />
+        <activity android:name=".view.add_sign.SignYourselfActivity" />
+        <activity android:name=".view.NavBarActivity" />
+        <activity android:name=".view.ui.draft.RespondSignature" />
+        <activity android:name=".view.register_activity" />
+        <activity android:name=".view.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

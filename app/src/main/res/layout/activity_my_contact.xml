@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:background="@color/colorBackground"
+    >
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarMyContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/colorBackground"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolBarAddSign"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Contact"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayText"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                />
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="15dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_bg"
+            >
+            <EditText
+                android:drawableTint="@color/colorGrayText"
+                android:drawableLeft="@drawable/size_ic_search"
+                android:drawablePadding="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:paddingVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Your Contact"
+                android:backgroundTint="@color/colorBackground"
+                android:background="@drawable/rounded_edittext"
+                ></EditText>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"/>
+            <LinearLayout
+                android:weightSum="1.0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/spinnerContact"
+                    android:layout_weight="0.45"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+
+                    android:paddingVertical="5dp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+
+                android:id="@+id/rvMyContact"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

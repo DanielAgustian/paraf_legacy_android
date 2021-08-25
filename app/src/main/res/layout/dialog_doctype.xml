@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    >
+    <TextView
+        android:id="@+id/tvTitleDialogType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Select File Type"/>
+    <TextView
+        android:id="@+id/tvTitleDataType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGrayText"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+
+        android:gravity="center_horizontal"
+        android:text="Choose file type you want to export"
+        />
+    <RadioGroup
+        android:id="@+id/rgFile"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="vertical">
+        <RadioButton android:id="@+id/radio_png"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PNG (Transparent)"
+            android:textSize="14sp"
+            android:textColor="@color/colorGrayText"
+            />
+        <RadioButton android:id="@+id/radio_jpeg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JPEG"
+            android:textSize="14sp"
+            android:textColor="@color/colorGrayText"
+            />
+        <RadioButton android:id="@+id/radio_pdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PDF"
+            android:textSize="14sp"
+            android:textColor="@color/colorGrayText"
+            />
+    </RadioGroup>
+
+    <LinearLayout
+
+        android:layout_marginVertical="10dp"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonWhiteBigger"
+            android:id="@+id/btnCancelType"
+            android:backgroundTint="@null"
+
+            android:textAllCaps="false"
+            android:text="Cancel"
+            android:layout_gravity="center_vertical"
+
+            android:paddingHorizontal="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonRed"
+            android:id="@+id/btnContinueType"
+            android:backgroundTint="@null"
+            android:text="Confirm"
+            android:layout_gravity="center_vertical"
+
+            android:layout_marginLeft="10dp"
+
+            android:paddingHorizontal="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ParafDigitalYokesen</string>
+    <string name="title_activity_nav_bar">MainActivity</string>
+    <string name="title_home"><font size = "12">Home</font></string>
+    <string name="title_sign"><font size = "12">Sign</font></string>
+    <string name="title_collab"><font size = "12">Collab</font></string>
+    <string name="title_profile"><font size = "12">Profile</font></string>
+    <string name="title_qr_sign"><font size = "12">QR Sign</font></string>
+    <string name="title_activity_navigation">MainActivity</string>
+    <string name="title_activity_navigation_bar">MainActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_hint"><font size="14">Input Your Email</font></string>
+    <string name="password_hint"><font size="14">Input Your Password</font></string>
+    <string name="code_hint"><font size="14">Input Code From Your Email</font></string>
+    <string name="search_hint"><font size="12">Search your signature</font></string>
+    <string name="name_add_sign">Name <font color="#DB2D26">*</font></string>
+    <string name="accept_tnc">I Accept Terms and Condition</string>
+    <string name="email_add_sign">Email <font color="#DB2D26">*</font></string>
+    <string name="docname_add_sign">Document Name <font color="#DB2D26">*</font></string>
+    <string name="doccategory_add_sign">Document Category <font color="#DB2D26">*</font></string>
+    <string name="doctype_add_sign">Document Type <font color="#DB2D26">*</font></string>
+    <string name="docFile_add_sign">Document File (Optional) <font color="#DB2D26">**</font></string>
+
+</resources>

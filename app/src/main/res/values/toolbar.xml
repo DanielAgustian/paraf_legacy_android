@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ToolBarLogin" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textSize">12dp</item>
+
+    </style>
+
+    <style name="ToolBarAddSign" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:background">@color/colorBackground</item>
+        <item name="android:textSize">12sp</item>
+
+    </style>
+    <style name="ToolBarRespondSign" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:background">@color/colorBackground</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

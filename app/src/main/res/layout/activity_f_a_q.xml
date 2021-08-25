@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:background="@color/colorBackground"
+    tools:context=".view.ui.draft.DraftFragment" >
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarFAQ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolBarAddSign"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayText"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                />
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="15dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_bg"
+            >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <RelativeLayout
+                        android:background="@drawable/button_flat_white"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:id="@+id/rlStartedFAQ"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Getting Started with the App"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/button_flat_white"
+                        android:id="@+id/rlCExportFAQ"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Export on the App"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/button_flat_white"
+                        android:id="@+id/rlManageFAQ"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Managing Signatures"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/button_flat_white"
+                        android:id="@+id/rlSecurityFAQ"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Security and Privacy"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/button_flat_white"
+                        android:id="@+id/rlTroubleShoot"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Troubleshooting the app"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+
+
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+
+    android:paddingHorizontal="15sp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="15dp">
+    <!--    -->
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@color/colorPrimary"/>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#FAFAFC"/>
+
+    <LinearLayout
+
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/colorLightGrayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Created By:"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvCreatedBy"
+                android:textSize="12sp"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nanas Kuning (You)"/>
+            <TextView
+                android:id="@+id/tvEmailRS"
+                android:textColor="@color/colorLightGrayText"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nanas.kuning@gmail.com"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/colorLightGrayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Initiated on:"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:id="@+id/tvInitiated"
+                android:textSize="12sp"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18 June, 2021 | 08.57"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#FAFAFC"/>
+    <LinearLayout
+        android:id="@+id/llSaveCollabDialog"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:weightSum="1.0"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            app:tint="@color/colorLightGrayText"
+            android:src="@drawable/ic_save"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="Save this sign"
+            android:textSize="12sp"
+            android:textColor="@color/colorLightGrayText"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llShareCollabDialog"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:weightSum="1.0"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            app:tint="@color/colorLightGrayText"
+            android:src="@drawable/ic_share"
+
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="Share this sign"
+            android:textSize="12sp"
+            android:textColor="@color/colorLightGrayText"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llRequestFileDialog"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="5dp"
+        android:layout_width="match_parent"
+        android:weightSum="1.0"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            app:tint="@color/colorLightGrayText"
+            android:src="@drawable/ic_share"
+
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="Request Final Document"
+            android:textSize="12sp"
+            android:textColor="@color/colorLightGrayText"
+            />
+    </LinearLayout>
+</LinearLayout>

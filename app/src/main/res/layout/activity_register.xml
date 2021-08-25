@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="15dp"
+
+        tools:context=".view.MainActivity"
+        android:orientation="vertical">
+
+        <!--        <androidx.appcompat.widget.Toolbar-->
+        <!--            android:id="@+id/toolbar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@color/colorPrimary"-->
+        <!--            android:minHeight="?attr/actionBarSize"-->
+        <!--            android:theme="@style/ToolBarLogin"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
+
+        <ImageView
+            android:layout_marginTop="35dp"
+            android:layout_gravity="center"
+            android:layout_width="50dp"
+            android:src="@drawable/draw_circle"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="32dp"
+            android:text="Welcome to Paraf!"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorGrayText"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvWelcome2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="25dp"
+            android:text="Enter your credentials to continue"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorGrayText"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_marginTop="30dp"
+            android:text="Email"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/colorGrayText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/etUsernameSignUp"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="42dp"
+            android:hint="@string/email_hint"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:theme="@style/editTextLogin"/>
+        <TextView
+            android:layout_marginTop="20dp"
+            android:text="Name"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/colorGrayText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/etNameSignUp"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="42dp"
+            android:hint="@string/email_hint"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:theme="@style/editTextLogin"/>
+        <TextView
+            android:layout_marginTop="20dp"
+            android:text="Password"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/colorGrayText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/etPasswordSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:theme="@style/editTextLogin" />
+
+            <ImageView
+                android:id="@+id/show_pass_btnSU"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+
+                android:alpha=".5"
+                android:onClick="ShowHidePass"
+
+                android:src="@drawable/ic_hide" />
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="20dp"
+            android:text="Confirm Password"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/colorGrayText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/etCPasswordSU"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:theme="@style/editTextLogin" />
+
+            <ImageView
+                android:id="@+id/show_pass_btnCPSU"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+
+                android:alpha=".5"
+                android:onClick="ShowHidePass"
+
+                android:src="@drawable/ic_hide" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <CheckBox android:id="@+id/checkbox_meat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I Accept Terms and Condition"
+                android:textSize="12sp"
+
+                android:textColor="@color/colorGrayText"
+                />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/buttonSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:text="Sign Up"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:theme="@style/buttonLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch1"></Button>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account?"
+                />
+            <TextView
+                android:id="@+id/tvSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlue"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

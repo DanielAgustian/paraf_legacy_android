@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+    <item android:state_pressed="true" android:drawable="@android:color/transparent" />
+    <item android:state_selected="true" android:drawable="@android:color/transparent" />
+    <item>
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item android:gravity="bottom">
+                <shape>
+                    <size android:height="1dp" />
+                    <solid android:color="#FFD0D2DC" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

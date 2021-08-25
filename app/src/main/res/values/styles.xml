@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--=============================EDIT TEXT STYLES =========================-->
+    <style name="editTextLogin" parent="android:Widget.EditText">
+        <item name="android:textColor">#FFD0D2DC</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="backgroundTint">#FFD0D2DC</item>
+        <item name="android:textColorHint">@color/colorPlaceholder</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="editTextChangePassword" parent="android:Widget.EditText">
+        <item name="android:textColor">@color/colorLightGrayText</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="backgroundTint">@color/colorLightGrayText</item>
+        <item name="android:textColorHint">@color/colorLightGrayText</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="editTextMultline" parent="android:Widget.EditText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/edit_text_multiline</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="backgroundTint">#FFD0D2DC</item>
+        <item name="android:textColorHint">#FFD0D2DC</item>
+        <item name="android:textSize">14sp</item>
+
+    </style>
+
+
+
+<!--============================BUTTON STYLES================================-->
+    <style name="buttonLogin" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:radius">5dp</item>
+        <item name="android:background">@drawable/rounded_button</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="buttonPink" parent="Widget.AppCompat.Button.Colored">
+        <item name="background">@color/colorBackgroundBlue</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:radius">5dp</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="buttonRed" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/rounded_red_button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="buttonRedSmall" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/rounded_red_button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="buttonWhiteBigger" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/rounded_white_button</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+    <style name="buttonWhite" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/rounded_white_button</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="buttonCancel" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorError</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:radius">10dp</item>
+        <item name="android:background">@drawable/rounded_cancel_button</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+<!--=========================OTHERS STYLE====================-->
+    <style name="cardShadow">
+        <item name="android:background">@drawable/rounded_shadow_bg</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/white</item>
+        <item name="itemTextColor">@color/color_nav_bar</item>
+        <item name="itemIconTint">@color/color_nav_bar</item>
+
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorGrayText</item>
+    </style>
+
+</resources>

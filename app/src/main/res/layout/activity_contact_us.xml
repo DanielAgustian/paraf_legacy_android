@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:background="@color/colorBackground"
+    >
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/colorBackground"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolBarAddSign"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Us"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayText"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                 />
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="15dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_bg"
+            >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"/>
+                    <RelativeLayout
+
+
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Google"/>
+                        <Switch
+                            android:scaleX="1.15"
+                            android:scaleY="1.10"
+                            android:id="@+id/switchGoogle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+
+                        android:id="@+id/rlFaq"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Phone Contact"/>
+                        <Switch
+                            android:scaleX="1.15"
+                            android:scaleY="1.10"
+                            android:id="@+id/switchPhoneContact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="Link your contacts and quickly add recipients when sharing signed, or when sending a signature request. Don’t worry, we do not upload or save your contacts anywhere."
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+
+
+
+
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

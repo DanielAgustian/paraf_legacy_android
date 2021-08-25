@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    >
+    <TextView
+        android:id="@+id/tvTitleDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Data Confirmation"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/tvTitleData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:text="Are you sure the data you entered is correct?"
+        />
+    <LinearLayout
+
+        android:layout_marginVertical="10dp"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonWhiteBigger"
+            android:id="@+id/btnCancel"
+            android:backgroundTint="@null"
+
+            android:textAllCaps="false"
+            android:text="Cancel"
+            android:layout_gravity="center_vertical"
+
+            android:paddingHorizontal="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/buttonRed"
+            android:id="@+id/btnContinue"
+            android:backgroundTint="@null"
+            android:text="Confirm"
+            android:layout_gravity="center_vertical"
+
+            android:layout_marginLeft="10dp"
+
+            android:paddingHorizontal="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

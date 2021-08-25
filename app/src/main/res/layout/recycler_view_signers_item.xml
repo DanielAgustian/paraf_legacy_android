@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingVertical="5dp">
+        <LinearLayout
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/circleAvatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@color/colorBlue"/>
+
+            <LinearLayout
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvListEmail"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="nanas@gmail.com"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginTop="1dp"
+                    android:id="@+id/tvListName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="9sp"
+                    android:textColor="@color/colorLightGrayText"
+                    android:text="Nanas Kuning"
+                    />
+                <TextView
+                    android:layout_marginTop="1dp"
+                    android:id="@+id/tvListStatusSigners"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Waiting for Signature"
+                    android:textSize="9sp"
+                    android:textColor="@color/colorPending"
+                    />
+                <TextView
+                    android:visibility="gone"
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/tvListReqFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Request Final Document"
+                    android:textSize="9sp"
+                    android:textColor="@color/colorPrimary"
+                    />
+                <LinearLayout
+                    android:id="@+id/llButtonSigners"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/buttonWhite"
+                        android:id="@+id/btnViewQR"
+                        android:backgroundTint="@null"
+
+                        android:textAllCaps="false"
+                        android:text="View"
+                        android:layout_gravity="center_vertical"
+
+                        android:paddingHorizontal="25dp"
+                        android:layout_weight="0.45"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                    <View
+                        android:layout_weight="0.05"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/buttonRedSmall"
+                        android:id="@+id/btnSaveQR"
+                        android:backgroundTint="@null"
+
+                        android:textAllCaps="false"
+                        android:text="Save"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:paddingHorizontal="25dp"
+                        android:layout_weight="0.45"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

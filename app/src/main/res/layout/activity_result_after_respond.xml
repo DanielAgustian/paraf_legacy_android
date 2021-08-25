@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:overScrollMode="never"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+
+        tools:context=".view.MainActivity"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarRespondResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/colorBackground"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolBarRespondSign"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Details and Activity"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayText"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_titleRAR" />
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_bg"
+            android:orientation="vertical"
+
+            android:paddingVertical="15dp"
+            >
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layoutAccepted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <ImageView
+                    android:id="@+id/ivQRScanResultRespond"
+                    android:layout_marginVertical="15dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_gravity="center_horizontal"/>
+                <TextView
+                    android:id="@+id/tvStatusSignRespond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:text="Your signature was created successfully"
+                    android:textColor="@color/colorSuccess"
+                    android:textSize="14sp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/colorBackgroundBlue"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutRejected"
+                android:visibility="gone"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/tvStatusSignRespond2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:text="You have successfully rejected signature request"
+                    android:textColor="@color/colorSuccess"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:layout_marginHorizontal="15dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorLightGrayText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rejected Reason"/>
+                <TextView
+                    android:layout_marginHorizontal="15dp"
+                    android:id="@+id/tvRejectedReason"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ada typo di kontrak pasal ke IV poin ke 2, kata berhak typo jadi berak tolong diubah ya .... "
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+                <LinearLayout
+                    android:paddingVertical="5dp"
+                    android:background="@color/colorBackgroundBlue"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="13sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:text="Sign Rejected"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:layout_marginTop="10dp"
+                >
+                <LinearLayout
+
+                    android:layout_marginVertical="15dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+
+                        android:layout_weight="0.4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/colorLightGrayText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Requested By:"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"/>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/tvCreatedByRespondResult"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="3dp"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nanas Kuning (You)"/>
+                        <TextView
+                            android:id="@+id/tvEmailRespondResult"
+                            android:textColor="@color/colorLightGrayText"
+                            android:layout_marginTop="5dp"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="nanas.kuning@gmail.com"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+
+                        android:layout_weight="0.4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="12sp"
+                            android:textColor="@color/colorLightGrayText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Initiated on:"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:gravity="right"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"
+                            android:id="@+id/tvInitiatedRespondResult"
+                            android:textSize="12sp"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="18 June, 2021 | 08.57"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/colorBackgroundBlue"/>
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginBottom="7dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document Name"/>
+                    <TextView
+                        android:id="@+id/tvDocNameRespondResult"
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pengajuan HKI 3 in 1 Ekspresiku Boardgame"
+                        />
+                    <TextView
+                        android:layout_marginTop="20dp"
+
+                        android:layout_marginBottom="7dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description"/>
+                    <TextView
+                        android:id="@+id/tvDescRespondResult"
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pengalihan Hak Cipta-HKI/ Nanas Kuning-UMN No. Surat : 00000033104/UMN/HKI"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginTop="20dp"
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Category"/>
+                            <TextView
+                                android:id="@+id/tvCategoryRespondResult"
+                                android:textSize="13sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Surat Pribadi"
+                                />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="0.1"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginTop="20dp"
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Type"/>
+                            <TextView
+                                android:id="@+id/tvTypeRespondResult"
+                                android:textSize="13sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dokumen Resmi"
+                                />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginTop="20dp"
+
+                        android:layout_marginBottom="7dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document Link"/>
+                    <TextView
+                        android:id="@+id/tvLinkRespondResult"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorBlue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Google.com/plceholderLink"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginTop="20dp"
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status"/>
+                            <TextView
+                                android:id="@+id/tvStatusRespondResult"
+                                android:textSize="13sp"
+                                android:textColor="@color/colorSuccess"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Signed"
+                                android:layout_marginBottom="10dp"
+
+                                />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="0.1"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginTop="20dp"
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Size"/>
+                            <TextView
+                                android:id="@+id/tvSizeRespondResult"
+                                android:textSize="13sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="156 KB"
+                                android:layout_marginBottom="10dp"
+                                />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:paddingVertical="5dp"
+                android:background="@color/colorBackgroundBlue"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvPersonRespond"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:text="2 Person is left to sign"
+                    />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginHorizontal="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRespondResultDraft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="15dp"
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/buttonRed"
+                android:id="@+id/btnRequestFinalDoc"
+                android:backgroundTint="@null"
+                android:text="Request Final Document"
+                android:layout_gravity="center_vertical"
+                android:paddingHorizontal="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

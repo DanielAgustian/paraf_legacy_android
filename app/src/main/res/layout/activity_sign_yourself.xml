@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+
+        tools:context=".view.MainActivity"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarSignYourself"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/colorBackground"
+            android:minHeight="?attr/actionBarSize"
+
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            style="@style/ToolBarAddSign"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Yourself"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayText"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_titleSY" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_bg"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:text="Please make your signature and complete the
+following data"
+                android:textColor="@color/colorGrayText"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+
+
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/name_add_sign"
+                android:textSize="14dp" />
+
+            <EditText
+
+                android:paddingVertical="5dp"
+                android:id="@+id/etNameSignYour"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="30dp"
+                android:layout_height="42dp"
+                android:hint="Input your name"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:theme="@style/editTextLogin"/>
+
+
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/email_add_sign"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/etEmailNewSign"
+                android:layout_width="match_parent"
+
+                android:layout_marginBottom="30dp"
+                android:layout_height="42dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:theme="@style/editTextLogin"
+                android:hint="Input your email"
+
+                android:paddingVertical="5dp" />
+
+
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/docname_add_sign"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/etDocNameNewSign"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="30dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:theme="@style/editTextLogin"
+                android:hint="Input your documents name"
+
+                android:paddingVertical="5dp" />
+
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/doccategory_add_sign"
+                android:textSize="14dp" />
+
+
+            <Spinner
+                android:id="@+id/spinnerCategoryNewSign"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/spinner_bg"
+
+                android:paddingVertical="5dp" />
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/doctype_add_sign"
+                android:textSize="14sp" />
+
+
+
+            <Spinner
+                android:id="@+id/spinnerDocTypeyNewSign"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/spinner_bg"
+
+                android:paddingVertical="5dp" />
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Description (Optional)"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/etDescNewSign"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="30dp"
+                android:ems="10"
+
+                android:theme="@style/editTextLogin"
+                android:hint="Input your description"
+                android:inputType="textMultiLine"
+                android:maxLines="6"
+                android:minLines="4"
+
+                android:paddingVertical="5dp" />
+            <TextView
+                android:textColor="@color/colorLightGrayText"
+
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Document's Link (Optional)"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/etLinkNewSign"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="30dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:theme="@style/editTextLogin"
+                android:hint="Input your documents link"
+
+                android:paddingVertical="5dp" />
+
+
+                <TextView
+                    android:textColor="@color/colorLightGrayText"
+                    android:layout_marginBottom="7dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/docFile_add_sign"
+                    android:textSize="14dp" />
+
+            <LinearLayout
+                android:id="@+id/uploadData"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/border_upload_widget_outer"
+                android:padding="10dp"
+                >
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_upload_widget"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_upload"
+                        app:tint="@color/colorPrimary"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+
+                        android:textColor="@color/colorPrimary"
+                        android:text="Upload Your File"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:layout_marginBottom="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorError"
+                android:textSize="11sp"
+                android:text="** Max. size 10MB | Format (.pdf, .doc, .jpg, .jpeg, .png)"
+
+                />
+            <Button
+                android:id="@+id/btnSignYourself"
+                style="@style/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Signature" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>
