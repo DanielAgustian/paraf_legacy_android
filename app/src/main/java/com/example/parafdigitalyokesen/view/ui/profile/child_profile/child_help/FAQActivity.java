@@ -20,7 +20,7 @@ public class FAQActivity extends AppCompatActivity {
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFAQ);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Help");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_back_gray);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

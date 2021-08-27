@@ -124,9 +124,8 @@ public class DraftMyRequestFragment extends Fragment {
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
-                "Recent", "Newest First", "Oldest First", "A-Z", "Z-A"
+                "Recent", "Accepted", "Rejected"
         };
-
         Spinner spinnerLatest = root.findViewById(R.id.spinnerLatest);
 
         ArrayAdapter<String> adapterLatest = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerLatestList);

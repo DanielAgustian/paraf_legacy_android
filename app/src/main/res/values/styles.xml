@@ -3,7 +3,7 @@
 <!--=============================EDIT TEXT STYLES =========================-->
     <style name="editTextLogin" parent="android:Widget.EditText">
         <item name="android:textColor">#FFD0D2DC</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="backgroundTint">#FFD0D2DC</item>
@@ -12,7 +12,7 @@
     </style>
     <style name="editTextChangePassword" parent="android:Widget.EditText">
         <item name="android:textColor">@color/colorLightGrayText</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="backgroundTint">@color/colorLightGrayText</item>
@@ -20,7 +20,7 @@
         <item name="android:textSize">14sp</item>
     </style>
     <style name="editTextMultline" parent="android:Widget.EditText">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@android:color/transparent</item>
         <item name="android:background">@drawable/edit_text_multiline</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:textCursorDrawable">@null</item>

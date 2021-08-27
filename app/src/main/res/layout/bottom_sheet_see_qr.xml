@@ -130,8 +130,8 @@
         <ImageView
             app:tint="@color/colorLightGrayText"
             android:src="@drawable/ic_save"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             />
 
         <TextView
@@ -157,8 +157,8 @@
             app:tint="@color/colorLightGrayText"
             android:src="@drawable/ic_share"
 
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             />
 
         <TextView
@@ -184,8 +184,8 @@
             app:tint="@color/colorLightGrayText"
             android:src="@drawable/ic_share"
 
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             />
 
         <TextView

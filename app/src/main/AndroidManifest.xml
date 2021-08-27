@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParafDigitalYokesen">
-        <activity android:name=".view.ui.profile.child_profile.child_help.FAQActivity"></activity>
+        <activity android:name=".view.ui.profile.child_profile.child_help.TermConditionActivity"></activity>
+        <activity android:name=".view.ui.profile.child_profile.child_help.FAQActivity" />
         <activity android:name=".view.ui.profile.child_profile.security.ConfirmPasscode" />
         <activity android:name=".view.ui.profile.child_profile.security.CreatePasscodeActivity" />
         <activity android:name=".view.ui.profile.child_profile.MyContact" />
@@ -39,5 +40,8 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

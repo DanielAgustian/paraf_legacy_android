@@ -346,6 +346,7 @@
 
             </LinearLayout>
         <LinearLayout
+            android:id="@+id/llPersonRespond"
             android:paddingVertical="5dp"
             android:background="@color/colorBackgroundBlue"
             android:gravity="center_horizontal"
@@ -395,19 +396,18 @@
                 <ImageView
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_save"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
                     android:text="Save"
-                    android:textSize="14dp"
                     android:textColor="@color/colorLightGrayText"
-                    />
+                    android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/llShare"
@@ -424,8 +424,8 @@
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_share"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -434,7 +434,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Share"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrayText"
                     />
             </LinearLayout>
@@ -453,8 +453,8 @@
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_duplicate"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -463,7 +463,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Duplicate"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrayText"
                     />
             </LinearLayout>
@@ -482,8 +482,8 @@
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_invite"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -492,7 +492,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Invite Signers"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrayText"
                     />
             </LinearLayout>
@@ -512,8 +512,8 @@
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_regen"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -522,7 +522,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Regenerate"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrayText"
                     />
             </LinearLayout>
@@ -541,8 +541,8 @@
                     app:tint="@color/colorLightGrayText"
                     android:src="@drawable/ic_rename"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -551,7 +551,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Rename"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorLightGrayText"
                     />
             </LinearLayout>
@@ -570,8 +570,8 @@
                     app:tint="@color/colorError"
                     android:src="@drawable/ic_delete"
 
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     />
 
                 <TextView
@@ -580,7 +580,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Delete"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/colorError"
                     />
             </LinearLayout>

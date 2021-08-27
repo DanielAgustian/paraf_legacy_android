@@ -230,7 +230,7 @@ following data"
 
             <LinearLayout
 
-                android:id="@+id/uploadData"
+                android:id="@+id/uploadDataReq"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@drawable/border_upload_widget_outer"
@@ -377,7 +377,7 @@ following data"
 
                <androidx.appcompat.widget.AppCompatButton
                    android:background="@color/colorBackgroundBlue"
-                   android:id="@+id/btnCancel"
+                   android:id="@+id/btnTime"
                    android:backgroundTint="@null"
 
                    android:drawableLeft="@drawable/ic_time"

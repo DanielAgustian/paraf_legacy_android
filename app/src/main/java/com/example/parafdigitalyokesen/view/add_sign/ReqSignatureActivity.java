@@ -1,30 +1,47 @@
 package com.example.parafdigitalyokesen.view.add_sign;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ReqSignatureActivity extends AppCompatActivity {
-    Button btnContinue, btnCancel ;
+public class ReqSignatureActivity extends AppCompatActivity implements View.OnClickListener{
+    Button btnContinue, btnCancel, btnDueDate, btnTime;
+    LinearLayout llUploadData;
     private Dialog customDialog, waitingDialog;
+    private Uri fileUri;
+    private final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
+    private String filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +52,87 @@ public class ReqSignatureActivity extends AppCompatActivity {
         initDialog();
         initDialogWaiting();
         initComponent();
+    }
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.btnDueDate){
+            dateTimePicker();
+        } else if(view.getId() ==R.id.btnTime){
+            timepIcker();
+        } else if (view.getId() == R.id.uploadDataReq){
+            filePicker();
+        }
+    }
+
+    private void filePicker() {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+
+        chooseFile.setType("*/*");
+
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+
+        startActivityForResult(chooseFile, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data !=null){
+            if(requestCode == EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE){
+                fileUri = data.getData();
+
+                filePath = fileUri.getPath();
+
+                Log.d("PATH", filePath);
+            }
+        }
+    }
+
+    Calendar dateTimePicker(){
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, monthOfYear);
+                        c.set(Calendar.DATE, dayOfMonth);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+
+        return c;
+    }
+
+    Calendar timepIcker()
+    {
+        Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        c.set(Calendar.HOUR, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+        return c;
     }
 
     public void initToolbar(){
@@ -132,6 +230,9 @@ public class ReqSignatureActivity extends AppCompatActivity {
     }
 
     public void initComponent(){
+        llUploadData = findViewById(R.id.uploadDataReq);
+        btnDueDate = findViewById(R.id.btnDueDate);
+        btnTime = findViewById(R.id.btnTime);
         Button btnCreate = findViewById(R.id.btnReqSign);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,10 +240,16 @@ public class ReqSignatureActivity extends AppCompatActivity {
                 customDialog.show();
             }
         });
+        btnDueDate.setOnClickListener(this);
+        btnTime.setOnClickListener(this);
+        llUploadData.setOnClickListener(this);
     }
     void gotoResultPage(){
         this.finish();
         Intent intent = new Intent(this, ResultSignature.class);
         startActivity(intent);
     }
+
+
+
 }

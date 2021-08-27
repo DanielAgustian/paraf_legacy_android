@@ -27,7 +27,7 @@ public class ContactUsActivity extends AppCompatActivity {
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarContact);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Help");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_back_gray);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -34,11 +34,13 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     List<SignersModel> signers;
     private Dialog deleteDialog, regenerateDialog;
     LinearLayout llDelete, llRegen, llSave, llDuplicate, llInvite, llShare, llRename;
+    LinearLayout llPersonRespond;
     String type = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_signature);
+
         initRecyclerView();
         initToolbar();
         initComponent();
@@ -66,6 +68,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.llInvite:
                 inviteSigners();
+                break;
+            case R.id.llDuplicate:
+                duplicate();
                 break;
         }
     }
@@ -242,7 +247,34 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+    public void duplicate(){
+        Dialog duplicateDialog = new Dialog(this);
+        duplicateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        duplicateDialog.setContentView(R.layout.dialog_confirmation);
+        duplicateDialog.setCancelable(true);
+        duplicateDialog.show();
+        Button btnContinue = duplicateDialog.findViewById(R.id.btnContinue);
+        Button btnCancel = duplicateDialog.findViewById(R.id.btnCancel);
+        TextView textTitle = duplicateDialog.findViewById(R.id.tvTitleDialog);
+        TextView textData = duplicateDialog.findViewById(R.id.tvTitleData);
+        textTitle.setText("Are you sure want to duplicate this signature?");
+        btnContinue.setText("Regenerate");
+        textData.setVisibility(View.GONE);
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                dismissDialog(duplicateDialog);
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dismissDialog(duplicateDialog);
+            }
+        });
+    }
     public void regenerate(){
         regenerateDialog = new Dialog(this);
         regenerateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -312,11 +344,22 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
 
     public void initRecyclerView(){
         RecyclerView rv = findViewById(R.id.recyclerViewSigners);
-        rv.setNestedScrollingEnabled(false);
-        signers = SignersModel.generateModel(3);
-        SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        String from = getIntent().getStringExtra("where") != null? getIntent().getStringExtra("where"):"";
+
+        //if it is from my Sign, Recycler View will be invisible.
+
+        if(from.equals("mysign")){
+            rv.setVisibility(View.GONE);
+            llPersonRespond = findViewById(R.id.llPersonRespond);
+            llPersonRespond.setVisibility(View.GONE);
+        }else{
+            rv.setNestedScrollingEnabled(false);
+            signers = SignersModel.generateModel(3);
+            SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        }
+
     }
     public void back(){
         this.finish();

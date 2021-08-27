@@ -122,8 +122,10 @@ public class DraftMySIgnatureFragment extends Fragment {
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
-                "Recent", "Accepted", "Rejected"
+                "Recent", "Newest First", "Oldest First", "A-Z", "Z-A"
         };
+
+
 
         Spinner spinnerLatest = root.findViewById(R.id.spinnerLatest);
 

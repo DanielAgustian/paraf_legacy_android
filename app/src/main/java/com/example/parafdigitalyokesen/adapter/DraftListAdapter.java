@@ -62,10 +62,13 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
                 int position = viewHolder.getAdapterPosition();
                 SignModel sign = models.get(position);
                 if(type == 0){
+                    //Click for Draft/Sign My Signature
                     Intent intent= new Intent(context, ResultSignature.class);
+                    intent.putExtra("where", "mysign");
                     view.getContext().startActivity(intent);
                 }
                 else if(type < 2){
+                    //Click for Draft/Sign My Request
                     Intent intent= new Intent(context, RespondSignature.class);
                     view.getContext().startActivity(intent);
                 }else{
@@ -87,10 +90,13 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         TextView tvTime = holder.tvTime;
         tvTime.setText(sign.getTime());
         TextView tvStatus = holder.tvStatus;
-        if(type== 0 || type==1 || type==3){
+        if(type== 0 || type==3){
 
             tvStatus.setVisibility(View.GONE);
-        }else if (type == 2){
+        }else if (type == 1){
+            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
+        }
+        else if (type == 2){
 
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending) );
         }
