@@ -31,11 +31,12 @@
 <!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
 
             <ImageView
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
-                android:layout_width="50dp"
-                android:src="@drawable/draw_circle"
-                android:layout_height="50dp"/>
+                android:layout_width="70dp"
+                app:tint="@color/colorPrimary"
+                android:src="@drawable/ic_app_teken"
+                android:layout_height="70dp"/>
 
         <TextView
             android:id="@+id/tvWelcome"
@@ -43,7 +44,7 @@
             android:layout_height="wrap_content"
 
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="27dp"
             android:text="Welcome Back!"
             android:textColor="@color/colorGrayText"
             android:textSize="32sp"
@@ -53,8 +54,8 @@
                 android:id="@+id/tvWelcome2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
                 android:text="Stay signed in with your account to make creating sign easier"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
@@ -73,7 +74,7 @@
                 android:layout_height="wrap_content"/>
             <EditText
                 android:textCursorDrawable="@null"
-                android:id="@+id/etUsername"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_marginTop="5dp"
                 android:layout_height="42dp"
@@ -115,7 +116,7 @@
                         android:layout_marginBottom="5dp"
                         android:alpha=".5"
                         android:onClick="ShowHidePass"
-
+                        app:tint="@color/colorGrayText"
                         android:src="@drawable/ic_hide" />
             </RelativeLayout>
             <RelativeLayout
@@ -145,19 +146,13 @@
                         />
             </RelativeLayout>
 
-            <Button
-            android:id="@+id/buttonLogin"
+        <Button
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnLogin"
+            style="@style/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_marginTop="10dp"
-            android:text="Sign In"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:theme="@style/buttonLogin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1"></Button>
+            android:text="Sign In" />
 
             <TextView
                 android:layout_marginTop="25dp"
@@ -177,14 +172,14 @@
                 <Button
                     android:layout_weight="0.45"
                     android:layout_width="0dp"
-                    android:backgroundTint="@color/colorFacebookButton"
-
+                    android:backgroundTint="@color/colorBackgroundBlue"
+                    android:letterSpacing="0"
                     android:text="Google"
-                    android:paddingHorizontal="25dp"
+                    android:paddingVertical="10dp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/ic_google_icon"
-                    android:drawableTint="@color/white"
-                    android:textColor="@color/white"
+                    android:drawableTint="#FF0063F7"
+                    android:textColor="#FF0063F7"
                     android:layout_height="wrap_content"/>
                 <View
                     android:layout_width="0dp"
@@ -192,12 +187,13 @@
                     android:layout_weight="0.1"
                     />
                 <Button
+                    android:paddingVertical="10dp"
                     android:layout_weight="0.45"
                     android:layout_width="0dp"
-                    android:backgroundTint="@color/colorBlue"
+                    android:backgroundTint="#FF0063F7"
                     android:text="Facebook"
-                    android:paddingHorizontal="25dp"
                     android:textStyle="bold"
+                    android:letterSpacing="0"
                     android:drawableLeft="@drawable/ic_fb_icon"
                     android:drawableTint="@color/white"
                     android:textColor="@color/white"
@@ -225,7 +221,9 @@
                     android:textColor="@color/colorBlue"
                     />
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"/>  
 
     </LinearLayout>
 

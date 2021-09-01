@@ -10,8 +10,12 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.parafdigitalyokesen.R;
-import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.ContactUsActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.ContactActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.ContactSupportActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.DisclaimerActivity;
 import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.FAQActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.PrivacyPolicyActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.TermConditionActivity;
 
 public class HelpActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -26,10 +30,21 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.rlContactSupport:
-                gotoChildHelp(ContactUsActivity.class);
+                gotoChildHelp(ContactSupportActivity.class);
                 break;
             case R.id.rlFaq:
                 gotoChildHelp(FAQActivity.class);
+                break;
+            case R.id.rlTerms:
+                gotoChildHelp(TermConditionActivity.class);
+                break;
+            case R.id.rlPrivacyPolicy:
+                gotoChildHelp(PrivacyPolicyActivity.class);
+                break;
+            case R.id.rlDisclaimer:
+                gotoChildHelp(DisclaimerActivity.class);
+                break;
+            default:
                 break;
         }
     }
@@ -38,6 +53,12 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         rlContactUs.setOnClickListener(this);
         RelativeLayout rlFaq = findViewById(R.id.rlFaq);
         rlFaq.setOnClickListener(this);
+        RelativeLayout rlTerms = findViewById(R.id.rlTerms);
+        rlTerms.setOnClickListener(this);
+        RelativeLayout rlPrivacyPolicy = findViewById(R.id.rlPrivacyPolicy);
+        rlPrivacyPolicy.setOnClickListener(this);
+        RelativeLayout rlDisclaimer = findViewById(R.id.rlDisclaimer);
+        rlDisclaimer.setOnClickListener(this);
     }
 
     public void initToolbar(){

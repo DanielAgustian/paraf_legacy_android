@@ -110,7 +110,84 @@
                         android:layout_height="1dp"
                         android:background="@color/colorBackground"
                         />
+                    <RelativeLayout
+                        android:background="@drawable/button_flat_white"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:id="@+id/rlTerms"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
 
+                            android:text="Terms and Condition"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:background="@drawable/button_flat_white"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:id="@+id/rlPrivacyPolicy"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Privacy Policy"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
+                    <RelativeLayout
+                        android:background="@drawable/button_flat_white"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:id="@+id/rlDisclaimer"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:text="Disclaimer"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBackground"
+                        />
                 </LinearLayout>
 
             </ScrollView>

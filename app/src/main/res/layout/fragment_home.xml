@@ -71,154 +71,183 @@
             android:textColor="@color/colorGrayText"
             android:text="Signature"></TextView>
     </LinearLayout>
+    <LinearLayout
 
-    <LinearLayout
-        android:layout_marginBottom="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:orientation="horizontal"
+        android:id="@+id/fullStateHome"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        style="@style/cardShadow"
-        android:paddingVertical="10dp"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_weight="0.12"
-            android:layout_width="0dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/cardShadow"
+            android:paddingVertical="10dp"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_weight="0.12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_blue_clock"
+                    app:tint="@color/colorBlue"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.55"
+                android:layout_width="0dp"
+                android:textSize="14sp"
+                android:text="Today's Signature"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_blue_clock"
-                app:tint="@color/colorBlue"
-                />
+                android:gravity="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlue"
+                android:text="08"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.55"
-            android:layout_width="0dp"
-            android:textSize="14sp"
-            android:text="Today's Signature"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.25"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorBlue"
-            android:text="08"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-    <LinearLayout
-        android:paddingVertical="10dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        style="@style/cardShadow"
-        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_weight="0.12"
-            android:layout_width="0dp"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/cardShadow"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_weight="0.12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_circle_check"
+                    app:tint="@color/colorSuccess"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.55"
+                android:layout_width="0dp"
+                android:textSize="14sp"
+                android:text="Accepted"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_circle_check"
-                app:tint="@color/colorSuccess"
-                />
+                android:gravity="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorSuccess"
+                android:text="08"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.55"
-            android:layout_width="0dp"
-            android:textSize="14sp"
-            android:text="Accepted"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.25"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorSuccess"
-            android:text="08"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:paddingVertical="10dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        style="@style/cardShadow"
-        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_weight="0.12"
-            android:layout_width="0dp"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/cardShadow"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_weight="0.12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_cross"
+                    app:tint="@color/colorError"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.55"
+                android:layout_width="0dp"
+                android:textSize="14sp"
+                android:text="Rejected"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_cross"
-                app:tint="@color/colorError"
-                />
+                android:gravity="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorError"
+                android:text="08"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.55"
-            android:layout_width="0dp"
-            android:textSize="14sp"
-            android:text="Rejected"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.25"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorError"
-            android:text="08"
-            android:layout_gravity="center_vertical"/>
+        <LinearLayout
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/cardShadow"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="0.12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_request"
+                    app:tint="@color/colorPending"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.55"
+                android:layout_width="0dp"
+                android:textSize="14sp"
+                android:text="Request"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPending"
+                android:text="08"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
     </LinearLayout>
+<!--    For Empty State Home Fragment-->
     <LinearLayout
-        android:paddingVertical="10dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:orientation="horizontal"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/emptyStateHome"
+        android:gravity="center"
         android:layout_width="match_parent"
-        style="@style/cardShadow"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_weight="0.12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_request"
-                app:tint="@color/colorPending"
-                />
-        </LinearLayout>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.55"
-            android:layout_width="0dp"
-            android:textSize="14sp"
-            android:text="Request"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.25"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@drawable/ic_empy_state_home"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPending"
-            android:text="08"
-            android:layout_gravity="center_vertical"/>
+            />
+        <TextView
+            android:layout_marginTop="15dp"
+            android:text="You do not have any signature yet"
+            android:textColor="@color/colorGrayText"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

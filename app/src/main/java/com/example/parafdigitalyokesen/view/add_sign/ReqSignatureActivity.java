@@ -11,15 +11,19 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.parafdigitalyokesen.R;
@@ -37,11 +41,12 @@ import java.util.TimerTask;
 
 public class ReqSignatureActivity extends AppCompatActivity implements View.OnClickListener{
     Button btnContinue, btnCancel, btnDueDate, btnTime;
-    LinearLayout llUploadData;
+    LinearLayout llUploadData, llWaitingData, llDoneData;
     private Dialog customDialog, waitingDialog;
     private Uri fileUri;
     private final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     private String filePath;
+    int progress = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +66,11 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             timepIcker();
         } else if (view.getId() == R.id.uploadDataReq){
             filePicker();
+        } else if (view.getId()== R.id.ivEmptyFileReq){
+            emptyFile();
         }
     }
-
+    //------------------------File Picker Method---------------------------------
     private void filePicker() {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
 
@@ -73,7 +80,11 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
 
         startActivityForResult(chooseFile, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
     }
-
+    private void emptyFile() {
+        filePath = "";
+        llDoneData.setVisibility(View.GONE);
+        llUploadData.setVisibility(View.VISIBLE);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,10 +95,49 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                 filePath = fileUri.getPath();
 
                 Log.d("PATH", filePath);
+                llUploadData.setVisibility(View.GONE);
+                llWaitingData.setVisibility(View.VISIBLE);
+                TextView tvWaitingData = findViewById(R.id.tvWaitingUploadReq);
+                tvWaitingData.setText(filePath);
+                setProgressValue(filePath);
             }
         }
     }
+    private void setProgressValue(String filePath) {
+        ProgressBar simpleProgressBar = findViewById(R.id.simpleProgressBar);
+        // set the progress
 
+
+        simpleProgressBar.setProgress(progress);
+
+        // thread is used to change the progress value
+        CountDownTimer mCountDownTimer=new CountDownTimer(2000,200) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progress = progress+10;
+                simpleProgressBar.setProgress(progress);
+
+            }
+            @Override
+            public void onFinish() {
+                //Do what you want
+
+                simpleProgressBar.setProgress(100);
+                llWaitingData.setVisibility(View.GONE);
+                llDoneData.setVisibility(View.VISIBLE);
+                TextView tvUploadData = findViewById(R.id.tvDoneUploadReq);
+                tvUploadData.setText(filePath);
+            }
+        };
+        mCountDownTimer.start();
+
+
+    }
+    //----------------------------------------------------------------
+
+
+    //---------------------------Date picker----------------------
     Calendar dateTimePicker(){
         Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
@@ -113,6 +163,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         return c;
     }
 
+    //---------------------------------Time Picker------------------------
     Calendar timepIcker()
     {
         Calendar c = Calendar.getInstance();
@@ -243,6 +294,12 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         btnDueDate.setOnClickListener(this);
         btnTime.setOnClickListener(this);
         llUploadData.setOnClickListener(this);
+        llDoneData = findViewById(R.id.doneUploadDataReq);
+        llDoneData.setVisibility(View.GONE);
+        llWaitingData = findViewById(R.id.waitingUploadDataReq);
+        llWaitingData.setVisibility(View.GONE);
+        ImageView ivEmptyFile = findViewById(R.id.ivEmptyFileReq);
+        ivEmptyFile.setOnClickListener(this);
     }
     void gotoResultPage(){
         this.finish();

@@ -53,17 +53,18 @@
             android:paddingVertical="15dp"
             >
             <LinearLayout
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:tint="@color/black"
                     android:src="@drawable/ic_rename"
                     />
                 <TextView
                     android:layout_marginLeft="15dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:text="Decline Reason"
@@ -95,6 +96,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
                 <Button
+                    style="@style/buttonLogin"
                     android:id="@+id/btnSaveReason"
                     android:text="Save"
                     android:textSize="14sp"

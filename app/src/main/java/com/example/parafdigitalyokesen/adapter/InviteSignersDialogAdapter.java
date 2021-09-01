@@ -44,27 +44,15 @@ public class InviteSignersDialogAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.list_view_dialog_invite, null, true);
-            holder.etNameSigners = (EditText) view.findViewById(R.id.etDialogItemInvName);
             holder.etEmailSigners = view.findViewById(R.id.etDialogItemInvEmail);
             view.setTag(holder);
         }else {
             // the getTag returns the viewHolder object set as a tag to the view
             holder = (ViewHolder)view.getTag();
         }
-        holder.etNameSigners.setText(inviteSignersModelArrayList.get(position).getetName());
+
         holder.etEmailSigners.setText(inviteSignersModelArrayList.get(position).getEtEmail());
-        holder.etNameSigners.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                inviteSignersModelArrayList.get(position).setEtName(holder.etNameSigners.getText().toString());
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+
         holder.etEmailSigners.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -80,7 +68,7 @@ public class InviteSignersDialogAdapter extends BaseAdapter {
         return view;
     }
     private class ViewHolder {
-        protected EditText etNameSigners;
+
         protected EditText etEmailSigners;
     }
 }

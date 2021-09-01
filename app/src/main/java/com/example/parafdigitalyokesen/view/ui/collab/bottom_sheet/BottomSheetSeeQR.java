@@ -1,5 +1,6 @@
 package com.example.parafdigitalyokesen.view.ui.collab.bottom_sheet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.view.ui.collab.CollabResultActivity;
+import com.example.parafdigitalyokesen.view.ui.collab.FinalDocumentActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import kotlin.reflect.KType;
@@ -34,12 +37,21 @@ public class BottomSheetSeeQR extends BottomSheetDialogFragment implements View.
             llSave.setVisibility(View.GONE);
             llShare.setVisibility(View.GONE);
             llRequestFile.setVisibility(View.GONE);
+        }else{
+            llRequestFile.setOnClickListener(this);
         }
+
         return v;
     }
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()){
+            case R.id.llRequestFileDialog:
+                Intent intent = new Intent(getActivity(), FinalDocumentActivity.class);
+                startActivity(intent);
+                break;
+            default:break;
+        }
     }
 }

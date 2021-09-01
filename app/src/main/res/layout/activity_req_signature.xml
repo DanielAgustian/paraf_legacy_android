@@ -227,7 +227,85 @@ following data"
                 android:layout_gravity="center_vertical"
                 android:text="@string/docFile_add_sign"
                 android:textSize="14dp" />
+            <LinearLayout
+                android:background="@color/colorBackgroundBlue"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:id="@+id/doneUploadDataReq"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_marginRight="20dp"
+                            android:layout_width="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_pdf_placeholder"
+                            android:layout_height="20dp"/>
+                        <TextView
+                            android:id="@+id/tvDoneUploadReq"
+                            android:text="blabla.pdf"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorGrayText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/ivEmptyFileReq"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="20dp"
+                        app:tint="@color/colorError"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_cross_icon"
+                        android:layout_height="20dp"/>
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:id="@+id/waitingUploadDataReq"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_marginRight="20dp"
+
+                        android:layout_width="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_pdf_placeholder"
+                        android:layout_height="20dp"/>
+                    <TextView
+                        android:id="@+id/tvWaitingUploadReq"
+                        android:text="blabla.pdf"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <ProgressBar
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/simpleProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:progress="0"/>
+            </LinearLayout>
             <LinearLayout
 
                 android:id="@+id/uploadDataReq"
@@ -435,7 +513,9 @@ following data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Signature" />
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
         </LinearLayout>
 
 

@@ -31,18 +31,19 @@
         <!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
 
         <ImageView
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            android:layout_width="50dp"
-            android:src="@drawable/draw_circle"
-            android:layout_height="50dp"/>
+            android:layout_width="70dp"
+            app:tint="@color/colorPrimary"
+            android:src="@drawable/ic_app_teken"
+            android:layout_height="70dp"/>
 
         <TextView
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="27dp"
             android:text="Welcome to Paraf!"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/colorGrayText"
@@ -71,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/etUsernameSignUp"
+            android:id="@+id/etEmailSignUp"
             android:layout_width="match_parent"
             android:layout_marginTop="5dp"
             android:layout_height="42dp"
@@ -187,18 +188,12 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/buttonSignUp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnRegister"
+            style="@style/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_marginTop="10dp"
-            android:text="Sign Up"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:theme="@style/buttonLogin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1"></Button>
+            android:text="Register" />
 
         <LinearLayout
             android:layout_marginTop="20dp"

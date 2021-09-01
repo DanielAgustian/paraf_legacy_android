@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="20dp"
+
         android:ems="10"
         android:inputType="textPersonName"
         android:theme="@style/editTextLogin"
@@ -45,7 +45,7 @@
         android:layout_below="@+id/etRenameDoc"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -57,9 +57,13 @@
             android:text="Cancel"
             android:layout_gravity="center_vertical"
 
-            android:paddingHorizontal="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
+
+            android:layout_weight="0.42"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.16"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton
             style="@style/buttonRed"
@@ -70,8 +74,9 @@
 
             android:layout_marginLeft="10dp"
 
-            android:paddingHorizontal="25dp"
-            android:layout_width="wrap_content"
+
+            android:layout_weight="0.42"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </RelativeLayout>

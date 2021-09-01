@@ -6,39 +6,15 @@
     >
     <TextView
 
-        android:id="@+id/tvDialogItemInvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:textColor="@color/colorLightGrayText"
-        android:textSize="12sp"
-        android:gravity="center_horizontal"
-        android:text="Signers Name"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/etDialogItemInvName"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:theme="@style/editTextLogin"
-        android:hint="Name1"
-        android:layout_marginBottom="15dp"
-        android:textColorHint="@color/colorPlaceholder"
-
-        android:paddingVertical="5dp" />
-    <TextView
-        android:layout_marginBottom="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/tvDialogItemInvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/colorLightGrayText"
         android:textSize="12sp"
         android:gravity="center_horizontal"
         android:text="Signers Email"
         />
-
     <EditText
         android:layout_marginBottom="25dp"
         android:layout_width="match_parent"
@@ -48,7 +24,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:theme="@style/editTextLogin"
-        android:hint="email!@example.com"
+        android:hint="Name1"
         android:textColorHint="@color/colorPlaceholder"
         android:paddingVertical="5dp" />
 </LinearLayout>

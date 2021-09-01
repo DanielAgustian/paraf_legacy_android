@@ -35,7 +35,7 @@
 <!--============================BUTTON STYLES================================-->
     <style name="buttonLogin" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:radius">5dp</item>
         <item name="android:background">@drawable/rounded_button</item>
         <item name="android:textStyle">bold</item>
@@ -43,14 +43,14 @@
     <style name="buttonPink" parent="Widget.AppCompat.Button.Colored">
         <item name="background">@color/colorBackgroundBlue</item>
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">5dp</item>
         <item name="android:backgroundTint">@null</item>
         <item name="android:textStyle">normal</item>
     </style>
     <style name="buttonRed" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">10dp</item>
         <item name="android:background">@drawable/rounded_red_button</item>
         <item name="android:textStyle">bold</item>
@@ -59,18 +59,18 @@
 
     <style name="buttonRedSmall" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">10dp</item>
         <item name="android:background">@drawable/rounded_red_button</item>
         <item name="android:textStyle">bold</item>
         <item name="android:minHeight">0dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:paddingBottom">7dp</item>
     </style>
 
     <style name="buttonWhiteBigger" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">10dp</item>
         <item name="android:background">@drawable/rounded_white_button</item>
         <item name="android:backgroundTint">@color/white</item>
@@ -79,19 +79,19 @@
     </style>
     <style name="buttonWhite" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">10dp</item>
         <item name="android:background">@drawable/rounded_white_button</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:minHeight">0dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:paddingBottom">7dp</item>
     </style>
 
     <style name="buttonCancel" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/colorError</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:radius">10dp</item>
         <item name="android:background">@drawable/rounded_cancel_button</item>
         <item name="android:backgroundTint">@color/white</item>

@@ -15,12 +15,12 @@ import android.widget.TextView;
 
 import com.example.parafdigitalyokesen.R;
 
-public class ContactUsActivity extends AppCompatActivity {
+public class ContactActivity extends AppCompatActivity {
     Switch switchGoogle, switchPhone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_us);
+        setContentView(R.layout.activity_contact);
         initToolbar();
         initComponent();
     }

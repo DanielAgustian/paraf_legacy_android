@@ -78,11 +78,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="30dp"
-
+            android:layout_marginBottom="15dp"
             >
             <com.google.android.material.tabs.TabLayout
-                android:tabStripEnabled="true"
-                app:tabIndicatorColor="@color/colorBackground"
+                android:tabStripEnabled="false"
+                app:tabIndicatorColor="@android:color/transparent"
+                app:tabIndicatorHeight="0dp"
                 app:tabSelectedTextColor="@color/colorPrimary"
                 app:tabTextColor="@color/colorGrayText"
                 app:tabTextAppearance="@style/TabLayoutTextStyle"

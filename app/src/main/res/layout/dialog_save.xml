@@ -11,6 +11,7 @@
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
+        android:layout_marginBottom="15dp"
         android:textSize="18sp"
         android:text="Save Document"/>
     <TextView
@@ -29,7 +30,7 @@ Paraf-nanas.jpeg' will be saved to Download"
         android:layout_marginVertical="10dp"
 
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -39,9 +40,14 @@ Paraf-nanas.jpeg' will be saved to Download"
             android:textAllCaps="false"
             android:text="Cancel"
             android:layout_gravity="center_vertical"
-            android:paddingHorizontal="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
+
+
+            android:layout_weight="0.42"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.16"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton
             style="@style/buttonRed"
@@ -49,9 +55,9 @@ Paraf-nanas.jpeg' will be saved to Download"
             android:backgroundTint="@null"
             android:text="Save"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:paddingHorizontal="25dp"
-            android:layout_width="wrap_content"
+
+            android:layout_weight="0.42"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

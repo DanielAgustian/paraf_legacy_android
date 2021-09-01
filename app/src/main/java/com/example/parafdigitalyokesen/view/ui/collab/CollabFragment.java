@@ -44,9 +44,9 @@ public class CollabFragment extends Fragment {
                 if(position == 0){
                     tab.setText("Requested");
                 } else if (position == 1){
-                    tab.setText("Approved");
+                    tab.setText("Accepted");
                 } else if (position == 2){
-                    tab.setText("Disapproved");
+                    tab.setText("Rejected");
                 }
             }
         }

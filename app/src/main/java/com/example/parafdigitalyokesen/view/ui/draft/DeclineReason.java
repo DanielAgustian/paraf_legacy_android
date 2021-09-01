@@ -34,7 +34,7 @@ public class DeclineReason extends AppCompatActivity {
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDeclineReason);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Decline Reason");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_back_gray);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

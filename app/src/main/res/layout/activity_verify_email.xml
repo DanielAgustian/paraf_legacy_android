@@ -25,7 +25,7 @@
             android:layout_gravity="center"
 
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_big_email"
+            android:src="@drawable/ic_big_msg"
             android:layout_height="wrap_content"/>
 
         <TextView
@@ -80,7 +80,7 @@ code for continue"
             android:id="@+id/btnSendEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            style="@style/buttonLogin"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
             android:text="Send"

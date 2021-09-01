@@ -9,12 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParafDigitalYokesen">
-        <activity android:name=".view.ui.profile.child_profile.child_help.TermConditionActivity"></activity>
+        <activity android:name=".view.ui.profile.child_profile.child_help.ContactSupportActivity"></activity>
+        <activity android:name=".view.ui.profile.child_profile.child_help.DisclaimerActivity" />
+        <activity android:name=".view.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.ui.collab.FinalDocumentActivity" />
+        <activity android:name=".view.ui.profile.child_profile.child_help.PrivacyPolicyActivity" />
+        <activity android:name=".view.ui.profile.child_profile.child_help.TermConditionActivity" />
         <activity android:name=".view.ui.profile.child_profile.child_help.FAQActivity" />
         <activity android:name=".view.ui.profile.child_profile.security.ConfirmPasscode" />
         <activity android:name=".view.ui.profile.child_profile.security.CreatePasscodeActivity" />
         <activity android:name=".view.ui.profile.child_profile.MyContact" />
-        <activity android:name=".view.ui.profile.child_profile.child_help.ContactUsActivity" />
+        <activity android:name=".view.ui.profile.child_profile.child_help.ContactActivity" />
         <activity android:name=".view.ui.profile.child_profile.SecurityPrivacyActivity" />
         <activity android:name=".view.ui.profile.child_profile.NotificationActivity" />
         <activity android:name=".view.ui.profile.child_profile.HelpActivity" />
@@ -32,16 +43,10 @@
         <activity android:name=".view.NavBarActivity" />
         <activity android:name=".view.ui.draft.RespondSignature" />
         <activity android:name=".view.register_activity" />
-        <activity android:name=".view.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".view.MainActivity" />
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

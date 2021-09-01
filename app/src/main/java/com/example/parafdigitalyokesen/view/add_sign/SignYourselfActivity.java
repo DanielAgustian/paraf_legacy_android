@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -37,8 +41,10 @@ public class SignYourselfActivity extends AppCompatActivity  {
     private Uri fileUri;
     private int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     private String filePath;
+    Thread thread;
     Button btnContinue, btnCancel ;
     private Dialog customDialog, waitingDialog;
+    LinearLayout llWaitingData, llDoneData, llUploadData;
     private boolean result;
     SignYourselfViewModel VM;
     @Override
@@ -104,15 +110,36 @@ public class SignYourselfActivity extends AppCompatActivity  {
                 customDialog.show();
             }
         });
-        LinearLayout llUploadData = findViewById(R.id.uploadData);
+        llUploadData = findViewById(R.id.uploadData);
         llUploadData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filePicker();
             }
         });
+
+
+        llDoneData = findViewById(R.id.doneUploadData);
+        llDoneData.setVisibility(View.GONE);
+        llWaitingData = findViewById(R.id.waitingUploadData);
+        llWaitingData.setVisibility(View.GONE);
+        ImageView ivEmptyFile = findViewById(R.id.ivEmptyFile);
+        ivEmptyFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                emptyFile();
+            }
+        });
     }
 
+    private void emptyFile() {
+        filePath = "";
+        llDoneData.setVisibility(View.GONE);
+        llUploadData.setVisibility(View.VISIBLE);
+    }
+
+
+    //Method to get Trigger File Picker
     private void filePicker() {
 //        Intent intent = new Intent(this, FilePickerActivity.class);
 //        intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
@@ -136,6 +163,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
         startActivityForResult(chooseFile, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
     }
 
+    //For get data from filepicker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -147,9 +175,51 @@ public class SignYourselfActivity extends AppCompatActivity  {
                 filePath = fileUri.getPath();
 
                 Log.d("PATH", filePath);
+                llUploadData.setVisibility(View.GONE);
+
+                llWaitingData.setVisibility(View.VISIBLE);
+                TextView tvWaitingData = findViewById(R.id.tvWaitingUpload);
+                tvWaitingData.setText(filePath);
+                setProgressValue(filePath);
             }
         }
     }
+
+    int progress = 0;
+    //For progress bar
+    private void setProgressValue(String filePath) {
+        ProgressBar simpleProgressBar = findViewById(R.id.simpleProgressBar);
+        // set the progress
+
+
+        simpleProgressBar.setProgress(progress);
+
+        // thread is used to change the progress value
+        CountDownTimer mCountDownTimer=new CountDownTimer(2000,200) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progress = progress+10;
+                simpleProgressBar.setProgress(progress);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+
+                simpleProgressBar.setProgress(100);
+                llWaitingData.setVisibility(View.GONE);
+                llDoneData.setVisibility(View.VISIBLE);
+                TextView tvUploadData = findViewById(R.id.tvDoneUpload);
+                tvUploadData.setText(filePath);
+            }
+        };
+        mCountDownTimer.start();
+
+
+    }
+
 
     public void initDialogWaiting(){
         waitingDialog = new Dialog(this);

@@ -66,7 +66,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollabResult);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Details and Activity");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_back_gray);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

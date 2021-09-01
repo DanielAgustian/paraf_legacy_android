@@ -258,7 +258,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         TextView textTitle = duplicateDialog.findViewById(R.id.tvTitleDialog);
         TextView textData = duplicateDialog.findViewById(R.id.tvTitleData);
         textTitle.setText("Are you sure want to duplicate this signature?");
-        btnContinue.setText("Regenerate");
+        btnContinue.setText("Duplicate");
         textData.setVisibility(View.GONE);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override

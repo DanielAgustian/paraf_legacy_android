@@ -22,4 +22,5 @@
     <string name="doctype_add_sign">Document Type <font color="#DB2D26">*</font></string>
     <string name="docFile_add_sign">Document File (Optional) <font color="#DB2D26">**</font></string>
     <string name="rationale_storage">This app needs access to your storage, so it can send files to server.</string>
+
 </resources>
