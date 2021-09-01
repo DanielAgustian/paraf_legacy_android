@@ -98,7 +98,11 @@
         <item name="android:textStyle">bold</item>
 
     </style>
+    <style name="stylePassword">
+        <item name="android:width">20dp</item>
+        <item name="android:height">20dp</item>
 
+    </style>
 <!--=========================OTHERS STYLE====================-->
     <style name="cardShadow">
         <item name="android:background">@drawable/rounded_shadow_bg</item>

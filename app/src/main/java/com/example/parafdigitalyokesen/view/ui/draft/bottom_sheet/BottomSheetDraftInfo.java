@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.model.SignModel;
 import com.example.parafdigitalyokesen.view.add_sign.ReqSignatureActivity;
+import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
 import com.example.parafdigitalyokesen.view.add_sign.SignYourselfActivity;
 import com.example.parafdigitalyokesen.view.ui.collab.CollabResultActivity;
 import com.example.parafdigitalyokesen.view.ui.draft.RespondSignature;
@@ -53,12 +54,19 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         LinearLayout llRegenerate = v.findViewById(R.id.llRegenDraft);
         LinearLayout llRename = v.findViewById(R.id.llRenameDraft);
         LinearLayout llDelete = v.findViewById(R.id.llDeleteDraft);
+        LinearLayout llRemind = v.findViewById(R.id.llRemindDraft);
         llDetails.setOnClickListener(this);
         llSave.setOnClickListener(this);
         llShare.setOnClickListener(this);
         llRegenerate.setOnClickListener(this);
         llRename.setOnClickListener(this);
         llDelete.setOnClickListener(this);
+        llRemind.setOnClickListener(this);
+
+        if (!(where == 2)){
+            llRemind.setVisibility(View.GONE);
+        }
+
         return v;
     }
 
@@ -66,10 +74,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.llDetailsDraft:
-//                Intent intent = new Intent(getActivity(), RespondSignature.class);
-                Intent intent = new Intent(getActivity(), CollabResultActivity.class);
-                intent.putExtra("type", where);
-                startActivity(intent);
+                detailsActivity();
                 break;
             case R.id.llSaveDraft:
                 save();
@@ -86,10 +91,56 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             case R.id.llDeleteDraft:
                 delete();
                 break;
+            case R.id.llRemindDraft:
+                remindDialog();
+                break;
             default:
                 Log.d("onClickError", "onClickWrong ID");
                 break;
         }
+    }
+
+    public void detailsActivity(){
+        if(where  == 0){
+            Intent intent= new Intent(getActivity(), ResultSignature.class);
+            intent.putExtra("where", "mysign");
+            startActivity(intent);
+        }else if (where == 1){
+            Intent intent= new Intent(getActivity(), RespondSignature.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getActivity(), CollabResultActivity.class);
+            intent.putExtra("type", where);
+            startActivity(intent);
+        }
+
+    }
+
+    public void remindDialog(){
+        Dialog remindDialog = new Dialog(getActivity());
+        remindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        remindDialog.setContentView(R.layout.dialog_confirmation);
+        remindDialog.setCancelable(true);
+        remindDialog.show();
+        TextView textTitle =remindDialog.findViewById(R.id.tvTitleDialog);
+        TextView textData = remindDialog.findViewById(R.id.tvTitleData);
+        textTitle.setText("Are you sure want to remind your signers?");
+        textData.setVisibility(View.GONE);
+        Button btnContinue = remindDialog.findViewById(R.id.btnContinue);
+        btnContinue.setText("Remind");
+        Button btnCancel = remindDialog.findViewById(R.id.btnCancel);
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remindDialog.dismiss();
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remindDialog.dismiss();
+            }
+        });
     }
     private void sharing(){
 
@@ -211,7 +262,6 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 dismissDialog(dialog);
             }
         });

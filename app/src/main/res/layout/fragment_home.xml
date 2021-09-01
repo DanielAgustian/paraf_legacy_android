@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
 
 
-            android:text="Need a document signed? "
+            android:text="Need a document \nsigned? "
             android:textColor="@color/colorGrayText"
             android:textSize="22sp"
             android:textStyle="bold"

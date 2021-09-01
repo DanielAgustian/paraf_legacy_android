@@ -62,7 +62,7 @@
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nanas Kuning (You)"/>
+                android:text="Nasi Uduk Afrika"/>
             <TextView
                 android:id="@+id/tvEmailRS"
                 android:textColor="@color/colorLightGrayText"
@@ -70,7 +70,7 @@
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="nanas.kuning@gmail.com"/>
+                android:text="nasi.uduk.afrika@gmail.com"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

@@ -110,7 +110,7 @@ android:paddingBottom="15dp">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="Save"
+        android:text="Save this sign"
         android:textSize="12sp"
         android:textColor="@color/colorLightGrayText"
         />
@@ -139,7 +139,7 @@ android:paddingBottom="15dp">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="Share"
+        android:text="Share this sign"
         android:textSize="12sp"
         android:textColor="@color/colorLightGrayText"
         />
@@ -171,6 +171,35 @@ android:paddingBottom="15dp">
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:text="Re-create"
+        android:textSize="12sp"
+        android:textColor="@color/colorLightGrayText"
+        />
+</LinearLayout>
+<LinearLayout
+    android:id="@+id/llRemindDraft"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/button_flat_white"
+    android:layout_marginTop="10dp"
+    android:paddingVertical="8dp"
+    android:layout_width="match_parent"
+    android:weightSum="1.0"
+    android:layout_height="wrap_content">
+
+    <ImageView
+
+        android:src="@drawable/ic_bell"
+        app:tint="@color/colorPrimary"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        />
+
+    <TextView
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="Remind Signers"
         android:textSize="12sp"
         android:textColor="@color/colorLightGrayText"
         />

@@ -84,6 +84,7 @@
                         android:id="@+id/rlChangePasscode"
                         android:focusable="true"
                         android:clickable="true"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/button_flat_white"
                         android:paddingTop="15dp"
                         android:paddingBottom="5dp"

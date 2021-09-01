@@ -59,13 +59,13 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    app:tint="@color/black"
+                    app:tint="@color/colorGrayText"
                     android:src="@drawable/ic_rename"
                     />
                 <TextView
                     android:layout_marginLeft="15dp"
                     android:textSize="16sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/colorGrayText"
                     android:textStyle="bold"
                     android:text="Decline Reason"
 

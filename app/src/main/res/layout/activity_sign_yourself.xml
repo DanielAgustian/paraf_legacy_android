@@ -354,6 +354,7 @@ following data"
             <Button
                 android:id="@+id/btnSignYourself"
                 style="@style/buttonLogin"
+                android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Signature" />

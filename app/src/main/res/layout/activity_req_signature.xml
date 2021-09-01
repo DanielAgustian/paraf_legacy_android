@@ -429,7 +429,7 @@ following data"
                android:layout_height="wrap_content">
 
                <androidx.appcompat.widget.AppCompatButton
-                   android:background="@color/colorBackgroundBlue"
+                   android:background="@drawable/button_light_blue_bg"
                    android:id="@+id/btnDueDate"
                    android:backgroundTint="@null"
                    android:drawableLeft="@drawable/ic_date"
@@ -454,7 +454,7 @@ following data"
                    android:layout_weight="0.1"/>
 
                <androidx.appcompat.widget.AppCompatButton
-                   android:background="@color/colorBackgroundBlue"
+                   android:background="@drawable/button_light_blue_bg"
                    android:id="@+id/btnTime"
                    android:backgroundTint="@null"
 
@@ -510,6 +510,7 @@ following data"
             <Button
                 android:id="@+id/btnReqSign"
                 style="@style/buttonLogin"
+                android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Signature" />

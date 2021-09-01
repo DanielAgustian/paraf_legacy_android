@@ -14,7 +14,7 @@
         android:layout_height="60dp"
         />
     <LinearLayout
-
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -42,30 +42,23 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorLightGrayText"
                     android:textSize="11sp"
-                    android:text="Created, 12 June 2021 | 09.25"
+                    android:text="Created by Apel"
                     />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="0.04"/>
                 <TextView
-                    android:id="@+id/tvDueSignList"
+                    android:textSize="11sp"
+                    android:id="@+id/tvStatusListDraft"
+
+                    android:textColor="@color/colorPending"
+                    android:text="Lorem by Lorem"
                     android:layout_weight="0.48"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorSuccess"
-                    android:textSize="11sp"
-                    android:text="Created, 12 June 2021 | 09.25"
-                    />
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
-            <TextView
-                android:textSize="11sp"
-                android:id="@+id/tvStatusListDraft"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/colorPending"
-                android:text="Waiting 1 person left to sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+
         </LinearLayout>
         <LinearLayout
             android:layout_weight="0.1"

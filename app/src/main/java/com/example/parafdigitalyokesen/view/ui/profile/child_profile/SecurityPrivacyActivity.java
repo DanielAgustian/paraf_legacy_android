@@ -5,7 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -20,13 +22,20 @@ import com.example.parafdigitalyokesen.view.ui.profile.child_profile.security.Cr
 
 public class SecurityPrivacyActivity extends AppCompatActivity implements View.OnClickListener{
     Switch switchFaceId;
+    Switch switchPasscode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_privacy);
+        initSharedPref();
         initToolbar();
         initComponent();
     }
+
+    private void initSharedPref() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSecurity);
         setSupportActionBar(toolbar);
@@ -43,6 +52,7 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
     public void back(){
         this.finish();
     }
+
     public void initComponent(){
         RelativeLayout rlPasscode = findViewById(R.id.rlChangePasscode);
         rlPasscode.setOnClickListener(this);
@@ -52,6 +62,16 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     dialogFaceID();
+                }
+            }
+        });
+
+        switchPasscode = findViewById(R.id.switchPassCode);
+        switchPasscode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    dialogCreatePasscode();
                 }
             }
         });

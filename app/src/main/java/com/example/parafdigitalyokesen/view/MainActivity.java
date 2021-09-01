@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        loginClick();
+                        gotoNavigationBar();
+                        //loginClick();
                     }
                 }
         );
@@ -146,14 +147,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NavBarActivity.class);
         startActivity(intent);
     }
+
     public void gotoForgotPass() {
         Intent intent = new Intent(this, ForgotPassword.class);
         startActivity(intent);
     }
+
     public void ShowHidePass(View view){
-
         if(view.getId()==R.id.show_pass_btn){
-
             if(etPassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
                 //Show Password
                 etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());

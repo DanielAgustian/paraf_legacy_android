@@ -61,21 +61,21 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
             public void onClick(View view) {
                 int position = viewHolder.getAdapterPosition();
                 SignModel sign = models.get(position);
-                if(type == 0){
-                    //Click for Draft/Sign My Signature
-                    Intent intent= new Intent(context, ResultSignature.class);
-                    intent.putExtra("where", "mysign");
-                    view.getContext().startActivity(intent);
-                }
-                else if(type < 2){
-                    //Click for Draft/Sign My Request
-                    Intent intent= new Intent(context, RespondSignature.class);
-                    view.getContext().startActivity(intent);
-                }else{
-                    BottomSheetDraftInfo bottomSheet = new BottomSheetDraftInfo(sign, type);
-                    bottomSheet.show(fragmentManager, "ModalBottomSheet");
-                }
-
+//                if(type == 0){
+//                    //Click for Draft/Sign My Signature
+//                    Intent intent= new Intent(context, ResultSignature.class);
+//                    intent.putExtra("where", "mysign");
+//                    view.getContext().startActivity(intent);
+//                }
+//                else if(type < 2){
+//                    //Click for Draft/Sign My Request
+//                    Intent intent= new Intent(context, RespondSignature.class);
+//                    view.getContext().startActivity(intent);
+//                }else{
+//
+//                }
+                BottomSheetDraftInfo bottomSheet = new BottomSheetDraftInfo(sign, type);
+                bottomSheet.show(fragmentManager, "ModalBottomSheet");
             }
         });
         return viewHolder;
@@ -90,6 +90,14 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         TextView tvTime = holder.tvTime;
         tvTime.setText(sign.getTime());
         TextView tvStatus = holder.tvStatus;
+        /*
+         * type is an identifier for what's fragment that access here.
+         * 0=> DraftCompletedFragment
+         * 1=> Draft Request Fragment
+         * 2=> FragmentRequested in Collab
+         * 3=> FragmentAccepted
+         * 4=> FragmentRejected
+         * */
         if(type== 0 || type==3){
 
             tvStatus.setVisibility(View.GONE);
