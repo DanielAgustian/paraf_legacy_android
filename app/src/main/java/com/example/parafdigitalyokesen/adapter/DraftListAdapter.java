@@ -2,6 +2,8 @@ package com.example.parafdigitalyokesen.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.PictureDrawable;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.model.SignModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
@@ -90,16 +94,17 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         TextView tvTime = holder.tvTime;
         tvTime.setText(sign.getTime());
         TextView tvStatus = holder.tvStatus;
-        /*
-         * type is an identifier for what's fragment that access here.
-         * 0=> DraftCompletedFragment
-         * 1=> Draft Request Fragment
-         * 2=> FragmentRequested in Collab
-         * 3=> FragmentAccepted
-         * 4=> FragmentRejected
-         * */
-        if(type== 0 || type==3){
+        ImageView ivList = holder.ivList;
 
+        //Log.d("QRCODE", sign.getQr_code());
+        if(type== 0 ){
+            try {
+                SVG svg = SVG.getFromString(sign.getQr_code());
+                PictureDrawable  pd = new PictureDrawable(svg.renderToPicture());
+                ivList.setImageDrawable(pd);
+            } catch (SVGParseException e) {
+                e.printStackTrace();
+            }
             tvStatus.setVisibility(View.GONE);
         }else if (type == 1){
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
@@ -107,6 +112,8 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         else if (type == 2){
 
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending) );
+        } else if (type == 3){
+            tvStatus.setVisibility(View.GONE);
         }
         else if (type == 4){
 
@@ -120,13 +127,13 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
     }
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvTitle, tvTime, tvStatus;
-
+        public ImageView ivList;
         public ViewHolder(View itemView){
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitleSignList);
             tvTime = itemView.findViewById(R.id.tvTimeSignList);
             tvStatus = itemView.findViewById(R.id.tvStatusListDraft);
-
+            ivList = itemView.findViewById(R.id.ivSignList);
         }
     }
 }

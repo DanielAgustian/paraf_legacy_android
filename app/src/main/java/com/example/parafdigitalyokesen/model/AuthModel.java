@@ -12,14 +12,11 @@ public class AuthModel {
     @SerializedName("password")
     String password;
 
-    @SerializedName("password_confirmation")
-    String password_confirmation;
-
-    public AuthModel(String email, String name, String password, String password_confirmation){
+    public AuthModel(String email, String name, String password){
             this.email = email;
             this.name = name;
             this.password = password;
-            this.password_confirmation = password_confirmation;
+
     }
     public String getEmail(){
         return email;
@@ -33,7 +30,4 @@ public class AuthModel {
         return password;
     }
 
-    public String getPasswordConfirmation() {
-        return password_confirmation;
-    }
 }

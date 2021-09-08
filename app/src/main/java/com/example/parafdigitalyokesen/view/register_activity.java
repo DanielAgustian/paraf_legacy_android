@@ -1,14 +1,13 @@
 package com.example.parafdigitalyokesen.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -19,11 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.parafdigitalyokesen.API.APIClient;
-import com.example.parafdigitalyokesen.API.APIInterface;
+import com.example.parafdigitalyokesen.Repository.APIClient;
+import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.model.AuthModel;
-import com.google.android.material.badge.BadgeUtils;
 
 
 public class register_activity extends AppCompatActivity {
@@ -33,6 +31,8 @@ public class register_activity extends AppCompatActivity {
     EditText etConfirmPassword;
     ImageView ivPassRegister, ivConfirmPassRegister;
     APIInterface apiInterface;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +58,8 @@ public class register_activity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //gotoRegister();
                 registerClick();
             }
         });
@@ -76,36 +78,46 @@ public class register_activity extends AppCompatActivity {
     }
 
     private void doRegister(String email, String name, String password, String passwordConfirmation){
-        AuthModel authModel = new AuthModel(email, name, password, passwordConfirmation);
-        Call<AuthModel> callRegister = apiInterface.registerUser(authModel);
-        callRegister.enqueue(new Callback<AuthModel>() {
-            @Override
-            public void onResponse(Call<AuthModel> call, Response<AuthModel> response) {
-                if(response.isSuccessful()){
-                    AuthModel result = response.body();
-                    Log.d("RegisterAPI", "RegisterAPI"+ response.body());
-                    
-                }
-                else{
-                    Log.d("RegisterAPI", "RegisterAPIError"+ response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AuthModel> call, Throwable t) {
-
-            }
-        });
+        AuthModel authModel = new AuthModel(email, name, password);
+        Observable<AuthModel> callRegister = apiInterface.registerUser(authModel);
+        callRegister.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::handleResult);
+//        callRegister.enqueue(new Callback<AuthModel>() {
+//            @Override
+//            public void onResponse(Call<AuthModel> call, Response<AuthModel> response) {
+//                if(response.isSuccessful()){
+//                    AuthModel result = response.body();
+//                    Log.d("RegisterAPI", "RegisterAPI"+ response.body());
+//
+//                }
+//                else{
+//                    Log.d("RegisterAPI", "RegisterAPIError"+ response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<AuthModel> call, Throwable t) {
+//
+//            }
+//        });
     }
+
+    private void handleResult(AuthModel authModel) {
+        if(authModel !=null){
+            gotoRegister();
+        }else{
+            Log.e("Error Data", "Error");
+        }
+    }
+
 
     private boolean validation(String email, String name, String password, String passwordConfirmation){
         if(email.trim().equals("")){
             return false;
         } else if (name.trim().equals("")){
             return false;
-        } else if (password.trim().equals("") || password.length() < 7){
+        } else if (password.trim().equals("") || password.length() < 6){
             return false;
-        } else if (passwordConfirmation.trim().equals("") || passwordConfirmation.length()< 7){
+        } else if (passwordConfirmation.trim().equals("") || passwordConfirmation.length()< 6){
             return false;
         } else if (!password.equals(passwordConfirmation)){
             return false;

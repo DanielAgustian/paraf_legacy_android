@@ -2,21 +2,29 @@ package com.example.parafdigitalyokesen.view.add_sign;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,37 +34,90 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.parafdigitalyokesen.R;
+
+import com.example.parafdigitalyokesen.Repository.APIClient;
+import com.example.parafdigitalyokesen.Repository.APIInterface;
+import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.model.GetHomeModel;
+import com.example.parafdigitalyokesen.model.GetSignDetailModel;
+import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
+import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.model.SignatureDetailModel;
+import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.model.TypeCategoryModel;
+import com.example.parafdigitalyokesen.view.MainActivity;
 import com.example.parafdigitalyokesen.viewModel.SignYourselfViewModel;
 
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class SignYourselfActivity extends AppCompatActivity  {
     private Uri fileUri;
     private int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
-    private String filePath;
-    Thread thread;
+    File fileSending;
+    private boolean nameValidator, emailValidator, documentNameValidator;
+
     Button btnContinue, btnCancel ;
     private Dialog customDialog, waitingDialog;
     LinearLayout llWaitingData, llDoneData, llUploadData;
-    private boolean result;
-    SignYourselfViewModel VM;
+    //SignYourselfViewModel VM;
+    Util util;
+    APIInterface apiInterface;
+    PreferencesRepo preferencesRepo;
+    List<TypeCategoryModel> category, types;
+    TypeCategoryModel selectedCategory, selectedTypes;
+
+    EditText etName, etEmail, etDocumentName, etDescription, etLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_sign_yourself);
+        initNetwork();
         getPermission();
         initComponent();
         initSpinner();
         initDialog();
         initDialogWaiting();
+
+    }
+
+    private void initNetwork() {
+        util = new Util();
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        preferencesRepo = new PreferencesRepo(this);
+    }
+
+    public void initSpinner(){
+
+        String token = preferencesRepo.getToken();
+
+        Log.d("HomeTOKEN", token);
+        Observable<GetTypeCategoryModel> getCategory= apiInterface.getCategories(token);
+        getCategory.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessCategory, this::onFailedCategory);
+
+        Observable<GetTypeCategoryModel> getTypes= apiInterface.getTypes(token);
+        getTypes.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessTypes, this::onFailedTypes);
 
     }
 
@@ -67,29 +128,165 @@ public class SignYourselfActivity extends AppCompatActivity  {
                     this,
                     getString(R.string.rationale_storage),
                     EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.CAMERA);
+                    Manifest.permission.READ_EXTERNAL_STORAGE);
         }
     }
 
-    public void initSpinner(){
-        String[] spinnerCategoryList = new String[]{
-                "Message", "Report", "Accounting"
-        };
-        String[] spinnerDocTypeList = new String[]{
-                ".doc", ".pdf"
-        };
-        Spinner spinnerCategory = findViewById(R.id.spinnerCategoryNewSign);
-        Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeyNewSign);
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerCategoryList);
-        ArrayAdapter<String> adapterDocType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerDocTypeList);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapterCategory);
-        spinnerCategory.setPrompt("Select Category");
-        spinnerDocType.setAdapter(adapterDocType);
-        spinnerDocType.setPrompt("Select Document Type");
+    //=-----------------------------Method for Add SIgn------------------
+
+    private boolean validation(){
+        if(etName.getText().toString().trim().length()< 1){
+            nameValidator = true;
+        }else{
+            nameValidator = false;
+        }
+
+        if(etEmail.getText().toString().trim().length()< 5){
+            emailValidator = true;
+        }else{
+            emailValidator = false;
+        }
+
+        if(etDocumentName.getText().toString().trim().length()< 1){
+            documentNameValidator = true;
+        }else{
+            documentNameValidator = false;
+        }
+
+
+        if(!nameValidator && !emailValidator && !documentNameValidator){
+            return true;
+        }else{
+            return false;
+        }
     }
 
+    void addSignMethod(){
+        if (validation()){
+            try {
+
+                Log.d("FILE_GETNAMe", fileSending.getName());
+                RequestBody requestFile =
+                        RequestBody.create(
+                                MediaType.parse(getContentResolver().getType(fileUri)),
+                                fileSending
+                        );
+                MultipartBody.Part body =
+                        MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+
+
+                String token = preferencesRepo.getToken();
+                Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSign(
+                        token,
+                        util.requestBodyString(etName.getText().toString()),
+                        util.requestBodyString(etEmail.getText().toString()),
+                        util.requestBodyString(etDocumentName.getText().toString()),
+                        util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                        util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                        util.requestBodyString(etDescription.getText().toString()),
+                        util.requestBodyString(etLink.getText().toString()),
+                        body
+                );
+                postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void onFailedAddSign(Throwable throwable) {
+        waitingDialog.dismiss();
+        Toast.makeText(this, "ERROR IN POST API NEW SIGN. Try again = "+ throwable.getMessage(),
+                Toast.LENGTH_LONG).show();
+
+    }
+
+    private void onSuccessAddSign(GetSignDetailModel model) {
+        waitingDialog.dismiss();
+        gotoResultPage(model.getHome());
+    }
+
+    //---------------------Method For Get Types Spinner-------------------------------
+
+    private void onFailedTypes(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API Types. Try again",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessTypes(GetTypeCategoryModel getTypeCategoryModel) {
+        if(getTypeCategoryModel != null){
+            types = getTypeCategoryModel.getData();
+            getDataSpinnerTypes();
+        }
+    }
+    private void getDataSpinnerTypes(){
+        Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeyNewSign);
+        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
+        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDocType.setAdapter(adapterDocType);
+        spinnerDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedTypes = (TypeCategoryModel) spinnerDocType.getSelectedItem();
+                Log.d("CategorySelected", selectedTypes.getName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedTypes = (TypeCategoryModel) spinnerDocType.getItemAtPosition(0);
+
+            }
+        });
+    }
+
+
+    //-----------------------Method for Category Spinner -----------------------
+
+    private void onFailedCategory(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API Category. Try again",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessCategory(GetTypeCategoryModel getTypeCategoryModel) {
+        if(getTypeCategoryModel != null){
+            category = getTypeCategoryModel.getData();
+            getDataSpinnerCategory();
+        }
+    }
+
+    private void getDataSpinnerCategory(){
+        Spinner spinnerCategory = findViewById(R.id.spinnerCategoryNewSign);
+        ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
+                this,
+                android.R.layout.simple_spinner_item,
+                category);
+        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapterCategory);
+
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedCategory = (TypeCategoryModel) spinnerCategory.getSelectedItem();
+                Log.d("CategorySelected", selectedCategory.getName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedCategory = (TypeCategoryModel) spinnerCategory.getItemAtPosition(0);
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+    //------------------------------ Initialize Component-----------------
     public void initComponent(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSignYourself);
         setSupportActionBar(toolbar);
@@ -107,6 +304,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //--> Goto Init Dialog
                 customDialog.show();
             }
         });
@@ -118,11 +316,11 @@ public class SignYourselfActivity extends AppCompatActivity  {
             }
         });
 
-
         llDoneData = findViewById(R.id.doneUploadData);
         llDoneData.setVisibility(View.GONE);
         llWaitingData = findViewById(R.id.waitingUploadData);
         llWaitingData.setVisibility(View.GONE);
+
         ImageView ivEmptyFile = findViewById(R.id.ivEmptyFile);
         ivEmptyFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,34 +328,30 @@ public class SignYourselfActivity extends AppCompatActivity  {
                 emptyFile();
             }
         });
+
+        etName = findViewById(R.id.etNameSignYour);
+        etEmail = findViewById(R.id.etEmailNewSign);
+        etDocumentName = findViewById(R.id.etDocNameNewSign);
+        etDescription = findViewById(R.id.etDescNewSign);
+        etLink = findViewById(R.id.etLinkNewSign);
     }
 
+
+    //---------------------------FilePicker Method--------------------
     private void emptyFile() {
-        filePath = "";
+
         llDoneData.setVisibility(View.GONE);
         llUploadData.setVisibility(View.VISIBLE);
     }
 
-
     //Method to get Trigger File Picker
     private void filePicker() {
-//        Intent intent = new Intent(this, FilePickerActivity.class);
-//        intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
-//                .setCheckPermission(true)
-//                .setShowFiles(true)
-//                .setShowVideos(false)
-//                .setShowImages(false)
-//                .setShowAudios(false)
-//                .setMaxSelection(1)
-//                .setSuffixes("pdf", "docx", "doc")
-//                .setSkipZeroSizeFiles(true)
-//                .build());
-//        startActivityForResult(intent, 100);
 
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+
+        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
         chooseFile.setType("*/*");
-
+        chooseFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
 
         startActivityForResult(chooseFile, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
@@ -168,23 +362,102 @@ public class SignYourselfActivity extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && data !=null){
-//            List<MediaFile> mediaFiles = data.<MediaFile>getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
             if(requestCode == EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE){
                 fileUri = data.getData();
+                convertURiToFile(fileUri);
+//                File file = new File(fileUri.getPath());
+//                Log.d("GET_URI", file.getAbsolutePath());
 
-                filePath = fileUri.getPath();
-
-                Log.d("PATH", filePath);
                 llUploadData.setVisibility(View.GONE);
-
                 llWaitingData.setVisibility(View.VISIBLE);
                 TextView tvWaitingData = findViewById(R.id.tvWaitingUpload);
-                tvWaitingData.setText(filePath);
-                setProgressValue(filePath);
+                tvWaitingData.setText(fileUri.getPath());
+                setProgressValue(fileUri.getPath());
             }
         }
     }
 
+    void convertURiToFile(Uri uri){
+        File fileCopy = new File(getCacheDir(), getNameFile(uri));
+        int maxBufferSize = 1 * 1024 * 1024;
+        try {
+            InputStream  inputStream = getContentResolver().openInputStream(uri);
+            Log.e("GETFILE","Size " + inputStream);
+            int  bytesAvailable = inputStream.available();
+
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            final byte[] buffers = new byte[bufferSize];
+            FileOutputStream outputStream = new FileOutputStream(fileCopy);
+            int read = 0;
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+            Log.e("File Size","Size " + fileCopy.length());
+            inputStream.close();
+            outputStream.close();
+
+            Log.e("GETFILE","path " + fileCopy.getPath());
+            fileSending = fileCopy;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        try {
+//            Cursor cursor = this.getContentResolver()
+//                    .query(uri, null, null, null, null, null);
+//
+//
+//                // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+//                // "if there's anything to look at, look at it" conditionals.
+//                if (cursor != null && cursor.moveToFirst()) {
+//
+//                    // Note it's called "Display Name".  This is
+//                    // provider-specific, and might not necessarily be the file name.
+//                    String displayName = cursor.getString(
+//                            cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+//                    Log.i("GETFILE", "Display Name: " + displayName);
+//
+//                    int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+//                    // If the size is unknown, the value stored is null.  But since an
+//                    // int can't be null in Java, the behavior is implementation-specific,
+//                    // which is just a fancy term for "unpredictable".  So as
+//                    // a rule, check if it's null before assigning to an int.  This will
+//                    // happen often:  The storage API allows for remote files, whose
+//                    // size might not be locally known.
+//                    String size = null;
+//                    if (!cursor.isNull(sizeIndex)) {
+//                        // Technically the column stores an int, but cursor.getString()
+//                        // will do the conversion automatically.
+//                        size = cursor.getString(sizeIndex);
+//                    } else {
+//                        size = "Unknown";
+//                    }
+//                    Log.i("GETFILE", "Size: " + size);
+//                }
+//
+//                cursor.close();
+//            ParcelFileDescriptor parcelFileDescriptor =
+//                    getContentResolver().openFileDescriptor(uri, "r");
+//            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+//
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private String getNameFile(Uri uri){
+        Cursor cursor = this.getContentResolver()
+                    .query(uri, null, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            String displayName = cursor.getString(
+                            cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    Log.i("GETFILE", "Display Name: " + displayName);
+                    return displayName;
+        } else{
+            return "Unkwnown";
+        }
+    }
     int progress = 0;
     //For progress bar
     private void setProgressValue(String filePath) {
@@ -241,15 +514,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
 
                 customDialog.dismiss();
                 waitingDialog.show();
-                Timer obRunTime = new Timer();
-                obRunTime.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        waitingDialog.dismiss();
-                        gotoResultPage();
-                    }
-                },2000);
+                addSignMethod();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -265,9 +530,11 @@ public class SignYourselfActivity extends AppCompatActivity  {
         this.finish();
     }
 
-    void gotoResultPage(){
+    void gotoResultPage(SignatureDetailModel sign){
         this.finish();
         Intent intent = new Intent(this, ResultSignature.class);
+        intent.putExtra("where", "mysign");
+        intent.putExtra("id", sign.getId());
         startActivity(intent);
     }
 

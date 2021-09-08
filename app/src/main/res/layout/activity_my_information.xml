@@ -166,6 +166,22 @@
                         android:ems="10"
                         android:inputType="textPersonName"
                         android:theme="@style/editTextChangePassword"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+
+                            android:layout_alignParentRight="true"
+                            style="@style/buttonLogin"
+                            android:text="Save"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/btnUpdateInfo"
+                            android:layout_height="wrap_content"/>
+
+                    </RelativeLayout>
                 </LinearLayout>
 
             </ScrollView>

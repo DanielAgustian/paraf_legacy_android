@@ -20,6 +20,7 @@ android:paddingBottom="15dp">
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/ivBotNavInfo"
         android:layout_gravity="center_vertical"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -32,7 +33,7 @@ android:paddingBottom="15dp">
         android:layout_height="wrap_content">
         <TextView
 
-
+            android:id="@+id/tvTitleInfo"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:layout_width="wrap_content"
@@ -42,7 +43,7 @@ android:paddingBottom="15dp">
             android:textSize="16sp" />
         <TextView
 
-
+            android:id="@+id/tvDetailsInfo"
             android:textStyle="bold"
             android:textColor="@color/colorLightGrayText"
             android:layout_width="wrap_content"

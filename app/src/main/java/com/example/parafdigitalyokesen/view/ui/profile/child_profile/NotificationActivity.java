@@ -16,6 +16,7 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         initToolbar();
+
     }
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNotif);

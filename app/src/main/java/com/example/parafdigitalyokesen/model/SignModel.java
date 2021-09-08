@@ -1,16 +1,37 @@
 package com.example.parafdigitalyokesen.model;
 
+import android.util.Base64;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SignModel {
-    private String title, time;
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("name")
+    private String title;
+
+    @SerializedName("created_at")
+    private String time;
+
+    @SerializedName("qr_code")
+    private String qr_code;
+
 
     public SignModel(String title, String time, int id) {
         this.title = title;
         this.time = time;
         this.id = id;
+    }
+
+    public String getQr_code() {
+        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
+        String text = new String(data, StandardCharsets.UTF_8);
+        return text;
     }
 
     public int getId() {

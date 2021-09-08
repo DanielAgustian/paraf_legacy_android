@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.SignModel;
 import com.example.parafdigitalyokesen.view.add_sign.ReqSignatureActivity;
 import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
@@ -30,14 +32,18 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     SignModel sign;
     int where;
     String type = "";
+
+    View v;
+    Util util;
     /*
     * where is identifier where are they from
-    *  0=> DraftCompletedFragment
+    *  0=> Draft My Sign Fragment
      * 1=> Draft Request Fragment
      * 2=> FragmentRequested in Collab
      * 3=> FragmentAccepted
      * 4=> FragmentRejected
     * */
+
     public BottomSheetDraftInfo(SignModel sign, int where) {
         this.sign = sign;
         this.where =where;
@@ -46,8 +52,22 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.bottom_sheet_nav_info_draft,
+        v = inflater.inflate(R.layout.bottom_sheet_nav_info_draft,
                 container, false);
+        initComponent(v);
+
+
+        return v;
+    }
+
+    private void initComponent(View v) {
+        util = new Util();
+        TextView tvTitle = v.findViewById(R.id.tvTitleInfo);
+        tvTitle.setText(sign.getTitle());
+
+        TextView tvDetails = v.findViewById(R.id.tvDetailsInfo);
+        tvDetails.setText("Created at "+sign.getTime());
+
         LinearLayout llDetails = v.findViewById(R.id.llDetailsDraft);
         LinearLayout llSave = v.findViewById(R.id.llSaveDraft);
         LinearLayout llShare = v.findViewById(R.id.llShareDraft);
@@ -62,12 +82,13 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         llRename.setOnClickListener(this);
         llDelete.setOnClickListener(this);
         llRemind.setOnClickListener(this);
-
+        if(where == 0){
+            ImageView iv = v.findViewById(R.id.ivBotNavInfo);
+            iv.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
+        }
         if (!(where == 2)){
             llRemind.setVisibility(View.GONE);
         }
-
-        return v;
     }
 
     @Override
@@ -95,7 +116,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
                 remindDialog();
                 break;
             default:
-                Log.d("onClickError", "onClickWrong ID");
+                Log.e("onClickError", "onClickWrong ID");
                 break;
         }
     }
@@ -104,6 +125,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         if(where  == 0){
             Intent intent= new Intent(getActivity(), ResultSignature.class);
             intent.putExtra("where", "mysign");
+            intent.putExtra("id", sign.getId());
             startActivity(intent);
         }else if (where == 1){
             Intent intent= new Intent(getActivity(), RespondSignature.class);

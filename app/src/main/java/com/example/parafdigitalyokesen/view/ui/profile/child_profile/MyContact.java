@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.parafdigitalyokesen.R;
@@ -18,6 +20,8 @@ import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.example.parafdigitalyokesen.adapter.MyContactListAdapter;
 import com.example.parafdigitalyokesen.model.ContactModel;
 import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.view.NavBarActivity;
+import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.AddContactActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,7 @@ public class MyContact extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_contact);
         initToolbar();
+        initComponent();
         initRecyclerView();
         initSpinner();
     }
@@ -68,6 +73,20 @@ public class MyContact extends AppCompatActivity {
 
 
     }
+    public void initComponent(){
+        LinearLayout llAddContact = findViewById(R.id.llAddContact);
+        llAddContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoAddContact();
+            }
+        });
+    }
+    void gotoAddContact(){
+        Intent intent = new Intent(this, AddContactActivity.class);
+        startActivity(intent);
+    }
+
     public void back(){
         this.finish();
     }

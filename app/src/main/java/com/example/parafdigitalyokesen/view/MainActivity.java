@@ -4,9 +4,11 @@ package com.example.parafdigitalyokesen.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -16,17 +18,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.parafdigitalyokesen.API.APIClient;
-import com.example.parafdigitalyokesen.API.APIInterface;
+import com.example.parafdigitalyokesen.Repository.APIClient;
+import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.R;
-import com.example.parafdigitalyokesen.model.AuthModel;
+import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.model.LoginModel;
 import com.example.parafdigitalyokesen.view.forgot_password.ForgotPassword;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        gotoNavigationBar();
-                        //loginClick();
+                        //gotoNavigationBar();
+                        loginClick();
                     }
                 }
         );
@@ -88,45 +92,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     void doLogin(String email, String password){
-        Call<LoginModel> callLogin = apiInterface.loginUser(email, password);
-        callLogin.enqueue(new Callback<LoginModel>() {
-            @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if(response.isSuccessful()){
-                    LoginModel result = response.body();
-                    Log.d("RegisterAPI", "RegisterAPI"+ response.body());
-                    sharedPrefLogin(result.getToken());
-                    gotoNavigationBar();
-                }
-                else{
-                    Log.d("RegisterAPI", "RegisterAPIError"+ response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
-
-            }
-        });
+        Observable<LoginModel> callLogin = apiInterface.loginUser(email, password);
+        callLogin.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResult, this::handleError);
+//        callLogin.enqueue(new Callback<LoginModel>() {
+//            @Override
+//            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+//                if(response.isSuccessful()){
+//                    LoginModel result = response.body();
+//                    Log.d("RegisterAPI", "RegisterAPI"+ response.body());
+//                    sharedPrefLogin(result.getToken());
+//                    gotoNavigationBar();
+//                }
+//                else{
+//                    Log.d("RegisterAPI", "RegisterAPIError"+ response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LoginModel> call, Throwable t) {
+//
+//            }
+//        });
     }
+
+
+
 
     boolean validation(String email, String password){
         if(email.trim().equals("")){
             return false;
         }else if (password.trim().equals("")){
             return false;
-        } else if (password.length() < 7){
+        } else if (password.length() < 6){
             return false;
         } else{
             return true;
         }
     }
+    private void handleResult(LoginModel loginModel) {
+        if(loginModel != null){
 
-    void sharedPrefLogin(String token){
-        SharedPreferences.Editor editor = getSharedPreferences("LOGIN", MODE_PRIVATE).edit();
-        editor.putString("token", token);
-        editor.apply();
+            PreferencesRepo preferencesRepo = new PreferencesRepo(this);
+            preferencesRepo.setToken(loginModel.getToken());
+            gotoNavigationBar();
+        }else{
+            Log.d("LoginAPI", "LoginAPI "+  "Emptty" );
+        }
+
     }
+    private void handleError(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API RESPONSE. Try again",
+                Toast.LENGTH_LONG).show();
+    }
+
 
 
 
