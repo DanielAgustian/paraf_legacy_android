@@ -15,6 +15,7 @@ public class PreferencesRepo {
 
 
     final private String NAME_TOKEN = "token";
+
     public String getToken(){
         SharedPreferences pref = context.getSharedPreferences("LOGIN", context.MODE_PRIVATE);
         return (pref.getString(NAME_TOKEN, ""));
@@ -26,4 +27,9 @@ public class PreferencesRepo {
         editor.apply();
 
     }
+    public void deleteToken(){
+        SharedPreferences pref = context.getSharedPreferences("LOGIN", context.MODE_PRIVATE);
+        pref.edit().remove(NAME_TOKEN).commit();
+    }
+
 }

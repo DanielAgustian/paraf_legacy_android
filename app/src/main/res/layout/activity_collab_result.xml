@@ -530,6 +530,7 @@
                     />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/llDuplicateCollabRes"
                 android:clickable="true"
                 android:focusable="true"

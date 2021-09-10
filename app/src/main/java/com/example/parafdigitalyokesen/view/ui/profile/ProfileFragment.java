@@ -21,9 +21,12 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetMyInfoModel;
 import com.example.parafdigitalyokesen.model.GetProfileModel;
+import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.view.MainActivity;
 import com.example.parafdigitalyokesen.view.ui.profile.child_profile.ChangePasswordActivity;
 import com.example.parafdigitalyokesen.view.ui.profile.child_profile.HelpActivity;
 import com.example.parafdigitalyokesen.view.ui.profile.child_profile.MyContact;
@@ -42,19 +45,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
-
+    APIInterface apiInterface;
+    PreferencesRepo preferencesRepo;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View root =  inflater.inflate(R.layout.fragment_profile, container, false);
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        preferencesRepo = new PreferencesRepo(getActivity());
         initComponent(root);
         initData();
         return root;
     }
 
     private void initData() {
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
 
         String token = preferencesRepo.getToken();
 
@@ -101,6 +107,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         RelativeLayout rlHelp = root.findViewById(R.id.rlHelp);
         rlHelp.setOnClickListener(this);
+
+        RelativeLayout rlLogOut = root.findViewById(R.id.rlLogOut);
+        rlLogOut.setOnClickListener(this);
     }
 
     @Override
@@ -124,9 +133,39 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.rlHelp:
                 gotoProfileChild(HelpActivity.class);
                 break;
+            case R.id.rlLogOut:
+                logOut();
+                break;
             default:
                 Log.d("ProfileFragment", "Error Data");
                 break;
+        }
+    }
+
+    private void logOut() {
+        String token = preferencesRepo.getToken();
+
+        Observable<SimpleResponse> callHome = apiInterface.logOutUser(token);
+        try {
+            callHome.subscribeOn(Schedulers.io()).
+                    observeOn(AndroidSchedulers.mainThread()).
+                    subscribe(this::onSuccessLogout, this::onFailedLogOut);
+        } catch (Exception e){
+            Log.e("ProfileCrash", e.getMessage());
+        }
+    }
+
+    private void onFailedLogOut(Throwable throwable) {
+        Util util= new Util();
+        util.toastError(getActivity(), "API Log Out", throwable);
+    }
+
+    private void onSuccessLogout(SimpleResponse simpleResponse) {
+        if (simpleResponse!=null){
+            preferencesRepo.deleteToken();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 

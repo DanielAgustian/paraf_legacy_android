@@ -3,6 +3,7 @@ package com.example.parafdigitalyokesen.Repository;
 
 
 import com.example.parafdigitalyokesen.model.AuthModel;
+import com.example.parafdigitalyokesen.model.GetConnectModel;
 import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetMyInfoModel;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
@@ -50,10 +51,16 @@ public interface APIInterface {
     Observable<LoginModel> loginUser(@Field("email") String email, @Field("password") String password);
 
 
+    @POST("/api/v1/refresh")
+    Observable<LoginModel> refreshToken(@Header("Authorization") String token);
+
+    @POST("/api/v1/logout")
+    Observable<SimpleResponse> logOutUser(@Header("Authorization") String token);
+
+
     //--------------------------   Home API -----------------------------------
     @GET("api/v1/home")
     Observable<GetHomeModel> getHomeStat(@Header("Authorization") String token);
-
 
     //------------------------------ Profile API---------------
     @GET("api/v1/user")
@@ -73,7 +80,7 @@ public interface APIInterface {
                                            @Field("password_confirmation") String password_confirmation);
 
     @GET("api/v1/user/my-contact")
-    Observable<GetMyInfoModel> getMyContact(@Header("Authorization") String token);
+    Observable<GetConnectModel> getMyContact(@Header("Authorization") String token);
 
 
 

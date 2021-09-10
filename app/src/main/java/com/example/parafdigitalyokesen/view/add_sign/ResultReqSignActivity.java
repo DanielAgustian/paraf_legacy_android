@@ -330,7 +330,12 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
             public void onClick(View view) {
 
                 dismissDialog(dialog);
-                doSave();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    doSave(util.makeBitmap(pd));
+                }else{
+                    doSaveBelow29(util.makeBitmap(pd));
+                }
+
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -525,8 +530,57 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
 
-    private void doSave() {
+    void doSaveBelow29(Bitmap bitmap){
+        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .toString() + "/" + detailModel.getTitle()+ ".png");
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+        }
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(f);
+        } catch ( FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        try {
+            fOut.flush();
+            fOut.close();
+            MediaStore.Images.Media.insertImage(getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void doSave(Bitmap bitmap) {
+        ContentValues contentValues = new ContentValues();
+        MyReqDetailModel detailModel = this.detailModel;
+        contentValues.put(MediaStore.Downloads.DISPLAY_NAME, detailModel.getTitle()+detailModel.getCreatedBy()+".png");
+        contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/png");
+        contentValues.put(MediaStore.Downloads.IS_PENDING, true);
+        Uri uri = null;
+        uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+
+        Uri itemUri = getContentResolver().insert(uri, contentValues);
+
+        if (itemUri != null) {
+            try {
+                OutputStream outputStream = getContentResolver().openOutputStream(itemUri);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                outputStream.close();
+                contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
+                getContentResolver().update(itemUri, contentValues, null, null);
+                Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
+                        Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

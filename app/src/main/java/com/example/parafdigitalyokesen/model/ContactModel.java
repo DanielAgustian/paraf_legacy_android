@@ -1,11 +1,30 @@
 package com.example.parafdigitalyokesen.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactModel {
+    @SerializedName("id")
     int id;
-    String name, email;
+
+    @SerializedName("name")
+    String name;
+
+    @SerializedName("email")
+    String email;
+
+    @SerializedName("photo")
+    String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public ContactModel(int id, String name, String email) {
         this.id = id;

@@ -7,11 +7,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civContact"
+    <androidx.cardview.widget.CardView
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:src="@color/colorPrimary"/>
+        android:elevation="12dp"
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/view2"
+        app:cardCornerRadius="40dp"
+        android:layout_centerHorizontal="true"
+        android:innerRadius="0dp"
+        android:shape="ring"
+        android:thicknessRatio="1.9">
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/circleAvatarContact"
+            android:src="@drawable/circle_button"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+        </ImageView>
+    </androidx.cardview.widget.CardView>
     <View
         android:layout_width="15dp"
         android:layout_height="0dp"/>
