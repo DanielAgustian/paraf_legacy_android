@@ -68,6 +68,8 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         TextView tvDetails = v.findViewById(R.id.tvDetailsInfo);
         tvDetails.setText("Created at "+sign.getTime());
 
+
+
         LinearLayout llDetails = v.findViewById(R.id.llDetailsDraft);
         LinearLayout llSave = v.findViewById(R.id.llSaveDraft);
         LinearLayout llShare = v.findViewById(R.id.llShareDraft);
@@ -82,10 +84,10 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         llRename.setOnClickListener(this);
         llDelete.setOnClickListener(this);
         llRemind.setOnClickListener(this);
-        if(where == 0){
-            ImageView iv = v.findViewById(R.id.ivBotNavInfo);
-            iv.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
-        }
+
+        ImageView iv = v.findViewById(R.id.ivBotNavInfo);
+        iv.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
+
         if (!(where == 2)){
             llRemind.setVisibility(View.GONE);
         }
@@ -129,10 +131,12 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             startActivity(intent);
         }else if (where == 1){
             Intent intent= new Intent(getActivity(), RespondSignature.class);
+            intent.putExtra("id", sign.getId());
             startActivity(intent);
         }else{
             Intent intent = new Intent(getActivity(), CollabResultActivity.class);
             intent.putExtra("type", where);
+            intent.putExtra("id", sign.getId());
             startActivity(intent);
         }
 

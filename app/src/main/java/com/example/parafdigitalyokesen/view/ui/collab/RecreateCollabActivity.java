@@ -1,4 +1,4 @@
-package com.example.parafdigitalyokesen.view.add_sign.child_result;
+package com.example.parafdigitalyokesen.view.ui.collab;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +31,10 @@ import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
+import com.example.parafdigitalyokesen.model.MyReqDetailModel;
 import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.TypeCategoryModel;
 import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
@@ -52,7 +54,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class RecreateSignActivity extends AppCompatActivity {
+public class RecreateCollabActivity extends AppCompatActivity {
 
     private Uri fileUri;
     private int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
@@ -68,39 +70,43 @@ public class RecreateSignActivity extends AppCompatActivity {
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     List<TypeCategoryModel> category, types;
+    String token;
     TypeCategoryModel selectedCategory, selectedTypes;
-    SignatureDetailModel detailModel;
 
+
+    MyReqDetailModel detailModel;
     EditText etName, etEmail, etDocumentName, etDescription, etLink;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_sign_yourself);
-        getIntentData();
+
         initNetwork();
         getPermission();
-        initComponent();
-        initSpinner();
+        initData();
         initDialog();
         initDialogWaiting();
-
     }
 
-    private void getIntentData() {
+    private int getIntentData() {
         Intent intent = getIntent();
-        detailModel = (SignatureDetailModel) intent.getSerializableExtra("model");
+        int id = intent.getIntExtra("id", 0);
+        return id;
     }
 
     private void initNetwork() {
         util = new Util();
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
+        token = preferencesRepo.getToken();
     }
 
     public void initSpinner(){
 
-        String token = preferencesRepo.getToken();
+
 
         Log.d("HomeTOKEN", token);
         Observable<GetTypeCategoryModel> getCategory= apiInterface.getCategories(token);
@@ -109,6 +115,22 @@ public class RecreateSignActivity extends AppCompatActivity {
         Observable<GetTypeCategoryModel> getTypes= apiInterface.getTypes(token);
         getTypes.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessTypes, this::onFailedTypes);
 
+    }
+    private void initData(){
+        Observable<GetMyReqDetailModel> getDetails = apiInterface.getCollabDetail(token, getIntentData());
+        getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
+    private void onFailed(Throwable throwable) {
+        util.toastError(this, "API GET COLLAB DETAIL", throwable);
+    }
+
+    private void onSuccess(GetMyReqDetailModel getMyReqDetailModel) {
+        if(getMyReqDetailModel !=null){
+            detailModel = getMyReqDetailModel.getData();
+            initComponent();
+            initSpinner();
+        }
     }
 
     private void getPermission() {
@@ -221,7 +243,7 @@ public class RecreateSignActivity extends AppCompatActivity {
 
         for (int i=0; i< types.size(); i++){
             TypeCategoryModel element = types.get(i);
-            if(element.getName().equals(detailModel.getType())){
+            if(element.getName().equals(detailModel.getType())) {
                 spinnerDocType.setSelection(i);
                 recreateType = i;
             }
@@ -337,7 +359,7 @@ public class RecreateSignActivity extends AppCompatActivity {
         etLink = findViewById(R.id.etLinkNewSign);
         if(detailModel !=null){
             etName.setText(detailModel.getCreatedBy());
-            etEmail.setText(detailModel.getEmail());
+            etEmail.setText(detailModel.getEmailReq());
             etDocumentName.setText(detailModel.getTitle());
             etDescription.setText(detailModel.getDescription());
             etLink.setText(detailModel.getLink());
@@ -484,7 +506,6 @@ public class RecreateSignActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 customDialog.dismiss();
             }
         });
@@ -496,8 +517,8 @@ public class RecreateSignActivity extends AppCompatActivity {
 
     void gotoResultPage(int id){
         this.finish();
-        Intent intent = new Intent(this, ResultSignature.class);
-        intent.putExtra("where", "mysign");
+        Intent intent = new Intent(this, CollabResultActivity.class);
+        intent.putExtra("type", getIntent().getIntExtra("type", 0));
         intent.putExtra("id", id);
         startActivity(intent);
     }

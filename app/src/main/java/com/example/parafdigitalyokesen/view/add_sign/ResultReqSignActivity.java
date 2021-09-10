@@ -1,4 +1,10 @@
-package com.example.parafdigitalyokesen.view.ui.collab;
+package com.example.parafdigitalyokesen.view.add_sign;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -9,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.PictureDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,16 +29,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
@@ -40,15 +40,17 @@ import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.adapter.SignersAdapter;
+import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
-import com.example.parafdigitalyokesen.model.SignModel;
 import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
 import com.example.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,230 +59,141 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CollabResultActivity extends AppCompatActivity implements View.OnClickListener{
+public class ResultReqSignActivity extends AppCompatActivity implements View.OnClickListener {
     List<SignersModel> signers;
-    LinearLayout llRemind, llShare, llSave, llDuplicate, llInviteSigners, llRegenerate, llRename, llDelete;
-    TextView tvPerson;
-    private Dialog remindDialog;
     private Dialog deleteDialog, regenerateDialog, dialogRename;
-    int where;
-    String type;
+    LinearLayout llDelete, llRegen, llSave, llDuplicate, llInvite, llShare, llRename;
+    LinearLayout llPersonRespond;
+
+    String type = "";
     ArrayList<String> typeShare =  new ArrayList<>();
     String token;
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     MyReqDetailModel detailModel;
-    PictureDrawable pd;
     Util util = new Util();
+    PictureDrawable pd;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab_result);
-        where = getIntent().getIntExtra("type", 0);
-        initData();
-        initToolbar();
-    }
-
-    /*
-     * where is identifier where are they from
-     *  0=> DraftCompletedFragment
-     * 1=> Draft Request Fragment
-     * 2=> FragmentRequested in Collab
-     * 3=> FragmentAccepted
-     * 4=> FragmentRejected
-     * */
-    private void initData() {
-        typeShare.add("png");
-        typeShare.add("jpg");
-        typeShare.add("pdf");
+        setContentView(R.layout.activity_result_signature);
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
         token = preferencesRepo.getToken();
-        int id = getIntent().getIntExtra("id", -1) ;
-        if(id != -1){
-
-            Observable<GetMyReqDetailModel> getDetails = apiInterface.getCollabDetail(token, id);
-            getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
-        }
-    }
-
-    private void onSuccess(GetMyReqDetailModel getMyReqDetailModel) {
-        if(getMyReqDetailModel != null){
-            signers = getMyReqDetailModel.getData().getSigners();
-            detailModel = getMyReqDetailModel.getData();
-            initRecyclerView();
-            initComponent();
-            setData(getMyReqDetailModel.getData());
-        }
+        initData();
+        initToolbar();
+        initComponent();
     }
 
 
-
-    private void onFailed(Throwable throwable) {
-        util.toastError(this, "API Collab Detail", throwable);
-        throwable.printStackTrace();
-    }
-
-    private void setData(MyReqDetailModel data) {
-        pd = util.makeQRCOde(data.getQr_code());
-        ImageView iv = findViewById(R.id.ivQRScan);
-        iv.setImageDrawable(util.makeQRCOde(data.getQr_code()));
-
-        TextView tvCreatedBy = findViewById(R.id.tvCreatedBy);
-        tvCreatedBy.setText(data.getCreatedBy());
-
-        TextView tvEmail = findViewById(R.id.tvEmailRS);
-        tvEmail.setText(data.getEmailReq());
-
-        TextView tvInitiated = findViewById(R.id.tvInitiated);
-        tvInitiated.setText(data.getInitiatedOn());
-
-        TextView tvTitle = findViewById(R.id.tvDocName);
-        tvTitle.setText(data.getTitle());
-
-        TextView tvDesc = findViewById(R.id.tvDescRes);
-        tvDesc.setText(data.getDescription());
-
-        TextView tvCategory = findViewById(R.id.tvCategoryRes);
-        tvCategory.setText(data.getCategory());
-
-        TextView tvTypes = findViewById(R.id.tvTypeRes);
-        tvTypes.setText(data.getType());
-
-        TextView tvlink = findViewById(R.id.tvLinkRes);
-        tvlink.setText(data.getLink());
-
-        TextView tvStatus = findViewById(R.id.tvStatusRes);
-        tvStatus.setText(data.getStatus());
-
-        TextView tvSize = findViewById(R.id.tvSizeRes);
-        tvSize.setText(data.getSize());
-
-        TextView tvPersonRespond = findViewById(R.id.tvPersonRespond);
-        tvPersonRespond.setText(data.getTotalSigners()+ "person left to sign");
-    }
-    public void initRecyclerView(){
-        RecyclerView rv = findViewById(R.id.recyclerCollabResult);
-        rv.setNestedScrollingEnabled(false);
-
-        Log.d("SignersModel", signers.size()+ "");
-        SignersAdapter adapter = null;
-        if(where == 2){
-            adapter = new SignersAdapter(signers, 3, getSupportFragmentManager());
-            rv.setAdapter(adapter);
-        } else if(where == 3){
-            adapter = new SignersAdapter(signers, 4, getSupportFragmentManager());
-            rv.setAdapter(adapter);
-        } else {
-            adapter = new SignersAdapter(signers, 5, getSupportFragmentManager());
-            rv.setAdapter(adapter);
-        }
-
-        rv.setLayoutManager(new LinearLayoutManager(this));
-    }
-    public void initToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollabResult);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationIcon(R.drawable.ic_back_gray);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Respond Signature", "Back Clicked");
-                back();
-            }
-        });
-
-    }
-    public void initComponent(){
-
-
-        llRemind = findViewById(R.id.llRemindCollab);
-        llRemind.setOnClickListener(this);
-
-
-        llSave = findViewById(R.id.llSaveCollabRes);
-        llSave.setOnClickListener(this);
-
-        llShare = findViewById(R.id.llShareCollabRes);
-        llShare.setOnClickListener(this);
-
-        llDuplicate = findViewById(R.id.llDuplicateCollabRes);
-        llDuplicate.setOnClickListener(this);
-
-        llInviteSigners = findViewById(R.id.llInviteCollabRes);
-        llInviteSigners.setOnClickListener(this);
-
-        llRegenerate = findViewById(R.id.llRegenCollabRes);
-        llRegenerate.setOnClickListener(this);
-
-        llRename = findViewById(R.id.llRenameCollabRes);
-        llRename.setOnClickListener(this);
-
-        llDelete = findViewById(R.id.llDeleteCollabRes);
-        llDelete.setOnClickListener(this);
-
-        LinearLayout llRejected = findViewById(R.id.llRejected);
-        LinearLayout llApproved = findViewById(R.id.llApproved);
-        tvPerson = findViewById(R.id.tvPersonRespond);
-        if(where == 2){
-            llSave.setVisibility(View.GONE);
-            llRejected.setVisibility(View.GONE);
-        } else if (where == 3){
-            llRemind.setVisibility(View.GONE);
-            llRejected.setVisibility(View.GONE);
-        } else if (where == 4){
-            //Rejected
-            llApproved.setVisibility(View.GONE);
-            tvPerson.setText("Sign Rejected");
-            tvPerson.setTextColor(ContextCompat.getColor(this, R.color.colorError));
-        }
-
-    }
-
-    public void back(){
-        this.finish();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.llRemindCollab:
-                remindDialog();
-                break;
-            case R.id.llSaveCollabRes:
-                save();
-                break;
-            case R.id.llShareCollabRes:
-                sharing();
-                break;
-            case R.id.llDuplicateCollabRes:
-                duplicate();
-                break;
-            case R.id.llInviteCollabRes:
-                inviteSigners();
-                break;
-            case R.id.llRegenCollabRes:
-                regenerate();
-                break;
-            case R.id.llRenameCollabRes:
-                rename();
-                break;
-            case R.id.llDeleteCollabRes:
+            case R.id.llDelete:
                 delete();
                 break;
-            default:
+            case R.id.llRegen:
+                regenerate();
+                break;
+            case R.id.llSave:
+                save();
+                break;
+            case R.id.llRename:
+                rename();
+                break;
+            case R.id.llShare:
+                sharing();
+                break;
+            case R.id.llInvite:
+                inviteSigners();
+                break;
+            case R.id.llDuplicate:
+                duplicate();
                 break;
         }
     }
-    //-------------Process For Bottom Menu---------------------------------//
 
+    private void initData() {
+        typeShare.add("png");
+        typeShare.add("jpg");
+        typeShare.add("pdf");
+        int id = getIntent().getIntExtra("id", -1) ;
+        if(id != -1){
 
+            Observable<GetMyReqDetailModel> getDetails = apiInterface.getMyRequestDetail(token, id);
+            getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+        }
+    }
+
+    private void onSuccess(GetMyReqDetailModel model) {
+        if(model != null){
+            detailModel = model.getData();
+            initRecyclerView();
+            setData();
+        }
+    }
+
+    private void setData() {
+        pd = util.makeQRCOde(detailModel.getQr_code());
+        ImageView iv = findViewById(R.id.ivQRScan);
+        iv.setImageDrawable(pd);
+
+        TextView tvCreatedBy = findViewById(R.id.tvCreatedBy);
+        tvCreatedBy.setText(detailModel.getRequestBy());
+
+        TextView tvEmail = findViewById(R.id.tvEmailRS);
+        tvEmail.setText(detailModel.getEmailReq());
+
+        TextView tvInitiated = findViewById(R.id.tvInitiated);
+        tvInitiated.setText(detailModel.getInitiatedOn());
+
+        TextView tvTitle = findViewById(R.id.tvDocName);
+        tvTitle.setText(detailModel.getTitle());
+
+        TextView tvDesc = findViewById(R.id.tvDescRes);
+        tvDesc.setText(detailModel.getDescription());
+
+        TextView tvCategory = findViewById(R.id.tvCategoryRes);
+        tvCategory.setText(detailModel.getCategory());
+
+        TextView tvTypes = findViewById(R.id.tvTypeRes);
+        tvTypes.setText(detailModel.getType());
+
+        TextView tvlink = findViewById(R.id.tvLinkRes);
+        tvlink.setText(detailModel.getLink());
+
+        TextView tvStatus = findViewById(R.id.tvStatusRes);
+        tvStatus.setText(detailModel.getStatus());
+
+        TextView tvSize = findViewById(R.id.tvSizeRes);
+        tvSize.setText(detailModel.getSize());
+
+        TextView tvPerson = findViewById(R.id.tvPersonRespond);
+        tvPerson.setText(detailModel.getTotalSigners()+ " person left to sign");
+
+        TextView tvCreatedByPlace = findViewById(R.id.tvCreatedByPlace);
+        tvCreatedByPlace.setText("Request By");
+    }
+
+    private void onFailed(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API GET DETAILS. "+ throwable.getMessage(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    //-------------------------- OpenDialog -----------------------
     private void inviteSigners(){
         Dialog dialog  = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -315,6 +228,18 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
+
+    public ArrayList<InviteSignersModel> populateList(int position){
+        ArrayList<InviteSignersModel> list = new ArrayList<>();
+        for(int i = 0; i < position; i++){
+            InviteSignersModel invModel = new InviteSignersModel();
+            invModel.setEtName("");
+            invModel.setEtEmail("");
+            list.add(invModel);
+        }
+        return list;
+    }
+
     private void sharing(){
         Dialog dialog  = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -509,66 +434,56 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         dialog.dismiss();
     }
 
-    //To remind signers
-    public void remindDialog(){
-        remindDialog = new Dialog(this);
-        remindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        remindDialog.setContentView(R.layout.dialog_confirmation);
-        remindDialog.setCancelable(true);
-        remindDialog.show();
-        TextView textTitle =remindDialog.findViewById(R.id.tvTitleDialog);
-        TextView textData = remindDialog.findViewById(R.id.tvTitleData);
-        textTitle.setText("Are you sure want to remind your signers?");
-        textData.setVisibility(View.GONE);
-        Button btnContinue = remindDialog.findViewById(R.id.btnContinue);
-        btnContinue.setText("Remind");
-        Button btnCancel = remindDialog.findViewById(R.id.btnCancel);
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remindDialog.dismiss();
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remindDialog.dismiss();
-            }
-        });
+
+    //------------------Init-----------------------------
+    public void initComponent(){
+        llDelete = findViewById(R.id.llDelete);
+        llRegen = findViewById(R.id.llRegen);
+        llSave  =findViewById(R.id.llSave);
+        llDuplicate = findViewById(R.id.llDuplicate);
+        llShare = findViewById(R.id.llShare);
+        llRename = findViewById(R.id.llRename);
+        llInvite = findViewById(R.id.llInvite);
+
+
+        llDelete.setOnClickListener(this); //Done
+        llRegen.setOnClickListener(this); //Done
+        llSave.setOnClickListener(this); //Done
+        llDuplicate.setOnClickListener(this);
+        llShare.setOnClickListener(this);
+        llRename.setOnClickListener(this);//Done
+        llInvite.setOnClickListener(this);
     }
 
-    //Dialog to remind signers if has been reminded before
-    public void remindDialog2(){
-        remindDialog = new Dialog(this);
-        remindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        remindDialog.setContentView(R.layout.dialog_confirmation);
-        remindDialog.setCancelable(true);
-        remindDialog.show();
-        TextView textTitle =remindDialog.findViewById(R.id.tvTitleDialog);
-        TextView textData = remindDialog.findViewById(R.id.tvTitleData);
-        textTitle.setText("Are you sure want to remind your signers?");
-        textData.setText("You’ve already remind your signers before, want to remind them again?");
-        Button btnContinue = remindDialog.findViewById(R.id.btnContinue);
-        btnContinue.setText("Remind");
-        Button btnCancel = remindDialog.findViewById(R.id.btnCancel);
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+    public void initToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarResultSig);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(R.drawable.ic_back_gray);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                remindDialog.dismiss();
+            public void onClick(View v) {
+                Log.d("mainActivity", "Back Clicked");
+                back();
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remindDialog.dismiss();
-            }
-        });
+
+    }
+
+    public void initRecyclerView(){
+        RecyclerView rv = findViewById(R.id.recyclerViewSigners);
+        signers = detailModel.getSigners();
+        SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+    public void back(){
+        this.finish();
     }
 
 
-
-    //--------------------------Dialog Logic ------------------------------//
-     private void doRename(String rename) {
+    // -----------------------LOGIC FOR MODAL-------------------------//
+    private void doRename(String rename) {
         Observable<SimpleResponse> putRename = apiInterface.putRenameSign(token, detailModel.getId(), rename);
         putRename.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessRename, this::onFailedRename);
     }
@@ -603,11 +518,10 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void gotoRecreateForm() {
-        Intent intent = new Intent(this, RecreateCollabActivity.class);
-        intent.putExtra("type", where);
-        intent.putExtra("id", detailModel.getId());
+        Intent intent = new Intent(this, RecreateSignActivity.class);
 
-        finish();
+        intent.putExtra("id", detailModel.getId());
+        intent.putExtra("model", detailModel);
         startActivity(intent);
     }
 
@@ -683,6 +597,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void downloadFileAPI29(Bitmap bitmap, String type) {
         Log.d("FILETYPE", type);
+
         if(type.equals(typeShare.get(0))){
             ContentValues contentValues = new ContentValues();
             MyReqDetailModel detailModel = this.detailModel;
@@ -761,17 +676,4 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         Toast.makeText(this, "Successfully Download PDF: "+ file.getPath(),
                 Toast.LENGTH_LONG).show();
     }
-    //---------------------------Misc Logic---------------------
-    public ArrayList<InviteSignersModel> populateList(int position){
-        ArrayList<InviteSignersModel> list = new ArrayList<>();
-        for(int i = 0; i < position; i++){
-            InviteSignersModel invModel = new InviteSignersModel();
-            invModel.setEtName("");
-            invModel.setEtEmail("");
-            list.add(invModel);
-        }
-        return list;
-    }
-
-
 }

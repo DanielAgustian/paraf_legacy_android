@@ -472,7 +472,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             llPersonRespond = findViewById(R.id.llPersonRespond);
             llPersonRespond.setVisibility(View.GONE);
         }else{
-            rv.setNestedScrollingEnabled(false);
+            //rv.setNestedScrollingEnabled(false);
             signers = SignersModel.generateModel(3);
             SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
             rv.setAdapter(adapter);

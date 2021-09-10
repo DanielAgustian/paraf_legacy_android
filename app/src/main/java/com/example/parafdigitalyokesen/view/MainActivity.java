@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoNavigationBar() {
         Intent intent = new Intent(this, NavBarActivity.class);
+        finish();
         startActivity(intent);
     }
 

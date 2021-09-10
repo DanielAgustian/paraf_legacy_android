@@ -21,11 +21,22 @@ public class SignModel {
     @SerializedName("qr_code")
     private String qr_code;
 
+    @SerializedName("due_date")
+    private String due_date;
+
+    @SerializedName("status")
+    private String status;
+
+
 
     public SignModel(String title, String time, int id) {
         this.title = title;
         this.time = time;
         this.id = id;
+    }
+
+    public String getDue_date() {
+        return due_date;
     }
 
     public String getQr_code() {
@@ -65,5 +76,8 @@ public class SignModel {
            ));
         }
         return model;
+    }
+    public String getStatus() {
+        return status;
     }
 }

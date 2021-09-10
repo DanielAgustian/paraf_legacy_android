@@ -33,32 +33,24 @@
                 android:textColor="@color/black"
                 android:text="Pengajuan HKI “MYSA” Family Boardgame"
                 android:layout_height="wrap_content"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tvTimeSignList"
-                    android:layout_weight="0.48"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorLightGrayText"
-                    android:textSize="11sp"
-                    android:text="Created by Apel"
-                    />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.04"/>
-                <TextView
-                    android:textSize="11sp"
-                    android:id="@+id/tvStatusListDraft"
+            <TextView
+                android:id="@+id/tvTimeSignList"
 
-                    android:textColor="@color/colorPending"
-                    android:text="Lorem by Lorem"
-                    android:layout_weight="0.48"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorLightGrayText"
+                android:textSize="11sp"
+                android:text="Created by Apel"
+                />
+            <TextView
+                android:textSize="11sp"
+                android:id="@+id/tvStatusListDraft"
+                android:textColor="@color/colorPending"
+                android:text="Lorem by Lorem"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
 
         </LinearLayout>
         <LinearLayout

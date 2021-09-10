@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParafDigitalYokesen">
+        <activity android:name=".view.ui.collab.RecreateCollabActivity"/>
+        <activity android:name=".view.add_sign.ResultReqSignActivity"/>
+        <activity android:name=".view.ui.collab.CollabResultActivity"/>
         <activity android:name=".view.add_sign.child_result.RecreateSignActivity"></activity>
         <activity android:name=".view.ui.profile.child_profile.child_help.AddContactActivity" />
         <activity android:name=".view.ui.NotificationListActivity" />

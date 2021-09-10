@@ -9,18 +9,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.Repository.APIClient;
+import com.example.parafdigitalyokesen.Repository.APIInterface;
+import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
+import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.SignModel;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,21 +78,43 @@ public class DraftMyRequestFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    View root;
     RecyclerView rvToday;
     List<SignModel> sign;
     ImageView ivGrid, ivList;
     boolean isGrid = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root =  inflater.inflate(R.layout.fragment_today, container, false);
-        initComponent(root);
-        initRecyclerView(root);
+        root =  inflater.inflate(R.layout.fragment_today, container, false);
+        initData();
         initSpinner(root);
         return root;
 
+    }
+    private void initData() {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
+        String token = preferencesRepo.getToken();
+        Log.d("HomeTOKEN", token);
+        Observable<GetSignatureModel> getSignatureList = apiInterface.getMyReqList(token);
+        getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
+    private void onFailed(Throwable throwable) {
+        Toast.makeText(getActivity(), "ERROR IN FETCHING API MySigantureList. Error:"+ throwable.getMessage(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccess(GetSignatureModel model) {
+        if(model!=null){
+            sign = model.getData();
+            initRecyclerView(root);
+            initComponent(root);
+        }
     }
 
     private void initComponent(View root){
@@ -114,7 +146,7 @@ public class DraftMyRequestFragment extends Fragment {
 
     private void initRecyclerView(View root){
         rvToday = root.findViewById(R.id.rvListGridDraft);
-        sign = SignModel.generateList();
+
         FragmentManager fragmentManager = getParentFragmentManager();
         DraftListAdapter adapter = new DraftListAdapter(sign, isGrid, fragmentManager, 1);
 

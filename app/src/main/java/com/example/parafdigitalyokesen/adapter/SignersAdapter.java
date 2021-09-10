@@ -1,14 +1,20 @@
 package com.example.parafdigitalyokesen.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +22,11 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.view.ui.collab.bottom_sheet.BottomSheetSeeQR;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHolder> {
 
@@ -38,6 +48,17 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         tvName.setText(signers.getName());
         TextView tvEmail = holder.tvEmailRV;
         tvEmail.setText(signers.getEmail());
+        TextView tvStatus = holder.tvListStatus;
+        tvStatus.setText(signers.getInfo());
+        if(signers.getPhoto() != null){
+            if(!(signers.getPhoto().equals(""))){
+                ImageView civ = holder.civPhoto;
+                new DownLoadImageTask(civ).execute(signers.getPhoto());
+            }
+        }
+        if(signers.getStatus().trim().toLowerCase().contains("waiting")){
+            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending));
+        }
     }
 
     @Override
@@ -49,6 +70,7 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         public TextView tvNameRv, tvEmailRV, tvListStatus, tvReqDocs;
         public LinearLayout llButton;
         public Button btnView, btnSave;
+        public ImageView civPhoto;
         public ViewHolder(View itemView){
             super(itemView);
             tvNameRv = itemView.findViewById(R.id.tvListName);
@@ -58,7 +80,7 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
             tvListStatus = itemView.findViewById(R.id.tvListStatusSigners);
             btnView = itemView.findViewById(R.id.btnViewQR);
             btnSave = itemView.findViewById(R.id.btnSaveQR);
-
+            civPhoto = itemView.findViewById(R.id.circleAvatar);
 
 
 
@@ -114,4 +136,44 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
             bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
         }
     };
+
+
+
+
+
+    private class DownLoadImageTask extends AsyncTask<String,Void, Bitmap> {
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        /*
+            doInBackground(Params... params)
+                Override this method to perform a computation on a background thread.
+         */
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                /*
+                    decodeStream(InputStream is)
+                        Decode an input stream into a bitmap.
+                 */
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){ // Catch the download exception
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        /*
+            onPostExecute(Result result)
+                Runs on the UI thread after doInBackground(Params...).
+         */
+        protected void onPostExecute(Bitmap result){
+            imageView.setImageBitmap(result);
+        }
+    }
 }

@@ -86,7 +86,7 @@
 
             <LinearLayout
                 android:id="@+id/layoutRejected"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginTop="15dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
                     android:text="You have successfully rejected signature request"
-                    android:textColor="@color/colorSuccess"
+                    android:textColor="@color/colorError"
                     android:textSize="14sp"
                     />
                 <TextView
@@ -179,7 +179,7 @@
                         android:gravity="right"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/tvCreatedByRespondResult"
+                            android:id="@+id/tvReqByRespondResult"
                             android:textSize="12sp"
                             android:layout_marginBottom="3dp"
                             android:layout_gravity="right"

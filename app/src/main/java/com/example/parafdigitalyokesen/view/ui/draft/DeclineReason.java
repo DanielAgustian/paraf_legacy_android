@@ -4,24 +4,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.Repository.APIClient;
+import com.example.parafdigitalyokesen.Repository.APIInterface;
+import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.example.parafdigitalyokesen.model.SimpleResponse;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class DeclineReason extends AppCompatActivity {
-
+    EditText etDeclineReason;
+    int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decline_reason);
+
+         id = getIntent().getIntExtra("id", -1) ;
+
         initToolbar();
         initComponent();
     }
 
     public void initComponent(){
+        etDeclineReason = findViewById(R.id.etDeclineReason);
         Button btnSaveReason = findViewById(R.id.btnSaveReason);
         btnSaveReason.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,10 +65,39 @@ public class DeclineReason extends AppCompatActivity {
         this.finish();
     }
     public void getToResult(){
-        Intent intent = new Intent(this, ResultAfterRespond.class);
-        intent.putExtra("Result", "0");
-        startActivity(intent);
+
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(this);
+
+        String token = preferencesRepo.getToken();
+
+        if(etDeclineReason.getText().toString().trim() != ""){
+            Observable<SimpleResponse> getDetails = apiInterface.putRejectedReq(token, id, etDeclineReason.getText().toString());
+
+            getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessRejected, this::onFailedReject);
+        }else{
+            Toast.makeText(this, "Reason Text is Empty. Please fill the reason text to reject this request sign.",
+                    Toast.LENGTH_LONG).show();
+        }
+
     }
+
+    private void onFailedReject(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN PUT REJECTED. "+ throwable.getMessage(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessRejected(SimpleResponse simpleResponse) {
+        if (simpleResponse!=null){
+            Intent intent = new Intent(this, ResultAfterRespond.class);
+            intent.putExtra("Result", 0);
+            intent.putExtra("id", id);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+    }
+
+
 
 
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.SignModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
@@ -36,7 +37,7 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
     private boolean isGrid;
     private FragmentManager fragmentManager;
     private int type;
-
+    Util util =new Util();
     public DraftListAdapter(List<SignModel> model, boolean isGrid, FragmentManager fragmentManager, int type) {
         this.models = model;
         this.isGrid = isGrid;
@@ -97,27 +98,24 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         ImageView ivList = holder.ivList;
 
         //Log.d("QRCODE", sign.getQr_code());
-        if(type== 0 ){
-            try {
-                SVG svg = SVG.getFromString(sign.getQr_code());
-                PictureDrawable  pd = new PictureDrawable(svg.renderToPicture());
-                ivList.setImageDrawable(pd);
-            } catch (SVGParseException e) {
-                e.printStackTrace();
-            }
+        tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
+        ivList.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
+
+        if(type == 0 ){
             tvStatus.setVisibility(View.GONE);
-        }else if (type == 1){
-            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
+        }
+        else if (type == 1){
+            tvStatus.setText(sign.getDue_date());
         }
         else if (type == 2){
-
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending) );
+            tvStatus.setText(sign.getStatus());
         } else if (type == 3){
             tvStatus.setVisibility(View.GONE);
         }
         else if (type == 4){
-
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorError) );
+            tvStatus.setText(sign.getStatus());
         }
     }
 
