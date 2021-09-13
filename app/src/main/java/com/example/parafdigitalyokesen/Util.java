@@ -2,6 +2,8 @@ package com.example.parafdigitalyokesen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,6 +16,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.core.view.ViewCompat;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -90,5 +94,18 @@ public class Util {
     public void toastError(Context context, String apiName, Throwable throwable){
         Toast.makeText(context, "ERROR IN "+apiName+":" + throwable.getMessage(),
                 Toast.LENGTH_LONG).show();
+    }
+
+    public void changeColorEditText(EditText editText, boolean validator, Context context){
+        Resources res = context.getResources();
+        if(validator){
+            editText.setTextColor(res.getColor(R.color.colorError));
+            ColorStateList colorStateList = ColorStateList.valueOf(res.getColor(R.color.colorError));
+            ViewCompat.setBackgroundTintList(editText, colorStateList);
+        } else{
+            editText.setTextColor(res.getColor(R.color.colorGrayText));
+            ColorStateList colorStateList = ColorStateList.valueOf(res.getColor(R.color.colorLightGrayText));
+            ViewCompat.setBackgroundTintList(editText, colorStateList);
+        }
     }
 }

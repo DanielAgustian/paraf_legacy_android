@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.R;
+import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.AuthModel;
 
 
@@ -31,7 +32,7 @@ public class register_activity extends AppCompatActivity {
     EditText etConfirmPassword;
     ImageView ivPassRegister, ivConfirmPassRegister;
     APIInterface apiInterface;
-
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,18 +112,60 @@ public class register_activity extends AppCompatActivity {
 
 
     private boolean validation(String email, String name, String password, String passwordConfirmation){
-        if(email.trim().equals("")){
-            return false;
-        } else if (name.trim().equals("")){
-            return false;
-        } else if (password.trim().equals("") || password.length() < 6){
-            return false;
-        } else if (passwordConfirmation.trim().equals("") || passwordConfirmation.length()< 6){
-            return false;
-        } else if (!password.equals(passwordConfirmation)){
+        boolean emailValidator = false,
+                nameValidator= false,
+                passValidator= false,
+                confirmValidator = false,
+                sameValidator = false;
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if(email.length()>0 && email.matches(emailPattern)){
+            emailValidator = false;
+        }else{
+            emailValidator= true;
+        }
+
+        if(name.trim().length()>0){
+            nameValidator = false;
+        }else{
+            nameValidator = true;
+        }
+
+        if(password.trim().length()>5){
+            passValidator = false;
+        }else{
+            passValidator = true;
+        }
+
+        if(passwordConfirmation.trim().length()>5){
+            confirmValidator = false;
+        }else{
+            confirmValidator = true;
+        }
+        if(password.equals(passwordConfirmation)){
+            sameValidator = false;
+        }else{
+            sameValidator = true;
+        }
+
+        util.changeColorEditText(etEmail, emailValidator, this);
+        util.changeColorEditText(etUsername, nameValidator, this);
+        if(sameValidator || passValidator){
+            util.changeColorEditText(etPassword, true, this);
+        }else{
+            util.changeColorEditText(etPassword, false, this);
+        }
+        if(sameValidator || confirmValidator){
+            util.changeColorEditText(etConfirmPassword, true, this);
+        }else{
+            util.changeColorEditText(etConfirmPassword, false, this);
+        }
+
+        if(!passValidator && !nameValidator && !emailValidator && !confirmValidator && !sameValidator){
+            return true;
+        }else{
             return false;
         }
-        return true;
+
     }
 
 

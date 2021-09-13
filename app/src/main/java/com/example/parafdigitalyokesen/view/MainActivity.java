@@ -24,6 +24,7 @@ import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.LoginModel;
 import com.example.parafdigitalyokesen.view.forgot_password.ForgotPassword;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView ivPassword;
     TextView tvSignUp, tvForgotPas;
     APIInterface apiInterface;
+    Util util = new Util();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,14 +122,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     boolean validation(String email, String password){
+        boolean passValidator = false, emailValidator= false;
         if(email.trim().equals("")){
-            return false;
-        }else if (password.trim().equals("")){
-            return false;
-        } else if (password.length() < 6){
-            return false;
-        } else{
+            emailValidator = true;
+        }else{
+            emailValidator = false;
+        }
+        util.changeColorEditText(etEmail, emailValidator, this);
+
+        if(password.trim().equals("") || password.trim().length()<6){
+            passValidator = true;
+
+        }else{
+            passValidator = false;
+        }
+        util.changeColorEditText(etPassword, passValidator, this);
+
+        if(!emailValidator && !passValidator){
             return true;
+        }else{
+            return false;
         }
     }
     private void handleResult(LoginModel loginModel) {
@@ -142,8 +156,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void handleError(Throwable throwable) {
-        Toast.makeText(this, "ERROR IN FETCHING API RESPONSE. Try again",
-                Toast.LENGTH_LONG).show();
+        String wrong = throwable.getMessage().toLowerCase();
+        if (wrong.contains("unauthorized")|| wrong.contains("401")){
+
+            Toast.makeText(this, "Please check your email or password.",
+                    Toast.LENGTH_LONG).show();
+        }else{
+
+            util.toastError(this, "API LOGIN ERROR", throwable);
+        }
+
     }
 
 
