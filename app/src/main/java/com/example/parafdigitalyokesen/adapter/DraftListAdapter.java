@@ -79,6 +79,7 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
 //                }else{
 //
 //                }
+
                 BottomSheetDraftInfo bottomSheet = new BottomSheetDraftInfo(sign, type);
                 bottomSheet.show(fragmentManager, "ModalBottomSheet");
             }
@@ -106,6 +107,13 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
         }
         else if (type == 1){
             tvStatus.setText(sign.getDue_date());
+            String status = models.get(position).getStatus();
+            if(status == null || status.equals("")){
+                    tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending));
+            }else if(status.toLowerCase().contains("rejected")){
+                tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorError));
+            }
+
         }
         else if (type == 2){
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending) );

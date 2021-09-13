@@ -58,8 +58,11 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable throwable) {
-        Util util = new Util();
-        util.toastError(this, "API Refresh Token", throwable);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(this);
+        preferencesRepo.deleteToken();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void handleResult(LoginModel loginModel) {

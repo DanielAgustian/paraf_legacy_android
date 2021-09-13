@@ -27,13 +27,6 @@ public class CollabFragment extends Fragment {
         notificationsViewModel =
                 new ViewModelProvider(this).get(CollabViewModel.class);
         View root = inflater.inflate(R.layout.fragment_collab, container, false);
-//        final TextView textView = root.findViewById(R.id.text_notifications);
-//        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
         tabLayout = root.findViewById(R.id.tabLayoutCollab);
         vpCollab = root.findViewById(R.id.vpCollab);
         vpCollab.setAdapter(new CollabPageAdapter(getActivity()));

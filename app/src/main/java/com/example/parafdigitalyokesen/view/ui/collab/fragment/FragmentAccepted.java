@@ -52,6 +52,12 @@ public class FragmentAccepted extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initData() {
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());

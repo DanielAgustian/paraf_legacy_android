@@ -478,7 +478,7 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
     public void initRecyclerView(){
         RecyclerView rv = findViewById(R.id.recyclerViewSigners);
         signers = detailModel.getSigners();
-        SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
+        SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager(), detailModel.getId());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }

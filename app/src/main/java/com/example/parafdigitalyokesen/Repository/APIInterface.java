@@ -58,6 +58,21 @@ public interface APIInterface {
     Observable<SimpleResponse> logOutUser(@Header("Authorization") String token);
 
 
+    //---------------------FORGOT PASSWORD API------------------------------
+    @FormUrlEncoded
+    @POST("/api/v1/forgot-password")
+    Observable<SimpleResponse> forgotPassword(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("/api/v1/confirm-token")
+    Observable<SimpleResponse> checkPasswordToken(@Field("email") String email, @Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("/api/v1/reset-password")
+    Observable<SimpleResponse> resetPassword(@Field("email") String email,
+                                             @Field("password") String password,
+                                             @Field("password_confirmation") String password_confirmation);
+
     //--------------------------   Home API -----------------------------------
     @GET("api/v1/home")
     Observable<GetHomeModel> getHomeStat(@Header("Authorization") String token);
@@ -133,6 +148,15 @@ public interface APIInterface {
     Observable<GetSignatureModel> getMyReqList(
             @Header("Authorization") String token
     );
+
+    @GET("api/v1/sign/my-request?status=accepted")
+    Observable<GetSignatureModel> getMyReqAccList(
+            @Header("Authorization") String token
+    );
+    @GET("api/v1/sign/my-request?status=rejected")
+    Observable<GetSignatureModel> getMyReqRejList(
+            @Header("Authorization") String token
+    );
     //---------------------------------- My Signature details --------------------------------//
     @GET("api/v1/sign/my-signature/{sign_id}")
     Observable<GetSignDetailModel> getMySignDetail(
@@ -146,8 +170,6 @@ public interface APIInterface {
     Observable<SimpleResponse> putRenameSign(
             @Header("Authorization") String token,
             @Path("sign_id") int signId,
-            
-            
             @Field("name") String name
     );
 
@@ -189,7 +211,7 @@ public interface APIInterface {
     );
 
 
-    @PUT("api/v1/sign/my-request/{sign_id}}/accept")
+    @PUT("api/v1/sign/my-request/{sign_id}/accept")
     Observable<SimpleResponse> putAcceptReq(
             @Header("Authorization") String token,
             @Path("sign_id") int signId
@@ -202,6 +224,8 @@ public interface APIInterface {
             @Path("sign_id") int signId,
             @Field("feedback") String feedback
     );
+
+
 
     //--------------------------------Get Collab List------------------------------------//
     @GET("api/v1/collab/requested")
@@ -222,6 +246,23 @@ public interface APIInterface {
     //--------------------------Collab Detail--------------------------//
     @GET("api/v1/collab/{sign_id}/detail")
     Observable<GetMyReqDetailModel> getCollabDetail(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId
+    );
+
+
+    //-------------------------- Send document and request document--------------------------//
+    @Multipart
+    @POST("api/v1/sign/my-signature/send-document")
+    Observable<SimpleResponse> SendDocument(
+            @Header("Authorization") String token,
+            @Query("email[]") ArrayList<String> email,
+            @Part MultipartBody.Part file,
+            @Part("id") RequestBody id,
+            @Part("message") RequestBody message
+    );
+    @POST("api/v1/sign/my-request/{sign_id}/request-document")
+    Observable<SimpleResponse> RequestDocument(
             @Header("Authorization") String token,
             @Path("sign_id") int signId
     );

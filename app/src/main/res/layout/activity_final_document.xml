@@ -58,7 +58,6 @@
 
 
             <ListView
-
                 android:id="@+id/lvSignersFinalDocument"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -231,7 +230,7 @@
 
                 android:textSize="14sp" />
             <EditText
-                android:id="@+id/etMsgNewSign"
+                android:id="@+id/etMsgFinal"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
 

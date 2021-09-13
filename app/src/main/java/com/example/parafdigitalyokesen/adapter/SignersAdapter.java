@@ -30,13 +30,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHolder> {
 
-
+    View contactView;
     @NonNull
     @Override
     public SignersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.recycler_view_signers_item, parent, false);
+        contactView = inflater.inflate(R.layout.recycler_view_signers_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
@@ -59,6 +59,24 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         if(signers.getStatus().trim().toLowerCase().contains("waiting")){
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending));
         }
+
+        Button btnSave = holder.btnSave;
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("save",mSigners.get(position) , id);
+                bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
+            }
+        });
+
+        Button btnView = holder.btnView;
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("save", mSigners.get(position), id);
+                bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
+            }
+        });
     }
 
     @Override
@@ -89,14 +107,13 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
             }else if (type == 3){
                 llButton.setVisibility(View.VISIBLE);
                 btnSave.setVisibility(View.INVISIBLE);
-                btnView.setOnClickListener(btnViewListener);
+
 
             }
             else if (type == 4){
                 llButton.setVisibility(View.VISIBLE);
                 tvReqDocs.setVisibility(View.VISIBLE);
-                btnView.setOnClickListener(btnViewListener);
-                btnSave.setOnClickListener(btnSaveListener);
+
             }
             else{
                 llButton.setVisibility(View.GONE);
@@ -106,6 +123,7 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
     private List<SignersModel> mSigners;
     private int type;
     private FragmentManager fragmentManager;
+    private int id;
     /*
     * type is identifier for what layout is accessing this adapter.
     * 0=> Result Signature in Add_sign
@@ -115,30 +133,12 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
     * 4=> Collab Result from Accepted
     * 5=> Collab Result from Rejected
     * */
-    public SignersAdapter(List<SignersModel> mSigners, int type, FragmentManager fragmentManager) {
+    public SignersAdapter(List<SignersModel> mSigners, int type, FragmentManager fragmentManager, int id) {
         this.mSigners = mSigners;
         this.type = type;
+        this.id = id;
         this.fragmentManager = fragmentManager;
     }
-
-    View.OnClickListener btnViewListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("view");
-            bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
-        }
-    };
-
-    View.OnClickListener btnSaveListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("save");
-            bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
-        }
-    };
-
-
-
 
 
     private class DownLoadImageTask extends AsyncTask<String,Void, Bitmap> {

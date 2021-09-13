@@ -77,6 +77,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     SignatureDetailModel detailModel;
     Util util = new Util();
     PictureDrawable pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,21 +194,32 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         dialog.show();
         ListView lvSigners = dialog.findViewById(R.id.lvDialogInvite);
         lvSigners.setNestedScrollingEnabled(false);
-        ArrayList<InviteSignersModel> list = populateList(2);
+        ArrayList<InviteSignersModel> list = populateList(1);
         InviteSignersDialogAdapter invAdapter = new InviteSignersDialogAdapter(
                 this, list
         );
         lvSigners.setAdapter(invAdapter);
         Button btnContinue = dialog.findViewById(R.id.btnContinueInvite);
         Button btnCancel = dialog.findViewById(R.id.btnCancelInvite);
-
+        LinearLayout llAddSigners = findViewById(R.id.llAddSigners);
+        llAddSigners.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InviteSignersModel model = new InviteSignersModel();
+                model.setEtName("");
+                model.setEtEmail("");
+                list.add(model);
+                invAdapter.notifyDataSetChanged();
+            }
+        });
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View viewListItem = lvSigners.getChildAt(0);
-                EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
-                String string = editText.getText().toString();
-                Log.d("Dialog Invite", string);
+                ArrayList<String> listSigners = util.getDataEmails(lvSigners, list);
+//                View viewListItem = lvSigners.getChildAt(0);
+//                EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
+//                String string = editText.getText().toString();
+//                Log.d("Dialog Invite", string);
                 dismissDialog(dialog);
             }
         });
@@ -474,7 +486,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         }else{
             //rv.setNestedScrollingEnabled(false);
             signers = SignersModel.generateModel(3);
-            SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager());
+            SignersAdapter adapter =  new SignersAdapter(signers, 0, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
             rv.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -568,6 +580,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            util.shareData(Uri.parse(f.toString()),"image/png", this);
         } else  if(type.equals(typeShare.get(1))){
             File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                     .toString() + "/" + detailModel.getTitle()+ ".jpg");
@@ -590,6 +603,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            util.shareData(Uri.parse(f.toString()),"image/jpeg", this);
         } else if (type.equals(typeShare.get(2))){
             downloadPDF(bitmap);
         }
@@ -621,6 +635,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
                     getContentResolver().update(itemUri, contentValues, null, null);
                     Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
                             Toast.LENGTH_LONG).show();
+                    util.shareData(itemUri, "image/png", this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -646,6 +661,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
                     getContentResolver().update(itemUri, contentValues, null, null);
                     Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
                             Toast.LENGTH_LONG).show();
+                    util.shareData(itemUri, "image/jpeg", this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -675,7 +691,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
 
         }
+        Uri.parse(new File("/sdcard/cats.jpg").toString());
         pdfDocument.close();
+        util.shareData(Uri.parse(stringFilePath), "application/pdf", this);
         Toast.makeText(this, "Successfully Download PDF: "+ file.getPath(),
                 Toast.LENGTH_LONG).show();
     }

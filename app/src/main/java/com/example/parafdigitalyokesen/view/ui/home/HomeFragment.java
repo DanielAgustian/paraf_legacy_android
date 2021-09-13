@@ -51,6 +51,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initHomeState();
+    }
+
     private void initHomeState() {
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());

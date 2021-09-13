@@ -59,6 +59,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initData() {
 
 

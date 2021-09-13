@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +28,7 @@ import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
+import com.example.parafdigitalyokesen.model.SimpleResponse;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ResultAfterRespond extends AppCompatActivity {
+public class ResultAfterRespond extends AppCompatActivity implements View.OnClickListener {
 
     int result, id;
     String token;
@@ -71,16 +74,16 @@ public class ResultAfterRespond extends AppCompatActivity {
 
     private void onSuccess(GetMyReqDetailModel getMyReqDetailModel) {
         if(getMyReqDetailModel != null){
-            initRecyclerView(getMyReqDetailModel.getData().getSigners());
+            initRecyclerView(getMyReqDetailModel.getData().getSigners(), getMyReqDetailModel.getData().getId());
             initComponent(getMyReqDetailModel.getData());
         }
     }
 
-    public void initRecyclerView(List<SignersModel> signers){
+    public void initRecyclerView(List<SignersModel> signers, int id){
         RecyclerView rv = findViewById(R.id.rvRespondResultDraft);
         rv.setNestedScrollingEnabled(false);
 
-        SignersAdapter adapter =  new SignersAdapter(signers, 2, getSupportFragmentManager());
+        SignersAdapter adapter =  new SignersAdapter(signers, 2, getSupportFragmentManager(), id);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -104,21 +107,26 @@ public class ResultAfterRespond extends AppCompatActivity {
         LinearLayout layoutRejected = findViewById(R.id.layoutRejected);
         Button btnRequestDoc = findViewById(R.id.btnRequestFinalDoc);
 
+        btnRequestDoc.setOnClickListener(this);
 
-
-        if(result== 1){
+        if(model.getStatus().toLowerCase().equals("accepted")){
             if(layoutAccepted.getVisibility() == View.GONE){
                 layoutAccepted.setVisibility(View.VISIBLE);
+                layoutRejected.setVisibility(View.GONE);
                 ImageView ivQRScan = findViewById(R.id.ivQRScanResultRespond);
                 ivQRScan.setImageDrawable(util.makeQRCOde(model.getQr_code()));
             }
-        } else if (result == 0){
+        } else if (model.getStatus().toLowerCase().equals("rejected")){
             if(layoutRejected.getVisibility()== View.GONE){
+                layoutAccepted.setVisibility(View.GONE);
                 layoutRejected.setVisibility(View.VISIBLE);
                 btnRequestDoc.setVisibility(View.GONE);
                 TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
+                tvRejectedReason.setText(model.getReason());
             }
-
+        } else{
+            layoutAccepted.setVisibility(View.GONE);
+            layoutRejected.setVisibility(View.GONE);
         }
 
         TextView tvReqBy = findViewById(R.id.tvReqByRespondResult);
@@ -155,5 +163,41 @@ public class ResultAfterRespond extends AppCompatActivity {
 
     public void back(){
         this.finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnRequestFinalDoc:
+                sentRequest();
+                break;
+        }
+    }
+
+    private void sentRequest() {
+        Observable<SimpleResponse> senRequest = apiInterface.RequestDocument(token, id);
+        senRequest.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessRequest, this::onFailedrequestDoc);
+    }
+
+    private void onFailedrequestDoc(Throwable throwable) {
+        util.toastError(this, "API Request DOc", throwable);
+    }
+
+    private void onSuccessRequest(SimpleResponse simpleResponse) {
+        initDialog();
+    }
+    public void initDialog(){
+        Log.d("RequestAPI", "Success");
+        Dialog customDialog = new Dialog(this);
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.dialog_approval);
+        Button btnContinue = customDialog.findViewById(R.id.btnCloseDialog);
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
     }
 }

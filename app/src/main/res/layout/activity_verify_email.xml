@@ -55,14 +55,14 @@ code for continue"
             />
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/etTokenEmail"
             android:layout_width="match_parent"
-            android:layout_marginTop="7dp"
             android:layout_height="42dp"
-            android:hint="@string/code_hint"
+            android:layout_marginTop="7dp"
             android:ems="10"
+            android:hint="@string/code_hint"
             android:inputType="textPersonName"
-            android:theme="@style/editTextLogin"/>
+            android:theme="@style/editTextLogin" />
 
         <TextView
             android:clickable="true"

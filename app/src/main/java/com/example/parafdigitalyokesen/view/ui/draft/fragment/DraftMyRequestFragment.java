@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -89,11 +90,18 @@ public class DraftMyRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root =  inflater.inflate(R.layout.fragment_today, container, false);
-        initData();
+        //initData();
         initSpinner(root);
         return root;
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initData() {
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
@@ -156,7 +164,7 @@ public class DraftMyRequestFragment extends Fragment {
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
-                "Recent", "Accepted", "Rejected"
+                "Waiting", "Accepted", "Rejected"
         };
         Spinner spinnerLatest = root.findViewById(R.id.spinnerLatest);
 
@@ -166,6 +174,40 @@ public class DraftMyRequestFragment extends Fragment {
 
         spinnerLatest.setAdapter(adapterLatest);
 
+        spinnerLatest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0){
+                    initData();
+                } else if (i==1){
+                    initDataAccepted();
+                } else if (i==2){
+                    initDataRejected();
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                initData();
+            }
+        });
+    }
+    private void initDataRejected() {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
+        String token = preferencesRepo.getToken();
+        Log.d("HomeTOKEN", token);
+        Observable<GetSignatureModel> getSignatureList = apiInterface.getMyReqRejList(token);
+        getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+    private void initDataAccepted() {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
+        String token = preferencesRepo.getToken();
+        Log.d("HomeTOKEN", token);
+        Observable<GetSignatureModel> getSignatureList = apiInterface.getMyReqAccList(token);
+        getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
 }

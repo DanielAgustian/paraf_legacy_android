@@ -12,6 +12,9 @@ public class MyReqDetailModel implements Serializable {
     @SerializedName("id")
     private int id;
 
+    @SerializedName("sign_number")
+    private String signNumber;
+
     @SerializedName("request_by")
     private String requestBy;
 
@@ -210,5 +213,9 @@ public class MyReqDetailModel implements Serializable {
 
     public void setEmailReq(String emailReq) {
         this.emailReq = emailReq;
+    }
+
+    public String getSignNumber() {
+        return signNumber;
     }
 }

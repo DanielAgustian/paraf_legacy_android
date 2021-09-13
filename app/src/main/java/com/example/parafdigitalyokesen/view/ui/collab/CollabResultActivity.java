@@ -171,13 +171,13 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         Log.d("SignersModel", signers.size()+ "");
         SignersAdapter adapter = null;
         if(where == 2){
-            adapter = new SignersAdapter(signers, 3, getSupportFragmentManager());
+            adapter = new SignersAdapter(signers, 3, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
         } else if(where == 3){
-            adapter = new SignersAdapter(signers, 4, getSupportFragmentManager());
+            adapter = new SignersAdapter(signers, 4, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
         } else {
-            adapter = new SignersAdapter(signers, 5, getSupportFragmentManager());
+            adapter = new SignersAdapter(signers, 5, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
         }
 

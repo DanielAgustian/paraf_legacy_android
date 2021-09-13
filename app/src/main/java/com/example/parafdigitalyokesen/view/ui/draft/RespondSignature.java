@@ -110,7 +110,7 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
     public void initRecyclerView(List<SignersModel> signers){
         RecyclerView rv = findViewById(R.id.rvRespondDraft);
         rv.setNestedScrollingEnabled(false);
-        SignersAdapter adapter =  new SignersAdapter(signers, 1, getSupportFragmentManager());
+        SignersAdapter adapter =  new SignersAdapter(signers, 1, getSupportFragmentManager(), detailModel.getId());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
