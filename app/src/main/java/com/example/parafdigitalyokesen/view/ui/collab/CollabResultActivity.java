@@ -1,6 +1,8 @@
 package com.example.parafdigitalyokesen.view.ui.collab;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,12 +19,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,17 +41,18 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.model.GetSaveAllSign;
+import com.example.parafdigitalyokesen.model.SaveSignModel;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.adapter.SignersAdapter;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
-import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
-import com.example.parafdigitalyokesen.model.SignModel;
-import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.util.UtilFile;
+import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
 import com.example.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
 
 import java.io.File;
@@ -56,6 +61,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -64,7 +70,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CollabResultActivity extends AppCompatActivity implements View.OnClickListener{
     List<SignersModel> signers;
-    LinearLayout llRemind, llShare, llSave, llDuplicate, llInviteSigners, llRegenerate, llRename, llDelete;
+    LinearLayout llRemind, llShare, llSave, llDuplicate, llInviteSigners, llRegenerate, llRename, llDelete, llSentFinal;
     TextView tvPerson;
     private Dialog remindDialog;
     private Dialog deleteDialog, regenerateDialog, dialogRename;
@@ -77,6 +83,9 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     MyReqDetailModel detailModel;
     PictureDrawable pd;
     Util util = new Util();
+    String choosenDate = "";
+    String choosenTime = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,9 +136,11 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void setData(MyReqDetailModel data) {
+
         pd = util.makeQRCOde(data.getQr_code());
+
         ImageView iv = findViewById(R.id.ivQRScan);
-        iv.setImageDrawable(util.makeQRCOde(data.getQr_code()));
+        iv.setImageDrawable(pd);
 
         TextView tvCreatedBy = findViewById(R.id.tvCreatedBy);
         tvCreatedBy.setText(data.getCreatedBy());
@@ -161,8 +172,28 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         TextView tvSize = findViewById(R.id.tvSizeRes);
         tvSize.setText(data.getSize());
 
+        LinearLayout llRespond = findViewById(R.id.llRespond);
+
         TextView tvPersonRespond = findViewById(R.id.tvPersonRespond);
         tvPersonRespond.setText(data.getTotalSigners()+ "person left to sign");
+
+        TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
+
+        String status = data.getStatus().toLowerCase();
+        if(status.contains("wait")){
+            tvStatus.setTextColor(getResources().getColor(R.color.colorPending));
+        } else if(status.contains("accept")){
+            tvStatus.setTextColor(getResources().getColor(R.color.colorSuccess));
+            llRespond.setBackground(getResources().getDrawable(R.color.colorBackgroundGreen));
+            tvPersonRespond.setText("Everyone has already signed");
+            tvPersonRespond.setTextColor(getResources().getColor(R.color.colorSuccess));
+            llSentFinal.setVisibility(View.VISIBLE);
+        }else if(status.contains("reject")){
+            tvStatus.setTextColor(getResources().getColor(R.color.colorError));
+            tvPersonRespond.setText("Sign Rejected");
+            tvRejectedReason.setText(data.getReason());
+        }
+
     }
     public void initRecyclerView(){
         RecyclerView rv = findViewById(R.id.recyclerCollabResult);
@@ -170,16 +201,32 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
 
         Log.d("SignersModel", signers.size()+ "");
         SignersAdapter adapter = null;
-        if(where == 2){
+        String status = detailModel.getStatus().toLowerCase();
+
+        if(status.contains("wait")){
+            util.toastMisc(this, status);
             adapter = new SignersAdapter(signers, 3, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
-        } else if(where == 3){
+        } else if (status.contains("accept")){
+
             adapter = new SignersAdapter(signers, 4, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
-        } else {
+        }
+        else {
             adapter = new SignersAdapter(signers, 5, getSupportFragmentManager(), detailModel.getId());
             rv.setAdapter(adapter);
         }
+
+//        if(where == 2){
+//            adapter = new SignersAdapter(signers, 3, getSupportFragmentManager(), detailModel.getId());
+//            rv.setAdapter(adapter);
+//        } else if(where == 3){
+//            adapter = new SignersAdapter(signers, 4, getSupportFragmentManager(), detailModel.getId());
+//            rv.setAdapter(adapter);
+//        } else {
+//            adapter = new SignersAdapter(signers, 5, getSupportFragmentManager(), detailModel.getId());
+//            rv.setAdapter(adapter);
+//        }
 
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -203,7 +250,6 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         llRemind = findViewById(R.id.llRemindCollab);
         llRemind.setOnClickListener(this);
 
-
         llSave = findViewById(R.id.llSaveCollabRes);
         llSave.setOnClickListener(this);
 
@@ -224,6 +270,9 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
 
         llDelete = findViewById(R.id.llDeleteCollabRes);
         llDelete.setOnClickListener(this);
+
+        llSentFinal = findViewById(R.id.llSentDocCollabRes);
+        llSentFinal.setOnClickListener(this);
 
         LinearLayout llRejected = findViewById(R.id.llRejected);
         LinearLayout llApproved = findViewById(R.id.llApproved);
@@ -274,9 +323,25 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             case R.id.llDeleteCollabRes:
                 delete();
                 break;
+            case R.id.llSentDocCollabRes:
+                sentDoc();
+                break;
             default:
                 break;
         }
+    }
+
+    private void sentDoc() {
+        ArrayList<String> emailString = new ArrayList<>();
+        for(int i = 0; i< signers.size(); i++){
+            SignersModel sign  = signers.get(i);
+            emailString.add(sign.getEmail());
+        }
+
+        Intent intent = new Intent(this, FinalDocumentActivity.class);
+        intent.putStringArrayListExtra("list", emailString);
+        intent.putExtra("id", detailModel.getId());
+        startActivity(intent);
     }
     //-------------Process For Bottom Menu---------------------------------//
 
@@ -289,21 +354,55 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         dialog.show();
         ListView lvSigners = dialog.findViewById(R.id.lvDialogInvite);
         lvSigners.setNestedScrollingEnabled(false);
-        ArrayList<InviteSignersModel> list = populateList(2);
+        ArrayList<InviteSignersModel> list = populateList(1);
         InviteSignersDialogAdapter invAdapter = new InviteSignersDialogAdapter(
-                this, list
+                this, list, false
         );
         lvSigners.setAdapter(invAdapter);
         Button btnContinue = dialog.findViewById(R.id.btnContinueInvite);
         Button btnCancel = dialog.findViewById(R.id.btnCancelInvite);
+        LinearLayout btnDueDate = dialog.findViewById(R.id.llDueDate);
+        LinearLayout btnTime = dialog.findViewById(R.id.llTimePicker);
+        LinearLayout llAddSigners = dialog.findViewById(R.id.llAddSigners);
+        btnDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dateTimePicker(dialog);
+            }
+        });
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timepIcker(dialog);
+            }
+        });
+        llAddSigners.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InviteSignersModel model = new InviteSignersModel();
+                model.setEtName("");
+                model.setEtEmail("");
+                list.add(model);
+                invAdapter.notifyDataSetChanged();
+                if(list.size()<6){
+                    int data = list.size() * 90;
+                    data = util.dpToPx(data, CollabResultActivity.this);
+                    lvSigners.getLayoutParams().height = data;
+                    lvSigners.requestLayout();
+                }
 
+            }
+        });
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View viewListItem = lvSigners.getChildAt(0);
-                EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
-                String string = editText.getText().toString();
-                Log.d("Dialog Invite", string);
+                ArrayList<String> listSigners = util.getDataEmails(lvSigners, list);
+//                View viewListItem = lvSigners.getChildAt(0);
+//                EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
+//                String string = editText.getText().toString();
+//                Log.d("Dialog Invite", string);
+                doInviteSigners(listSigners, choosenDate, choosenTime);
+                dismissDialog(dialog);
                 dismissDialog(dialog);
             }
         });
@@ -315,7 +414,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
-    private void sharing(){
+    private void save(){
         Dialog dialog  = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_doctype);
@@ -355,11 +454,14 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 dismissDialog(dialog);
-                doShare(type);
+                doSave(type);
             }
         });
     }
 
+    private void sharing(){
+        doShare("blbla");
+    }
 
     private void rename(){
         dialogRename  = new Dialog(this);
@@ -376,9 +478,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View view) {
                 String rename = etRename.getText().toString();
                 doRename(rename);
-
             }
-
 
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -390,32 +490,32 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void save(){
-        Dialog dialog  = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_save);
-        dialog.setCancelable(true);
-        dialog.show();
-        Button btnContinue = dialog.findViewById(R.id.btnContinueSave);
-        Button btnCancel = dialog.findViewById(R.id.btnCancelSave);
-        TextView textTitle =dialog.findViewById(R.id.tvTitleDialogSave);
-        textTitle.setText(detailModel.getTitle() +"will be saved to Download");
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialog);
-                doSave();
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialog);
-            }
-        });
-    }
+//    private void save(){
+//        Dialog dialog  = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.dialog_save);
+//        dialog.setCancelable(true);
+//        dialog.show();
+//        Button btnContinue = dialog.findViewById(R.id.btnContinueSave);
+//        Button btnCancel = dialog.findViewById(R.id.btnCancelSave);
+//        TextView textTitle =dialog.findViewById(R.id.tvTitleDialogSave);
+//        textTitle.setText(detailModel.getTitle() +"will be saved to Download");
+//        btnContinue.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                dismissDialog(dialog);
+//                doSave();
+//            }
+//        });
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                dismissDialog(dialog);
+//            }
+//        });
+//    }
 
 
 
@@ -526,7 +626,9 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 remindDialog.dismiss();
+                doRemind();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -611,156 +713,140 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         startActivity(intent);
     }
 
-    private void doSave() {
+    private void doSave(String type) {
 
+        Observable<GetSaveAllSign> Remind= apiInterface.getSAveAllSign(token, detailModel.getId());
+        Remind.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessSaveAll, this::onFailedSaveAll);
+    }
+
+    private void onSuccessSaveAll(GetSaveAllSign getSaveAllSign) {
+        if(getSaveAllSign != null){
+            List<SaveSignModel> saveModel = getSaveAllSign.getData();
+
+            savingSign(saveModel);
+        }
+    }
+
+    private void savingSign(List<SaveSignModel> saveModel) {
+        UtilFile utilFile = new UtilFile(this);
+        for (int i=0; i<saveModel.size(); i++){
+            PictureDrawable pdList = util.makeQRCOde(saveModel.get(i).getQr_code());
+            ImageView iv = findViewById(R.id.emptyDrawable);
+            iv.setImageDrawable(pdList);
+            if(type.equals("") ){
+            }else{
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    utilFile.downloadFileAPI29(util.makeBitmap(pdList), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                }else{
+                    utilFile.downloadFile(util.makeBitmap(pdList), type, typeShare, detailModel.getTitle()+util.milisNow());
+                }
+            }
+        }
+        if(type.equals("") ){
+        }else{
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                utilFile.downloadFileAPI29(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+            }else{
+                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+            }
+        }
+
+    }
+
+    private void onFailedSaveAll(Throwable throwable) {
+        util.toastError(this, "API SAVE ALL SIGN", throwable);
+        throwable.printStackTrace();
     }
 
 
     private void doShare(String type){
-        if(type.equals("") ){
-        }else{
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                downloadFileAPI29((util.makeBitmap(pd)), type);
-            }else{
-                downloadFile(util.makeBitmap(pd), type);
-            }
+        util.shareLink(this, "paraf.yokesen.com");
+    }
 
+    private void doRemind() {
+        Observable<SimpleResponse> Remind= apiInterface.GetRemindReq(token, detailModel.getId());
+        Remind.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessRemind, this::onFailedRemind);
+    }
+
+    private void onSuccessRemind(SimpleResponse simpleResponse) {
+        if(simpleResponse!=null){
+            util.toastMisc(this, "You have Successfully Remind Signers");
         }
     }
 
-    private void downloadFile(Bitmap bitmap, String type) {
-        if(type.equals(typeShare.get(0))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + detailModel.getTitle()+ ".png");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else  if(type.equals(typeShare.get(1))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + detailModel.getTitle()+ ".jpg");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
+    private void onFailedRemind(Throwable throwable) {
+        util.toastError(this , "API REMIND", throwable);
+    }
+    void doInviteSigners(ArrayList<String> emails, String date, String time){
+        Observable<SimpleResponse> putInviteSign = apiInterface.putInviteSign(token, detailModel.getId(), emails, date, time );
+        putInviteSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessInvite, this::onFailedInvite);
+    }
+
+    private void onSuccessInvite(SimpleResponse simpleResponse) {
+        if(simpleResponse != null){
+            back();
         }
+    }
+
+    private void onFailedInvite(Throwable throwable) {
+        util.toastError(this, "API INVITE ERROR", throwable);
+    }
+    //--------------------Date Picker
+    void dateTimePicker(Dialog dialog){
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, monthOfYear);
+                        c.set(Calendar.DATE, dayOfMonth);
+                        choosenDate = util.CalendarToDateString(c);
+                        TextView tvDate = dialog.findViewById(R.id.tvDueDate);
+                        tvDate.setText(choosenDate);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+
+
+    }
+
+    //---------------------------------Time Picker------------------------
+    void timepIcker(Dialog dialog)
+    {
+        Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+                        choosenTime = util.CalendarToTimeString(c);
+                        TextView tvTime = dialog.findViewById(R.id.tvAddTime);
+                        tvTime.setText(choosenTime);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
 
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void downloadFileAPI29(Bitmap bitmap, String type) {
-        Log.d("FILETYPE", type);
-        if(type.equals(typeShare.get(0))){
-            ContentValues contentValues = new ContentValues();
-            MyReqDetailModel detailModel = this.detailModel;
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, detailModel.getTitle()+detailModel.getCreatedBy()+".png");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/png");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-
-            Uri itemUri = getContentResolver().insert(uri, contentValues);
-
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    getContentResolver().update(itemUri, contentValues, null, null);
-                    Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else  if(type.equals(typeShare.get(1))){
-            ContentValues contentValues = new ContentValues();
-            MyReqDetailModel detailModel = this.detailModel;
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, detailModel.getTitle()+detailModel.getCreatedBy()+".jpg");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/jpeg");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-
-            Uri itemUri = getContentResolver().insert(uri, contentValues);
-
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    getContentResolver().update(itemUri, contentValues, null, null);
-                    Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
-        }
-    }
-    void downloadPDF(Bitmap bitmap){
-        String stringFilePath = Environment.getExternalStorageDirectory().getPath() + "/Download/"+detailModel.getTitle()+ detailModel.getCreatedBy() + ".pdf";
-        File file = new File(stringFilePath);
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.parseColor("#000000"));
-
-
-        page.getCanvas().drawBitmap(bitmap,0,0 , paint);
-        pdfDocument.finishPage(page);
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-
-        }
-        pdfDocument.close();
-        Toast.makeText(this, "Successfully Download PDF: "+ file.getPath(),
-                Toast.LENGTH_LONG).show();
-    }
     //---------------------------Misc Logic---------------------
     public ArrayList<InviteSignersModel> populateList(int position){
         ArrayList<InviteSignersModel> list = new ArrayList<>();

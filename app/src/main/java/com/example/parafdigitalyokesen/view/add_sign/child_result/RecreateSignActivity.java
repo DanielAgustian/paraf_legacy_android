@@ -30,18 +30,17 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.TypeCategoryModel;
+import com.example.parafdigitalyokesen.util.UtilWidget;
 import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.security.Signature;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -58,17 +57,20 @@ public class RecreateSignActivity extends AppCompatActivity {
     private int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     int recreateType = 0, recreateCategory;
     File fileSending;
-    private boolean nameValidator, emailValidator, documentNameValidator;
+
 
     Button btnContinue, btnCancel ;
     private Dialog customDialog, waitingDialog;
     LinearLayout llWaitingData, llDoneData, llUploadData;
     //SignYourselfViewModel VM;
     Util util;
+
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     List<TypeCategoryModel> category, types;
     TypeCategoryModel selectedCategory, selectedTypes;
+    String token;
+    int id;
     SignatureDetailModel detailModel;
 
     EditText etName, etEmail, etDocumentName, etDescription, etLink;
@@ -78,29 +80,41 @@ public class RecreateSignActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_sign_yourself);
         getIntentData();
-        initNetwork();
         getPermission();
-        initComponent();
-        initSpinner();
-        initDialog();
-        initDialogWaiting();
+        initNetwork();
 
     }
 
     private void getIntentData() {
         Intent intent = getIntent();
-        detailModel = (SignatureDetailModel) intent.getSerializableExtra("model");
+        //detailModel = (SignatureDetailModel) intent.getSerializableExtra("model");
+        id = intent.getIntExtra("id", -1);
     }
 
     private void initNetwork() {
         util = new Util();
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
+        token = preferencesRepo.getToken();
+        Observable<GetSignDetailModel> getDetails = apiInterface.getMySignDetail(token, id);
+        getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
+    private void onFailed(Throwable throwable) {
+        util.toastError(this, "API GET SIGNATURE DETAIL", throwable);
+    }
+
+    private void onSuccess(GetSignDetailModel getSignDetailModel) {
+        if(getSignDetailModel!=null){
+            detailModel = getSignDetailModel.getHome();
+            initComponent();
+            initSpinner();
+            initDialog();
+            initDialogWaiting();
+        }
     }
 
     public void initSpinner(){
-
-        String token = preferencesRepo.getToken();
 
         Log.d("HomeTOKEN", token);
         Observable<GetTypeCategoryModel> getCategory= apiInterface.getCategories(token);
@@ -125,6 +139,7 @@ public class RecreateSignActivity extends AppCompatActivity {
     //=-----------------------------Method for Add SIgn------------------
 
     private boolean validation(){
+        boolean nameValidator, emailValidator, documentNameValidator;
         if(etName.getText().toString().trim().length()< 1){
             nameValidator = true;
         }else{
@@ -143,6 +158,10 @@ public class RecreateSignActivity extends AppCompatActivity {
             documentNameValidator = false;
         }
 
+        util.changeColorEditText(etName, nameValidator, this);
+        util.changeColorEditText(etEmail, emailValidator, this);
+        util.changeColorEditText(etDocumentName, documentNameValidator, this);
+
 
         if(!nameValidator && !emailValidator && !documentNameValidator){
             return true;
@@ -154,14 +173,22 @@ public class RecreateSignActivity extends AppCompatActivity {
     void addSignMethod(){
         if (validation()){
             try {
-                Log.d("FILE_GETNAMe", fileSending.getName());
-                RequestBody requestFile =
-                        RequestBody.create(
-                                MediaType.parse(getContentResolver().getType(fileUri)),
-                                fileSending
-                        );
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+
+                RequestBody requestFile = null;
+                MultipartBody.Part body = null;
+                if(fileUri!=null){
+                    requestFile =
+                            RequestBody.create(
+                                    MediaType.parse(getContentResolver().getType(fileUri)),
+                                    fileSending
+                            );
+                    body =
+                            MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                }else{
+                    requestFile = RequestBody.create(MediaType.parse("text/plain"), "");
+
+                    body = MultipartBody.Part.createFormData("attachment", "", requestFile);
+                }
 
 
                 String token = preferencesRepo.getToken();

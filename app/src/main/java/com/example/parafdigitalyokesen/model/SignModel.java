@@ -27,7 +27,8 @@ public class SignModel {
     @SerializedName("status")
     private String status;
 
-
+    @SerializedName("location")
+    private  String location;
 
     public SignModel(String title, String time, int id) {
         this.title = title;
@@ -43,6 +44,10 @@ public class SignModel {
         byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
         String text = new String(data, StandardCharsets.UTF_8);
         return text;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public int getId() {

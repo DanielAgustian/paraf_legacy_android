@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.R;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.AuthModel;
 
 

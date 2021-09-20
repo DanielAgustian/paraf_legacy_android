@@ -26,11 +26,16 @@ import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.viewModel.NotificationState;
+import com.example.parafdigitalyokesen.viewModel.SignCollabState;
+import com.example.parafdigitalyokesen.viewModel.refresh;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -83,6 +88,7 @@ public class DraftMySIgnatureFragment extends Fragment {
     ImageView ivGrid, ivList;
     boolean isGrid = false;
     View root;
+    DisposableObserver disposableRefresh;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,14 +98,42 @@ public class DraftMySIgnatureFragment extends Fragment {
 
         initSpinner(root);
         initData();
+        observe();
         return root;
 
+    }
+
+    private void observe() {
+        disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
+            @Override
+            public void onNext(@NonNull refresh refresh) {
+                if(refresh == com.example.parafdigitalyokesen.viewModel.refresh.MY_SIGN){
+                    initData();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initData();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableRefresh.dispose();
     }
 
     private void initData() {

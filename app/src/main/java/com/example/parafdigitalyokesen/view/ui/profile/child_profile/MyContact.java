@@ -2,32 +2,23 @@ package com.example.parafdigitalyokesen.view.ui.profile.child_profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
-import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.MyContactListAdapter;
 import com.example.parafdigitalyokesen.model.ContactModel;
 import com.example.parafdigitalyokesen.model.GetConnectModel;
-import com.example.parafdigitalyokesen.model.GetHomeModel;
-import com.example.parafdigitalyokesen.model.SignModel;
-import com.example.parafdigitalyokesen.view.NavBarActivity;
-import com.example.parafdigitalyokesen.view.ui.profile.child_profile.child_help.AddContactActivity;
 
 import java.util.ArrayList;
 import java.util.List;

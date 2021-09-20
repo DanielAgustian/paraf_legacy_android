@@ -34,7 +34,7 @@ Paraf-nanas.jpeg' will be saved to Download"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/buttonCancel"
+            style="@style/buttonWhite"
             android:id="@+id/btnCancelSave"
             android:backgroundTint="@null"
             android:textAllCaps="false"
@@ -50,7 +50,7 @@ Paraf-nanas.jpeg' will be saved to Download"
             android:layout_weight="0.16"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/buttonRed"
+            style="@style/buttonRedSmall"
             android:id="@+id/btnContinueSave"
             android:backgroundTint="@null"
             android:text="Save"

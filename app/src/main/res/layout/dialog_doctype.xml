@@ -67,7 +67,7 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/buttonWhiteBigger"
+            style="@style/buttonWhite"
             android:id="@+id/btnCancelType"
             android:backgroundTint="@null"
 
@@ -85,7 +85,7 @@
             android:layout_weight="0.16"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/buttonRed"
+            style="@style/buttonRedSmall"
             android:id="@+id/btnContinueType"
             android:backgroundTint="@null"
             android:text="Confirm"

@@ -9,6 +9,9 @@ public class GetHomeModel {
     @SerializedName("data")
     private StatHomeModel home;
 
+    @SerializedName("notification_status")
+    private int notifStatus;
+
     public GetHomeModel(String success, StatHomeModel home) {
         this.success = success;
         this.home = home;
@@ -20,5 +23,9 @@ public class GetHomeModel {
 
     public StatHomeModel getHome() {
         return home;
+    }
+
+    public int getNotifStatus() {
+        return notifStatus;
     }
 }

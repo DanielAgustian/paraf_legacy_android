@@ -5,9 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +20,14 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.model.GetDownloadModel;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.SignersAdapter;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
-import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.util.UtilFile;
 
 import java.util.List;
 
@@ -105,11 +104,21 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
     public void initComponent(MyReqDetailModel model){
         LinearLayout layoutAccepted = findViewById(R.id.layoutAccepted);
         LinearLayout layoutRejected = findViewById(R.id.layoutRejected);
-        Button btnRequestDoc = findViewById(R.id.btnRequestFinalDoc);
+        LinearLayout llRespond = findViewById(R.id.llRespond);
 
-        btnRequestDoc.setOnClickListener(this);
+//        Button btnRequestDoc = findViewById(R.id.btnRequestFinalDoc);
+//        btnRequestDoc.setOnClickListener(this);
 
+        Button btnDownloadDoc = findViewById(R.id.btnDownloadFinalDoc);
+        btnDownloadDoc.setOnClickListener(this);
+
+        TextView tvPersonRespond = findViewById(R.id.tvPersonRespond);
+        tvPersonRespond.setText(model.getTotalSigners()+" Person is left to sign");
         if(model.getStatus().toLowerCase().equals("accepted")){
+            llRespond.setBackground(getResources().getDrawable(R.color.colorBackgroundGreen));
+            tvPersonRespond.setText("Everyone has signed this docs");
+            tvPersonRespond.setTextColor(getResources().getColor(R.color.colorSuccess));
+
             if(layoutAccepted.getVisibility() == View.GONE){
                 layoutAccepted.setVisibility(View.VISIBLE);
                 layoutRejected.setVisibility(View.GONE);
@@ -117,17 +126,31 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
                 ivQRScan.setImageDrawable(util.makeQRCOde(model.getQr_code()));
             }
         } else if (model.getStatus().toLowerCase().equals("rejected")){
+            TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
+            tvRejectedReason.setText(model.getReason());
+            util.toastMisc(this, model.getReason());
             if(layoutRejected.getVisibility()== View.GONE){
                 layoutAccepted.setVisibility(View.GONE);
                 layoutRejected.setVisibility(View.VISIBLE);
-                btnRequestDoc.setVisibility(View.GONE);
-                TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
-                tvRejectedReason.setText(model.getReason());
+                //btnRequestDoc.setVisibility(View.GONE);
+
             }
         } else{
             layoutAccepted.setVisibility(View.GONE);
             layoutRejected.setVisibility(View.GONE);
         }
+
+//        if(model.isCanRequestDocument()){
+//            btnRequestDoc.setVisibility(View.VISIBLE);
+//        }else{
+//            btnRequestDoc.setVisibility(View.GONE);
+//        }
+        if(model.isCanDownload()){
+            btnDownloadDoc.setVisibility(View.VISIBLE);
+        }else{
+            btnDownloadDoc.setVisibility(View.GONE);
+        }
+
 
         TextView tvReqBy = findViewById(R.id.tvReqByRespondResult);
         tvReqBy.setText(model.getRequestBy());
@@ -168,9 +191,29 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btnRequestFinalDoc:
-                sentRequest();
+//            case R.id.btnRequestFinalDoc:
+//                sentRequest();
+//                break;
+            case R.id.btnDownloadFinalDoc:
+                downloadFinalDoc();
                 break;
+        }
+    }
+
+    private void downloadFinalDoc() {
+        Observable<GetDownloadModel> GetFinalDocument = apiInterface.DownloadFinalDocument(token, id);
+        GetFinalDocument.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessGetLink, this::onFailedGetLink);
+    }
+
+    private void onFailedGetLink(Throwable throwable) {
+        util.toastError(this, "API FINAL DOC", throwable);
+    }
+
+    private void onSuccessGetLink(GetDownloadModel getDownloadModel) {
+        if (getDownloadModel!=null){
+           String link = getDownloadModel.getData().getLink();
+           UtilFile utilFile = new UtilFile(this);
+           utilFile.downloadFileURL(link);
         }
     }
 

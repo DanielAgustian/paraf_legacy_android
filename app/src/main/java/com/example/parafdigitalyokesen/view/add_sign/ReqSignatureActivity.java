@@ -1,6 +1,5 @@
 package com.example.parafdigitalyokesen.view.add_sign;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,25 +34,20 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.TypeCategoryModel;
+import com.example.parafdigitalyokesen.util.UtilWidget;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -70,7 +64,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     private Uri fileUri;
     Util util = new Util();
     File fileSending;
-
+    UtilWidget utiWidget = new UtilWidget(this);
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     List<TypeCategoryModel> category, types;
@@ -80,7 +74,6 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     ArrayList<InviteSignersModel> list;
 
     private EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage;
-    private boolean nameValidator, emailValidator, documentNameValidator;
     private final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     private String filePath, choosenDate = "", choosenTime = "";
     int progress = 0;
@@ -248,6 +241,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                         btnDueDate.setText(choosenDate);
                     }
                 }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
 
 
@@ -268,7 +262,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                        c.set(Calendar.HOUR, hourOfDay);
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         c.set(Calendar.MINUTE, minute);
                         choosenTime = util.CalendarToTimeString(c);
                         btnTime.setText(choosenTime);
@@ -305,7 +299,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         lvSigners = findViewById(R.id.lvInviteSigners);
         list = populateList(1);
         invAdapter = new InviteSignersDialogAdapter(
-                this, list
+                this, list, false
         );
         lvSigners.setAdapter(invAdapter);
     }
@@ -316,6 +310,10 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         model.setEtEmail("");
         list.add(model);
         invAdapter.notifyDataSetChanged();
+        int data = list.size() * 90;
+        data = util.dpToPx(data, this);
+        lvSigners.getLayoutParams().height = data;
+        lvSigners.requestLayout();
     }
 
 
@@ -418,6 +416,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
+
     public void initDialog(){
         customDialog = new Dialog(this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -428,12 +427,8 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 customDialog.dismiss();
-                waitingDialog.show();
                 addSignMethod();
-
-
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -494,6 +489,12 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     //=-----------------------------Method for Add SIgn------------------
 
     private boolean validation(){
+        boolean nameValidator = false,
+                emailValidator=false,
+                documentNameValidator =false,
+                dateValidator = false,
+                timeValidator = false,
+                emailListValidator = false;
         if(etName.getText().toString().trim().length()< 1){
             nameValidator = true;
         }else{
@@ -512,8 +513,38 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             documentNameValidator = false;
         }
 
+        if (choosenDate != ""){
+            dateValidator = false;
+        }else{
+            dateValidator = true;
+        }
+        if(choosenTime != ""){
+            timeValidator = false;
+        } else{
+            timeValidator = true;
+        }
 
-        if(!nameValidator && !emailValidator && !documentNameValidator){
+        if(getDataEmails().size() < 1){
+            emailListValidator = true;
+        } else{
+            emailListValidator = false;
+        }
+
+        util.changeColorEditText(etName, nameValidator, this);
+        util.changeColorEditText(etEmail, emailValidator, this);
+        util.changeColorEditText(etDocumentName, documentNameValidator, this);
+        if(dateValidator){
+            utiWidget.makeApprovalDialog("Date Empty", "Please Choose Date.");
+        }
+        if(timeValidator){
+            utiWidget.makeApprovalDialog("Time Empty", "PLease Choose Time");
+        }
+        if(emailListValidator){
+            utiWidget.makeApprovalDialog("No Email", "Please write at least one email address");
+        }
+
+        if(!nameValidator && !emailValidator && !documentNameValidator
+                && !dateValidator && !timeValidator){
             return true;
         }else{
             return false;
@@ -522,15 +553,26 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
 
     void addSignMethod(){
         if (validation()){
+
+            waitingDialog.show();
+
             try {
                 Log.d("FILE_GETNAMe", fileSending.getName());
-                RequestBody requestFile =
-                        RequestBody.create(
-                                MediaType.parse(getContentResolver().getType(fileUri)),
-                                fileSending
-                        );
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                RequestBody requestFile = null;
+                MultipartBody.Part body = null;
+                if(fileUri!=null){
+                    requestFile =
+                            RequestBody.create(
+                                    MediaType.parse(getContentResolver().getType(fileUri)),
+                                    fileSending
+                            );
+                    body =
+                            MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                }else{
+                    requestFile = RequestBody.create(MediaType.parse("text/plain"), "");
+
+                    body = MultipartBody.Part.createFormData("attachment", "", requestFile);
+                }
 
 
 
@@ -553,6 +595,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                 addReqSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
             }catch (Exception e){
                 e.printStackTrace();
+                waitingDialog.dismiss();
             }
 
         }
@@ -578,7 +621,9 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             View viewListItem = lvSigners.getChildAt(i);
             EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
             String string = editText.getText().toString();
-            emails.add(string);
+            if(!(string.equals(""))){
+                emails.add(string);
+            }
         }
         return emails;
     }

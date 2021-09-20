@@ -25,9 +25,8 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
-import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
 
@@ -73,7 +72,6 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initNetwork() {
-
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
     }
@@ -91,7 +89,6 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.btnFinalDoc:
                 sentDocMethod();
-
                 break;
             default:
                 break;
@@ -115,9 +112,9 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
                 String token = preferencesRepo.getToken();
                 Observable<SimpleResponse> postNewSign = apiInterface.SendDocument(
                         token,
+                        id,
                         getDataEmails(),
                         body,
-                        util.requestBodyString(String.valueOf(id)),
                         util.requestBodyString(etMessage.getText().toString())
                 );
                 postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessSentDoc, this::onFailedSentDoc);
@@ -135,6 +132,7 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
 
     private void onSuccessSentDoc(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
+            util.toastMisc(this, "File Succesfully Sent!");
             back();
         }
     }
@@ -229,8 +227,8 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
     //For progress bar
     private void setProgressValue(Uri uri) {
         ProgressBar simpleProgressBar = findViewById(R.id.simpleProgressBarFinal);
-        // set the progress
 
+        // set the progress
         TextView tvWaitingUplaod = findViewById(R.id.tvWaitingUploadFinal);
         tvWaitingUplaod.setText(getNameFile(uri));
         simpleProgressBar.setProgress(progress);
@@ -258,10 +256,7 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
             }
         };
         mCountDownTimer.start();
-
-
     }
-
 
     //------------------------------------------------------------
 
@@ -300,11 +295,23 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
     public void initRecyclerView(){
         lvSigners = findViewById(R.id.lvSignersFinalDocument);
 //        lvSigners.setNestedScrollingEnabled(false);
-        list = populateList(1);
+        ArrayList<String> listEmail = getIntent().getStringArrayListExtra("list");
+        list = populateString(listEmail);
         InviteSignersDialogAdapter invAdapter = new InviteSignersDialogAdapter(
-                this, list
+                this, list, true
         );
         lvSigners.setAdapter(invAdapter);
+    }
+
+    public ArrayList<InviteSignersModel> populateString(ArrayList<String> strings){
+        ArrayList<InviteSignersModel> list = new ArrayList<>();
+        for(int i = 0; i < strings.size(); i++){
+            InviteSignersModel invModel = new InviteSignersModel();
+            invModel.setEtName("");
+            invModel.setEtEmail(strings.get(i));
+            list.add(invModel);
+        }
+        return list;
     }
     public ArrayList<InviteSignersModel> populateList(int position){
         ArrayList<InviteSignersModel> list = new ArrayList<>();

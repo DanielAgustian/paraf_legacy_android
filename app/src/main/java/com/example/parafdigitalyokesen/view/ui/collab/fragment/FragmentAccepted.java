@@ -21,15 +21,18 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.viewModel.SignCollabState;
+import com.example.parafdigitalyokesen.viewModel.refresh;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class FragmentAccepted extends Fragment {
@@ -39,6 +42,7 @@ public class FragmentAccepted extends Fragment {
     List<SignModel> sign;
     View root;
     Util util = new Util();
+    DisposableObserver disposableRefresh;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,9 +53,35 @@ public class FragmentAccepted extends Fragment {
 
         initSpinner(root);
         initData();
+        observe();
         return root;
     }
+    private void observe() {
+        disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull refresh refresh) {
+                if(refresh == com.example.parafdigitalyokesen.viewModel.refresh.COLLAB_ACC){
+                    initData();
+                }
+            }
 
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableRefresh.dispose();
+    }
     @Override
     public void onResume() {
         super.onResume();

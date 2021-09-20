@@ -111,6 +111,7 @@
                     android:textColor="@color/colorLightGrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
                     android:text="Rejected Reason"/>
                 <TextView
                     android:layout_marginHorizontal="15dp"
@@ -417,6 +418,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llRespond"
                 android:layout_marginTop="20dp"
                 android:paddingVertical="5dp"
                 android:background="@color/colorBackgroundBlue"
@@ -458,11 +460,20 @@
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="15dp"
             >
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                style="@style/buttonRed"-->
+<!--                android:id="@+id/btnRequestFinalDoc"-->
+<!--                android:backgroundTint="@null"-->
+<!--                android:text="Request Final Document"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:paddingHorizontal="25dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
             <androidx.appcompat.widget.AppCompatButton
                 style="@style/buttonRed"
-                android:id="@+id/btnRequestFinalDoc"
+                android:id="@+id/btnDownloadFinalDoc"
                 android:backgroundTint="@null"
-                android:text="Request Final Document"
+                android:text="Download Final Document"
                 android:layout_gravity="center_vertical"
                 android:paddingHorizontal="25dp"
                 android:layout_width="match_parent"

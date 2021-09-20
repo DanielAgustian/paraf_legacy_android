@@ -3,11 +3,15 @@ package com.example.parafdigitalyokesen.Repository;
 
 
 import com.example.parafdigitalyokesen.model.AuthModel;
+import com.example.parafdigitalyokesen.model.GetCollabViewModel;
 import com.example.parafdigitalyokesen.model.GetConnectModel;
+import com.example.parafdigitalyokesen.model.GetDownloadModel;
 import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetMyInfoModel;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
+import com.example.parafdigitalyokesen.model.GetNotifListModel;
 import com.example.parafdigitalyokesen.model.GetProfileModel;
+import com.example.parafdigitalyokesen.model.GetSaveAllSign;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
@@ -43,32 +47,32 @@ import retrofit2.http.Query;
 public interface APIInterface {
 
     //------------------------Register Login API------------------------------------
-    @POST("/api/v1/register")
+    @POST("api/v1/register")
     Observable<AuthModel> registerUser(@Body AuthModel auth);
 
     @FormUrlEncoded
-    @POST("/api/v1/login")
+    @POST("api/v1/login")
     Observable<LoginModel> loginUser(@Field("email") String email, @Field("password") String password);
 
 
-    @POST("/api/v1/refresh")
+    @POST("api/v1/refresh")
     Observable<LoginModel> refreshToken(@Header("Authorization") String token);
 
-    @POST("/api/v1/logout")
+    @POST("api/v1/logout")
     Observable<SimpleResponse> logOutUser(@Header("Authorization") String token);
 
 
     //---------------------FORGOT PASSWORD API------------------------------
     @FormUrlEncoded
-    @POST("/api/v1/forgot-password")
+    @POST("api/v1/forgot-password")
     Observable<SimpleResponse> forgotPassword(@Field("email") String email);
 
     @FormUrlEncoded
-    @POST("/api/v1/confirm-token")
+    @POST("api/v1/confirm-token")
     Observable<SimpleResponse> checkPasswordToken(@Field("email") String email, @Field("token") String token);
 
     @FormUrlEncoded
-    @POST("/api/v1/reset-password")
+    @POST("api/v1/reset-password")
     Observable<SimpleResponse> resetPassword(@Field("email") String email,
                                              @Field("password") String password,
                                              @Field("password_confirmation") String password_confirmation);
@@ -165,6 +169,9 @@ public interface APIInterface {
     );
 
 
+
+
+
     @FormUrlEncoded
     @PUT("api/v1/document/{sign_id}/rename")
     Observable<SimpleResponse> putRenameSign(
@@ -180,7 +187,26 @@ public interface APIInterface {
     );
 
     @Multipart
-    @POST("api/v1/document/{sign_id}/recreate")
+    @POST("api/v1/collab/{sign_id}/recreate")
+    Observable<GetSignDetailModel> putRecreateSignCollab(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId,
+            @Part("user_name") RequestBody user_name,
+            @Part("user_email") RequestBody user_email,
+            @Part("name") RequestBody name,
+            @Part("category_id") RequestBody category_id,
+            @Part("type_id") RequestBody type_id,
+            @Part("description") RequestBody description,
+            @Part("link") RequestBody link,
+            @Part MultipartBody.Part file,
+            @Part("expired_date_at") RequestBody date,
+            @Part("expired_time_at") RequestBody time
+    );
+
+
+
+    @Multipart
+    @POST("api/v1/sign/my-signature/{sign_id}/recreate")
     Observable<GetSignDetailModel> putRecreateSign(
             @Header("Authorization") String token,
             @Path("sign_id") int signId,
@@ -195,6 +221,16 @@ public interface APIInterface {
     );
 
     @FormUrlEncoded
+    @POST("api/v1/document/{sign_id}/invite-signer")
+    Observable<SimpleResponse> putInviteSign(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId,
+            @Field("email[]") ArrayList<String> email,
+            @Field("expired_date_at") String date,
+            @Field("expired_time_at") String time
+    );
+
+    @FormUrlEncoded
     @POST("api/v1/document/{sign_id}/duplicate")
     Observable<SimpleResponse> putDuplicateSign(
             @Header("Authorization") String token,
@@ -202,6 +238,12 @@ public interface APIInterface {
             @Field("name") String name
     );
 
+
+    @GET("api/v1/collab/{doc_id}/detail/saveall")
+    Observable<GetSaveAllSign> getSAveAllSign(
+            @Header("Authorization") String token,
+            @Path("doc_id") int docId
+    );
 
     //------------------------ My Request Details ------------------------------//
     @GET("api/v1/sign/my-request/{sign_id}")
@@ -225,6 +267,12 @@ public interface APIInterface {
             @Field("feedback") String feedback
     );
 
+
+    @GET("api/v1/document/{sign_id}/remind")
+    Observable<SimpleResponse> GetRemindReq(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId
+    );
 
 
     //--------------------------------Get Collab List------------------------------------//
@@ -250,15 +298,21 @@ public interface APIInterface {
             @Path("sign_id") int signId
     );
 
-
+    @GET("api/v1/collab/{sign_id}/detail/{collab_id}/view")
+    Observable<GetCollabViewModel> getCollabDetailView(
+            @Header("Authorization") String token,
+            @Path("collab_id") int collab_id,
+            @Path("sign_id") int sign_id
+    );
     //-------------------------- Send document and request document--------------------------//
     @Multipart
-    @POST("api/v1/sign/my-signature/send-document")
+    @POST("api/v1/collab/{id}/send-document")
     Observable<SimpleResponse> SendDocument(
             @Header("Authorization") String token,
+            @Path("id") int id,
             @Query("email[]") ArrayList<String> email,
             @Part MultipartBody.Part file,
-            @Part("id") RequestBody id,
+
             @Part("message") RequestBody message
     );
     @POST("api/v1/sign/my-request/{sign_id}/request-document")
@@ -266,4 +320,50 @@ public interface APIInterface {
             @Header("Authorization") String token,
             @Path("sign_id") int signId
     );
+
+    @GET("api/v1/sign/my-request/{sign_id}/download")
+    Observable<GetDownloadModel> DownloadFinalDocument(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId
+    );
+
+
+    //-------------------------- SEARCHING DATA--------------------------------//
+    @GET("api/v1/search")
+    Observable<GetSignatureModel> GetSearchData(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/search/waiting-signature")
+    Observable<GetSignatureModel> GetSearchWaitingData(
+            @Header("Authorization") String token
+    );
+    @GET("api/v1/search/accepted-signature")
+    Observable<GetSignatureModel> GetSearchAcceptedData(
+            @Header("Authorization") String token
+    );
+    @GET("api/v1/search/rejected-signature")
+    Observable<GetSignatureModel> GetSearchRejectedData(
+            @Header("Authorization") String token
+    );
+
+    //----------------------- NOTIFICATION LIST --------------------------------------//
+    @GET("api/v1/notifications")
+    Observable<GetNotifListModel> GetNotificationList(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/notifications/mark-read")
+    Observable<SimpleResponse> ReadNotifAll(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/notifications/{id_notif}")
+    Observable<SimpleResponse> ReadNotifOnce(
+            @Header("Authorization") String token,
+            @Path("id_notif") int id
+    );
+
+
+
 }

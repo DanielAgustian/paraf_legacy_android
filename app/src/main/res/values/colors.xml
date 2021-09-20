@@ -15,6 +15,7 @@
     <color name="colorError">#FFDB2D26</color>
     <color name="colorFacebookButton">#FFFF6E72</color>
     <color name="colorSuccess">#FF30AF3B</color>
+    <color name="colorBackgroundGreen">#E6FCDA</color>
     <color name="colorPending">#FFDB8E00</color>
     <color name="colorShadow">#73D5D2D2</color>
     <color name="colorGrayText">#FF4F4F4F</color>

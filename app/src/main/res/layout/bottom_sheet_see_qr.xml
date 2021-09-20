@@ -10,6 +10,7 @@
     android:paddingBottom="15dp">
     <!--    -->
         <ImageView
+            android:id="@+id/ivQRScanBotNav"
             android:layout_gravity="center_horizontal"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -121,6 +122,7 @@
     <LinearLayout
         android:id="@+id/llSaveCollabDialog"
         android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="10dp"
         android:paddingVertical="5dp"
         android:layout_width="match_parent"
@@ -172,6 +174,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/llRequestFileDialog"
         android:clickable="true"
         android:layout_marginTop="10dp"
@@ -193,7 +196,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="Request Final Document"
+            android:text="Send Final Document"
             android:textSize="12sp"
             android:textColor="@color/colorLightGrayText"
             />

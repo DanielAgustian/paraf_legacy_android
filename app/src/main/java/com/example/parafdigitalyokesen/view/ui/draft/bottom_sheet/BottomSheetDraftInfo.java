@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,25 +30,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
-import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
-import com.example.parafdigitalyokesen.model.InviteSignersModel;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.SignModel;
-import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
-import com.example.parafdigitalyokesen.view.add_sign.ReqSignatureActivity;
+import com.example.parafdigitalyokesen.util.UtilFile;
+import com.example.parafdigitalyokesen.util.UtilWidget;
 import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
-import com.example.parafdigitalyokesen.view.add_sign.SignYourselfActivity;
 import com.example.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
 import com.example.parafdigitalyokesen.view.ui.collab.CollabResultActivity;
+import com.example.parafdigitalyokesen.view.ui.collab.RecreateCollabActivity;
 import com.example.parafdigitalyokesen.view.ui.draft.RespondSignature;
 import com.example.parafdigitalyokesen.view.ui.draft.ResultAfterRespond;
+import com.example.parafdigitalyokesen.viewModel.SignCollabState;
+import com.example.parafdigitalyokesen.viewModel.refresh;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
@@ -75,6 +73,8 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     PreferencesRepo preferencesRepo;
     String token;
     ArrayList<String> typeShare =  new ArrayList<>();
+    UtilWidget utilWidget = new UtilWidget(getContext());
+    PictureDrawable pd;
     /*
     * where is identifier where are they from
     *  0=> Draft My Sign Fragment
@@ -128,9 +128,16 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         llDelete.setOnClickListener(this);
         llRemind.setOnClickListener(this);
 
-        ImageView iv = v.findViewById(R.id.ivBotNavInfo);
-        iv.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
+        pd = util.makeQRCOde(sign.getQr_code());
 
+        ImageView iv = v.findViewById(R.id.ivBotNavInfo);
+        iv.setImageDrawable(pd);
+
+        if(where == 1){
+            llRegenerate.setVisibility(View.GONE);
+            llDelete.setVisibility(View.GONE);
+            llRename.setVisibility(View.GONE);
+        }
         if (!(where == 2)){
             llRemind.setVisibility(View.GONE);
         }
@@ -215,6 +222,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             @Override
             public void onClick(View view) {
                 remindDialog.dismiss();
+                doRemind();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -226,10 +234,41 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     }
 
 
-
-
-
     private void sharing(){
+        doShare();
+    }
+
+
+    private void rename(){
+        dialogRename  = new Dialog(getActivity());
+        dialogRename.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogRename.setContentView(R.layout.dialog_rename);
+        dialogRename.setCancelable(true);
+        dialogRename.show();
+        Button btnContinue = dialogRename.findViewById(R.id.btnContinueRename);
+        Button btnCancel = dialogRename.findViewById(R.id.btnCancelRename);
+        EditText etRename = dialogRename.findViewById(R.id.etRenameDoc);
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String rename = etRename.getText().toString();
+                doRename(rename);
+
+            }
+
+
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dismissDialog(dialogRename);
+            }
+        });
+    }
+
+    private void save(){
         typeShare.add("png");
         typeShare.add("jpg");
         typeShare.add("pdf");
@@ -272,66 +311,10 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             @Override
             public void onClick(View view) {
                 dismissDialog(dialog);
-                doShare(type);
-            }
-        });
-    }
-
-
-    private void rename(){
-        dialogRename  = new Dialog(getActivity());
-        dialogRename.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogRename.setContentView(R.layout.dialog_rename);
-        dialogRename.setCancelable(true);
-        dialogRename.show();
-        Button btnContinue = dialogRename.findViewById(R.id.btnContinueRename);
-        Button btnCancel = dialogRename.findViewById(R.id.btnCancelRename);
-        EditText etRename = dialogRename.findViewById(R.id.etRenameDoc);
-
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String rename = etRename.getText().toString();
-                doRename(rename);
-
-            }
-
-
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialogRename);
-            }
-        });
-    }
-
-    private void save(){
-        Dialog dialog  = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_save);
-        dialog.setCancelable(true);
-        dialog.show();
-        Button btnContinue = dialog.findViewById(R.id.btnContinueSave);
-        Button btnCancel = dialog.findViewById(R.id.btnCancelSave);
-        TextView textTitle =dialog.findViewById(R.id.tvTitleDialogSave);
-        textTitle.setText(sign.getTitle() + "will be saved to Download");
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialog);
                 doSave();
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                dismissDialog(dialog);
-            }
-        });
     }
 
 
@@ -353,7 +336,6 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             @Override
             public void onClick(View view) {
                 doDelete();
-
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -408,7 +390,6 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 dismissDialog(regenerateDialog);
                 gotoRecreateForm();
             }
@@ -416,7 +397,6 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 dismissDialog(regenerateDialog);
             }
         });
@@ -439,6 +419,8 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     private void onSuccessRename(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             dismissDialog(dialogRename);
+            dismiss();
+            toRefreshList();
         }
     }
 
@@ -449,8 +431,10 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
 
     private void onSuccessDelete(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
-            dismissDialog(deleteDialog);
 
+            dismissDialog(deleteDialog);
+            dismiss();
+            toRefreshList();
         }
     }
 
@@ -459,165 +443,76 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     }
 
     private void gotoRecreateForm() {
-        Intent intent = new Intent(getContext(), RecreateSignActivity.class);
+        if(where <= 1){
+            Intent intent = new Intent(getContext(), RecreateSignActivity.class);
 
-        intent.putExtra("id", sign.getId());
-        //intent.putExtra("model", detailModel);
-        startActivity(intent);
+            intent.putExtra("id", sign.getId());
+            //intent.putExtra("model", detailModel);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getContext(), RecreateCollabActivity.class);
+            intent.putExtra("type", where);
+            intent.putExtra("id", sign.getId());
+            //intent.putExtra("model", detailModel);
+            startActivity(intent);
+        }
+
+
     }
 
     private void doSave() {
-
-    }
-
-
-    private void doShare(String type){
-        PictureDrawable pd = util.makeQRCOde(sign.getQr_code());
+        UtilFile utilFile = new UtilFile(getContext());
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                downloadFileAPI29((util.makeBitmap(pd)), type);
+                utilFile.downloadFileAPI29((util.makeBitmap(pd)), type, typeShare, sign.getTitle());
             }else{
-                downloadFile(util.makeBitmap(pd), type);
+                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, sign.getTitle());
             }
-
         }
     }
 
-    private void downloadFile(Bitmap bitmap, String type) {
-        if(type.equals(typeShare.get(0))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + sign.getTitle()+ ".png");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContext().getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else  if(type.equals(typeShare.get(1))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + sign.getTitle()+ ".jpg");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
 
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContext().getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
+    private void doShare(){
+        util.shareLink(getContext(), "paraf.yokesen.com");
+    }
+
+    private void doRemind() {
+        Observable<SimpleResponse> Remind= apiInterface.GetRemindReq(token, sign.getId());
+        Remind.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessRemind, this::onFailedRemind);
+    }
+
+    private void onSuccessRemind(SimpleResponse simpleResponse) {
+        if(simpleResponse!=null){
+            utilWidget.makeApprovalDialog("Remind Success", "You have succesfully remind the signers!");
         }
+    }
 
+    private void onFailedRemind(Throwable throwable) {
+        util.toastError(getContext() , "API REMIND", throwable);
+    }
+
+    private void toRefreshList(){
+        switch(where){
+            case 0:
+                SignCollabState.getSubject().onNext(refresh.MY_SIGN);
+                break;
+            case 1:
+                SignCollabState.getSubject().onNext(refresh.MY_REQ);
+                break;
+            case 2:
+                SignCollabState.getSubject().onNext(refresh.COLLAB_WAIT);
+                break;
+            case 3:
+                SignCollabState.getSubject().onNext(refresh.COLLAB_ACC);
+                break;
+            case 4:
+                SignCollabState.getSubject().onNext(refresh.COLLAB_REJ);
+                break;
+        }
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void downloadFileAPI29(Bitmap bitmap, String type) {
-        Log.d("FILETYPE", type);
-
-        if(type.equals(typeShare.get(0))){
-            ContentValues contentValues = new ContentValues();
-            SignModel sign = this.sign;
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, sign.getTitle()+sign.getDue_date()+".png");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/png");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-
-            Uri itemUri = getContext().getContentResolver().insert(uri, contentValues);
-
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = getContext().getContentResolver().openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    getContext().getContentResolver().update(itemUri, contentValues, null, null);
-                    Toast.makeText(getContext(), "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else  if(type.equals(typeShare.get(1))){
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, sign.getTitle()+sign.getTime()+".jpg");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/jpeg");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-            ContentResolver cr = getContext().getContentResolver();
-            Uri itemUri = cr.insert(uri, contentValues);
-
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = cr.openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    cr.update(itemUri, contentValues, null, null);
-                    Toast.makeText(getContext(), "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
-        }
-    }
-    void downloadPDF(Bitmap bitmap){
-        String stringFilePath = Environment.getExternalStorageDirectory().getPath() + "/Download/"+sign.getTitle()+ sign.getTime() + ".pdf";
-        File file = new File(stringFilePath);
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.parseColor("#000000"));
-
-
-        page.getCanvas().drawBitmap(bitmap,0,0 , paint);
-        pdfDocument.finishPage(page);
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-
-        }
-        pdfDocument.close();
-        Toast.makeText(getContext(), "Successfully Download PDF: "+ file.getPath(),
-                Toast.LENGTH_LONG).show();
-    }
 
 
 }

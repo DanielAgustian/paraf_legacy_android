@@ -347,7 +347,7 @@ following data"
 
                 />
             <TextView
-
+                android:id="@+id/tvSignersTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -357,28 +357,30 @@ following data"
                 android:text="Invite Signers"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-            <RelativeLayout
-                android:paddingVertical="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorGrayText"
-                    android:text="Sign Document in Order"/>
-                <Switch
-                    android:scaleX="1.15"
-                    android:scaleY="1.10"
-                    android:id="@+id/switchOrderSignature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/colorLightGrayText"
-                    android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/rlSwitch"-->
+<!--                android:paddingVertical="10dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textColor="@color/colorGrayText"-->
+<!--                    android:text="Sign Document in Order"/>-->
+<!--                <Switch-->
+<!--                    android:scaleX="1.15"-->
+<!--                    android:scaleY="1.10"-->
+<!--                    android:id="@+id/switchOrderSignature"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/ic_arrow_right"-->
+<!--                    app:tint="@color/colorLightGrayText"-->
+<!--                    android:layout_alignParentEnd="true"/>-->
+<!--            </RelativeLayout>-->
             <ListView
-
+                android:divider="@null"
+                android:dividerHeight="0dp"
                 android:id="@+id/lvInviteSigners"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

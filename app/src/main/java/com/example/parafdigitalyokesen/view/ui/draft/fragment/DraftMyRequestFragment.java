@@ -26,11 +26,15 @@ import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.viewModel.SignCollabState;
+import com.example.parafdigitalyokesen.viewModel.refresh;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -84,7 +88,7 @@ public class DraftMyRequestFragment extends Fragment {
     List<SignModel> sign;
     ImageView ivGrid, ivList;
     boolean isGrid = false;
-
+    DisposableObserver disposableRefresh;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,8 +96,29 @@ public class DraftMyRequestFragment extends Fragment {
         root =  inflater.inflate(R.layout.fragment_today, container, false);
         //initData();
         initSpinner(root);
+        observe();
         return root;
 
+    }
+    private void observe() {
+        disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
+            @Override
+            public void onNext(@NonNull refresh refresh) {
+                if(refresh == com.example.parafdigitalyokesen.viewModel.refresh.MY_REQ){
+                    initData();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override

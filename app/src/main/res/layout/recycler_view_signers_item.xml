@@ -46,41 +46,62 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tvListEmail"
-                    android:textSize="13sp"
-                    android:textColor="@color/colorPrimary"
-                    android:text="nanas@gmail.com"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:layout_marginTop="1dp"
-                    android:id="@+id/tvListName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="9sp"
-                    android:textColor="@color/colorLightGrayText"
-                    android:text="Nanas Kuning"
-                    />
-                <TextView
-                    android:layout_marginTop="1dp"
-                    android:id="@+id/tvListStatusSigners"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Waiting for Signature"
-                    android:textSize="9sp"
-                    android:textColor="@color/colorPending"
-                    />
-                <TextView
-                    android:visibility="gone"
-                    android:layout_marginTop="3dp"
-                    android:id="@+id/tvListReqFile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Request Final Document"
-                    android:textSize="9sp"
-                    android:textColor="@color/colorPrimary"
-                    />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/tvListEmail"
+                            android:textSize="13sp"
+                            android:textColor="@color/colorPrimary"
+                            android:text="nanas@gmail.com"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_marginTop="1dp"
+                            android:id="@+id/tvListName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="9sp"
+                            android:textColor="@color/colorLightGrayText"
+                            android:text="Nanas Kuning"
+                            />
+                        <TextView
+                            android:layout_marginTop="1dp"
+                            android:id="@+id/tvListStatusSigners"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Waiting for Signature"
+                            android:textSize="9sp"
+                            android:textColor="@color/colorPending"
+                            />
+                        <TextView
+                            android:visibility="gone"
+                            android:layout_marginTop="3dp"
+                            android:id="@+id/tvListReqFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Request Final Document"
+                            android:textSize="9sp"
+                            android:textColor="@color/colorPrimary"
+                            />
+                    </LinearLayout>
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/ivDeleteIcon"
+                        android:layout_marginRight="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="24dp"
+                        android:src="@drawable/ic_delete_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_height="24dp"/>
+
+                </RelativeLayout>
+
+
                 <LinearLayout
                     android:id="@+id/llButtonSigners"
                     android:layout_marginTop="10dp"

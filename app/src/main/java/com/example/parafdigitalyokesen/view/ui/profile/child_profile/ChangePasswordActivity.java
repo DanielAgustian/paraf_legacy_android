@@ -20,6 +20,7 @@ import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.util.Util;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,7 +34,9 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     boolean passValidation= false,
             newPassValidation = false,
             confirmPassValidation = false,
-            diffPassValidation = false;
+            diffPassValidation = false,
+            sameOldNewValidation = false;
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,18 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             diffPassValidation = true;
         }
 
+        if(etPassword.getText().toString().trim().equals(etNewPassword.getText().toString().trim())){
+            sameOldNewValidation = true;
+        }else{
+            sameOldNewValidation = false;
+        }
+
+        if(passValidation || sameOldNewValidation){
+            changeColor(etPassword , true);
+        }else{
+            changeColor(etPassword, false);
+        }
+
         changeColor(etPassword, passValidation);
         if(diffPassValidation || confirmPassValidation){
             changeColor(etConfirmPassword , true);
@@ -112,13 +127,21 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             changeColor(etConfirmPassword, false);
         }
 
-        if(diffPassValidation || newPassValidation){
+        if(diffPassValidation || newPassValidation || sameOldNewValidation){
             changeColor(etNewPassword , true);
         }else{
             changeColor(etNewPassword, false);
         }
 
-        if(!passValidation && !newPassValidation && !confirmPassValidation && !diffPassValidation){
+        if (sameOldNewValidation){
+            util.toastMisc(this, "New Password cannot be the same as Old Password");
+        }
+
+        if(diffPassValidation){
+            util.toastMisc(this, "New Password need to be the same as Confirm password");
+        }
+
+        if(!passValidation && !newPassValidation && !confirmPassValidation && !diffPassValidation && !sameOldNewValidation){
             return true;
         } else{
 

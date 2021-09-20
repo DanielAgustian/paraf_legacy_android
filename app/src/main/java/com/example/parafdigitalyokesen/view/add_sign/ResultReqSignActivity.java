@@ -15,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.PictureDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,20 +35,15 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.adapter.SignersAdapter;
-import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
-import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
-import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
 import com.example.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,12 +52,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ResultReqSignActivity extends AppCompatActivity implements View.OnClickListener {
@@ -204,7 +194,7 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
         lvSigners.setNestedScrollingEnabled(false);
         ArrayList<InviteSignersModel> list = populateList(2);
         InviteSignersDialogAdapter invAdapter = new InviteSignersDialogAdapter(
-                this, list
+                this, list, false
         );
         lvSigners.setAdapter(invAdapter);
         Button btnContinue = dialog.findViewById(R.id.btnContinueInvite);

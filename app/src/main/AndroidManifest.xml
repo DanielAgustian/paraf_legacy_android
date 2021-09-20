@@ -39,7 +39,7 @@
         <activity android:name=".view.ui.profile.child_profile.HelpActivity" />
         <activity android:name=".view.ui.profile.child_profile.ChangePasswordActivity" />
         <activity android:name=".view.ui.profile.child_profile.MyInformation" />
-        <activity android:name=".view.ui.collab.CollabResultActivity" />
+
         <activity android:name=".view.ui.draft.DeclineReason" />
         <activity android:name=".view.ui.draft.ResultAfterRespond" />
         <activity android:name=".view.forgot_password.NewPassword" />

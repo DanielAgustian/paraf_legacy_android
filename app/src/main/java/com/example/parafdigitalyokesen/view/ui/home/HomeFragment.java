@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     TextView tvToday, tvAccepted, tvRejected, tvRequest;
+    View cartBadge;
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -79,6 +80,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             tvToday.setText(model.getHome().getToday());
             tvRequest.setText(model.getHome().getToday());
             tvRejected.setText(model.getHome().getRejected());
+
+            if(model.getNotifStatus() == 0){
+                cartBadge.setVisibility(View.GONE);
+            }
         } else{
             Log.d("Error", "Empty Model");
         }
@@ -108,6 +113,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         FrameLayout flNotif = root.findViewById(R.id.flNotif);
         flNotif.setOnClickListener(this);
 
+        cartBadge = root.findViewById(R.id.cart_badge);
     }
 
 }

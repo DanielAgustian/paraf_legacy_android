@@ -1,10 +1,6 @@
 package com.example.parafdigitalyokesen.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.PictureDrawable;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +9,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
 import com.example.parafdigitalyokesen.R;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.SignModel;
-import com.example.parafdigitalyokesen.model.SignersModel;
-import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
-import com.example.parafdigitalyokesen.view.ui.draft.RespondSignature;
 import com.example.parafdigitalyokesen.view.ui.draft.bottom_sheet.BottomSheetDraftInfo;
 
 import java.util.List;
-
-import kotlin.reflect.KFunction;
 
 public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.ViewHolder>{
     private List<SignModel> models;

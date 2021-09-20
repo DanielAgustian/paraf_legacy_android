@@ -50,17 +50,45 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         tvEmail.setText(signers.getEmail());
         TextView tvStatus = holder.tvListStatus;
         tvStatus.setText(signers.getInfo());
+
+        TextView tvReqDoc = holder.tvReqDocs;
+
+        Button btnSave = holder.btnSave;
+        Button btnView = holder.btnView;
+
+        ImageView ivDeleteIcon = holder.ivDeleteIcon;
+
+
+
         if(signers.getPhoto() != null){
             if(!(signers.getPhoto().equals(""))){
                 ImageView civ = holder.civPhoto;
                 new DownLoadImageTask(civ).execute(signers.getPhoto());
             }
         }
-        if(signers.getStatus().trim().toLowerCase().contains("waiting")){
+
+        String status = signers.getStatus().trim().toLowerCase();
+        if(status.contains("waiting")){
             tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPending));
+
+            ivDeleteIcon.setVisibility(View.VISIBLE);
+        } else if (status.contains("accept")){
+            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorSuccess));
+            if(signers.isReqDoc()){
+                tvReqDoc.setVisibility(View.VISIBLE);
+            }
+        } else if (status.contains("reject")){
+            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorError));
         }
 
-        Button btnSave = holder.btnSave;
+        int idSigners = -1;
+        idSigners = signers.getId();
+
+        if (idSigners == -1){
+            btnView.setVisibility(View.GONE);
+            btnSave.setVisibility(View.GONE);
+        }
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,12 +97,19 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
             }
         });
 
-        Button btnView = holder.btnView;
+
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("save", mSigners.get(position), id);
+                BottomSheetSeeQR bottomSheetSeeQR = new BottomSheetSeeQR("view", mSigners.get(position), id);
                 bottomSheetSeeQR.show(fragmentManager, "ModalBottomSheet");
+            }
+        });
+
+        ivDeleteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -88,7 +123,7 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         public TextView tvNameRv, tvEmailRV, tvListStatus, tvReqDocs;
         public LinearLayout llButton;
         public Button btnView, btnSave;
-        public ImageView civPhoto;
+        public ImageView civPhoto, ivDeleteIcon;
         public ViewHolder(View itemView){
             super(itemView);
             tvNameRv = itemView.findViewById(R.id.tvListName);
@@ -99,21 +134,15 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
             btnView = itemView.findViewById(R.id.btnViewQR);
             btnSave = itemView.findViewById(R.id.btnSaveQR);
             civPhoto = itemView.findViewById(R.id.circleAvatar);
+            ivDeleteIcon = itemView.findViewById(R.id.ivDeleteIcon);
 
 
 
-            if(type<3){
+            if(type<4){
                 llButton.setVisibility(View.GONE);
-            }else if (type == 3){
-                llButton.setVisibility(View.VISIBLE);
-                btnSave.setVisibility(View.INVISIBLE);
-
-
             }
             else if (type == 4){
                 llButton.setVisibility(View.VISIBLE);
-                tvReqDocs.setVisibility(View.VISIBLE);
-
             }
             else{
                 llButton.setVisibility(View.GONE);

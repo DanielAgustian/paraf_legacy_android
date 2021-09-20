@@ -9,9 +9,7 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
 import com.example.parafdigitalyokesen.model.LoginModel;
-import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -41,6 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         String token = preferencesRepo.getToken();
         if(token != null  && !(token.equals(""))){
             refreshToken(token);
+
         }else{
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

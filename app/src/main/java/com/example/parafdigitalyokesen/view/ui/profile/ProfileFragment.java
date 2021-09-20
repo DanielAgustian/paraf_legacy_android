@@ -1,7 +1,5 @@
 package com.example.parafdigitalyokesen.view.ui.profile;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,9 +19,7 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
-import com.example.parafdigitalyokesen.model.GetHomeModel;
-import com.example.parafdigitalyokesen.model.GetMyInfoModel;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.GetProfileModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
 import com.example.parafdigitalyokesen.view.MainActivity;

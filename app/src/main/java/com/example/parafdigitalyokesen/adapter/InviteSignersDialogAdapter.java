@@ -16,10 +16,12 @@ import java.util.ArrayList;
 
 public class InviteSignersDialogAdapter extends BaseAdapter {
     private Context context;
+    boolean isLocked;
     public static ArrayList<InviteSignersModel> inviteSignersModelArrayList;
-    public InviteSignersDialogAdapter(Context context, ArrayList<InviteSignersModel>model){
+    public InviteSignersDialogAdapter(Context context, ArrayList<InviteSignersModel>model, boolean isLocked){
         this.context = context;
         this.inviteSignersModelArrayList = model;
+        this.isLocked = isLocked;
     }
     @Override
     public int getCount() {
@@ -52,7 +54,8 @@ public class InviteSignersDialogAdapter extends BaseAdapter {
         }
 
         holder.etEmailSigners.setText(inviteSignersModelArrayList.get(position).getEtEmail());
-
+        holder.etEmailSigners.setEnabled(!isLocked);
+        holder.etEmailSigners.setFocusable(!isLocked);
         holder.etEmailSigners.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

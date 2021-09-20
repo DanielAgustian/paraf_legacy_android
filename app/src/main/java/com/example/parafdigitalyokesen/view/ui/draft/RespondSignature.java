@@ -77,6 +77,10 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
     }
 
     private void setData(MyReqDetailModel model) {
+
+        TextView tvPersonRespond = findViewById(R.id.tvPersonRespond);
+        tvPersonRespond.setText(model.getTotalSigners()+" Person is left to sign");
+
         TextView tvReqBy = findViewById(R.id.tvReqBYRespond);
         tvReqBy.setText(model.getRequestBy());
 

@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class SignersModel implements Serializable {
+    @SerializedName("id")
+    int id;
+
     @SerializedName("name")
     private String name;
 
@@ -28,7 +31,8 @@ public class SignersModel implements Serializable {
     @SerializedName("information")
     private String info;
 
-
+    @SerializedName("request_document")
+    private boolean reqDoc;
 
     public SignersModel(String name, String email, String photo, String status, String info) {
         this.name = name;
@@ -36,6 +40,14 @@ public class SignersModel implements Serializable {
         this.photo = photo;
         this.status = status;
         this.info = info;
+    }
+
+    public boolean isReqDoc() {
+        return reqDoc;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

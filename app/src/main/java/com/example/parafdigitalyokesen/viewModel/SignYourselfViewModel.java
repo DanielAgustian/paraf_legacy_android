@@ -14,7 +14,7 @@ public class SignYourselfViewModel extends ViewModel {
     private MutableLiveData<Integer> result = new MutableLiveData<>();
     public LiveData<Integer> getResult(){
         if(result == null){
-                result.postValue(100);
+                result.setValue(100);
             Log.d("ViewModel", "FUCKING MOVE YOU STUPID SHIT");
                 TimerTask task = new TimerTask() {
                     public void run() {

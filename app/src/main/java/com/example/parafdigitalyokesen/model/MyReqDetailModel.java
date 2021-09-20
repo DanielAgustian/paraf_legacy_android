@@ -69,6 +69,28 @@ public class MyReqDetailModel implements Serializable {
     @SerializedName("rejected_reason")
     private String reason;
 
+    @SerializedName("can_sign")
+    private boolean canSign;
+
+    @SerializedName("can_request_final_document")
+    private boolean canRequestDocument;
+
+    @SerializedName("can_download")
+    private boolean canDownload;
+
+
+    public boolean isCanSign() {
+        return canSign;
+    }
+
+    public boolean isCanRequestDocument() {
+        return canRequestDocument;
+    }
+
+    public boolean isCanDownload() {
+        return canDownload;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }

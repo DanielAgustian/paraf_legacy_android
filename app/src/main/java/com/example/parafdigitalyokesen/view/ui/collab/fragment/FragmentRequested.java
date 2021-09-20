@@ -1,7 +1,6 @@
 package com.example.parafdigitalyokesen.view.ui.collab.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +21,18 @@ import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.example.parafdigitalyokesen.model.GetSignatureModel;
 import com.example.parafdigitalyokesen.model.SignModel;
+import com.example.parafdigitalyokesen.viewModel.SignCollabState;
+import com.example.parafdigitalyokesen.viewModel.refresh;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class FragmentRequested extends Fragment {
@@ -40,6 +42,7 @@ public class FragmentRequested extends Fragment {
     List<SignModel> sign;
     View root;
     Util util = new Util();
+    DisposableObserver disposableRefresh;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,7 +52,34 @@ public class FragmentRequested extends Fragment {
 
         initData();
         initSpinner(root);
+        observe();
         return root;
+    }
+    private void observe() {
+        disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull refresh refresh) {
+                if(refresh == com.example.parafdigitalyokesen.viewModel.refresh.COLLAB_WAIT){
+                    initData();
+                }
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableRefresh.dispose();
     }
 
     @Override

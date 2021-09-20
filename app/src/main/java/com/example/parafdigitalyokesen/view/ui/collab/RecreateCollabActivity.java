@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,32 +20,35 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
+import com.example.parafdigitalyokesen.model.InviteSignersModel;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.example.parafdigitalyokesen.model.MyReqDetailModel;
-import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.TypeCategoryModel;
-import com.example.parafdigitalyokesen.view.add_sign.ResultSignature;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.security.Signature;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -62,7 +67,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
     File fileSending;
     private boolean nameValidator, emailValidator, documentNameValidator;
 
-    Button btnContinue, btnCancel ;
+    Button btnContinue, btnCancel, btnDueDate, btnTime;
     private Dialog customDialog, waitingDialog;
     LinearLayout llWaitingData, llDoneData, llUploadData;
     //SignYourselfViewModel VM;
@@ -73,17 +78,18 @@ public class RecreateCollabActivity extends AppCompatActivity {
     String token;
     TypeCategoryModel selectedCategory, selectedTypes;
 
+    ListView lvSigners;
+    ArrayList<InviteSignersModel> list = new ArrayList<>();
+    InviteSignersDialogAdapter invAdapter;
 
     MyReqDetailModel detailModel;
-    EditText etName, etEmail, etDocumentName, etDescription, etLink;
+    EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage;
 
-
+    String choosenDate = "", choosenTime= "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_sign_yourself);
-
+        setContentView(R.layout.activity_req_signature);
         initNetwork();
         getPermission();
         initData();
@@ -106,8 +112,6 @@ public class RecreateCollabActivity extends AppCompatActivity {
 
     public void initSpinner(){
 
-
-
         Log.d("HomeTOKEN", token);
         Observable<GetTypeCategoryModel> getCategory= apiInterface.getCategories(token);
         getCategory.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessCategory, this::onFailedCategory);
@@ -123,6 +127,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
 
     private void onFailed(Throwable throwable) {
         util.toastError(this, "API GET COLLAB DETAIL", throwable);
+        throwable.printStackTrace();
     }
 
     private void onSuccess(GetMyReqDetailModel getMyReqDetailModel) {
@@ -132,7 +137,26 @@ public class RecreateCollabActivity extends AppCompatActivity {
             initSpinner();
         }
     }
+    public void initRecyclerView(){
+        lvSigners = findViewById(R.id.lvInviteSigners);
+        list = populateList(1);
+        invAdapter = new InviteSignersDialogAdapter(
+                this, list, false
+        );
+        lvSigners.setAdapter(invAdapter);
+    }
 
+//    private void addSigners() {
+//        InviteSignersModel model = new InviteSignersModel();
+//        model.setEtName("");
+//        model.setEtEmail("");
+//        list.add(model);
+//        invAdapter.notifyDataSetChanged();
+//        int data = list.size() * 90;
+//        data = util.dpToPx(data, this);
+//        lvSigners.getLayoutParams().height = data;
+//        lvSigners.requestLayout();
+//    }
     private void getPermission() {
         if (!EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
@@ -176,18 +200,24 @@ public class RecreateCollabActivity extends AppCompatActivity {
     void addSignMethod(){
         if (validation()){
             try {
-                Log.d("FILE_GETNAMe", fileSending.getName());
-                RequestBody requestFile =
-                        RequestBody.create(
-                                MediaType.parse(getContentResolver().getType(fileUri)),
-                                fileSending
-                        );
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                RequestBody requestFile = null;
+                MultipartBody.Part body = null;
+                if(fileUri!=null){
+                    requestFile =
+                            RequestBody.create(
+                                    MediaType.parse(getContentResolver().getType(fileUri)),
+                                    fileSending
+                            );
+                    body =
+                            MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                }else{
+                    requestFile = RequestBody.create(MediaType.parse("text/plain"), "");
 
+                    body = MultipartBody.Part.createFormData("attachment", "", requestFile);
+                }
 
                 String token = preferencesRepo.getToken();
-                Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSign(
+                Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSignCollab(
                         token,
                         detailModel.getId(),
                         util.requestBodyString(etName.getText().toString()),
@@ -197,7 +227,9 @@ public class RecreateCollabActivity extends AppCompatActivity {
                         util.requestBodyString(String.valueOf(selectedTypes.getId())),
                         util.requestBodyString(etDescription.getText().toString()),
                         util.requestBodyString(etLink.getText().toString()),
-                        body
+                        body,
+                        util.requestBodyString(choosenDate),
+                        util.requestBodyString(choosenTime)
                 );
                 postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
 
@@ -236,7 +268,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
     }
     private void getDataSpinnerTypes(){
 
-        Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeyNewSign);
+        Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeReqSign);
         ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
         adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDocType.setAdapter(adapterDocType);
@@ -279,7 +311,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
     }
 
     private void getDataSpinnerCategory(){
-        Spinner spinnerCategory = findViewById(R.id.spinnerCategoryNewSign);
+        Spinner spinnerCategory = findViewById(R.id.spinnerCategoryReqSign);
         ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -311,7 +343,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
 
     //------------------------------ Initialize Component-----------------
     public void initComponent(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSignYourself);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarReqSign);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_back_gray);
@@ -323,7 +355,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 back();
             }
         });
-        Button btnCreate = findViewById(R.id.btnSignYourself);
+        Button btnCreate = findViewById(R.id.btnReqSign);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -331,7 +363,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 customDialog.show();
             }
         });
-        llUploadData = findViewById(R.id.uploadData);
+        llUploadData = findViewById(R.id.uploadDataReq);
         llUploadData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -339,12 +371,12 @@ public class RecreateCollabActivity extends AppCompatActivity {
             }
         });
 
-        llDoneData = findViewById(R.id.doneUploadData);
+        llDoneData = findViewById(R.id.doneUploadDataReq);
         llDoneData.setVisibility(View.GONE);
-        llWaitingData = findViewById(R.id.waitingUploadData);
+        llWaitingData = findViewById(R.id.waitingUploadDataReq);
         llWaitingData.setVisibility(View.GONE);
 
-        ImageView ivEmptyFile = findViewById(R.id.ivEmptyFile);
+        ImageView ivEmptyFile = findViewById(R.id.ivEmptyFileReq);
         ivEmptyFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -364,6 +396,23 @@ public class RecreateCollabActivity extends AppCompatActivity {
             etDescription.setText(detailModel.getDescription());
             etLink.setText(detailModel.getLink());
         }
+        etMessage = findViewById(R.id.etMsgNewSign);
+        btnDueDate = findViewById(R.id.btnDueDate);
+        btnTime = findViewById(R.id.btnTime);
+
+        btnDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dateTimePicker();
+            }
+        });
+
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timepIcker();
+            }
+        });
     }
 
 
@@ -399,7 +448,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
 
                 llUploadData.setVisibility(View.GONE);
                 llWaitingData.setVisibility(View.VISIBLE);
-                TextView tvWaitingData = findViewById(R.id.tvWaitingUpload);
+                TextView tvWaitingData = findViewById(R.id.tvWaitingUploadReq);
                 tvWaitingData.setText(fileUri.getPath());
                 setProgressValue(fileUri.getPath());
             }
@@ -470,7 +519,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 simpleProgressBar.setProgress(100);
                 llWaitingData.setVisibility(View.GONE);
                 llDoneData.setVisibility(View.VISIBLE);
-                TextView tvUploadData = findViewById(R.id.tvDoneUpload);
+                TextView tvUploadData = findViewById(R.id.tvDoneUploadReq);
                 tvUploadData.setText(filePath);
             }
         };
@@ -521,5 +570,66 @@ public class RecreateCollabActivity extends AppCompatActivity {
         intent.putExtra("type", getIntent().getIntExtra("type", 0));
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+    public ArrayList<InviteSignersModel> populateList(int position){
+        ArrayList<InviteSignersModel> list = new ArrayList<>();
+        for(int i = 0; i < position; i++){
+            InviteSignersModel invModel = new InviteSignersModel();
+            invModel.setEtName("");
+            invModel.setEtEmail("");
+            list.add(invModel);
+        }
+        return list;
+    }
+    void dateTimePicker(){
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, monthOfYear);
+                        c.set(Calendar.DATE, dayOfMonth);
+                        choosenDate = util.CalendarToDateString(c);
+                        btnDueDate.setText(choosenDate);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+
+
+    }
+
+    //---------------------------------Time Picker------------------------
+    void timepIcker()
+    {
+        Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+                        choosenTime = util.CalendarToTimeString(c);
+                        btnTime.setText(choosenTime);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+
     }
 }

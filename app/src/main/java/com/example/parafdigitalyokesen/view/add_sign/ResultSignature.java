@@ -1,66 +1,51 @@
 package com.example.parafdigitalyokesen.view.add_sign;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
+import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.PictureDrawable;
-import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
-import android.opengl.Visibility;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.parafdigitalyokesen.R;
 import com.example.parafdigitalyokesen.Repository.APIClient;
 import com.example.parafdigitalyokesen.Repository.APIInterface;
 import com.example.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.example.parafdigitalyokesen.Util;
+import com.example.parafdigitalyokesen.util.Util;
 import com.example.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.example.parafdigitalyokesen.adapter.SignersAdapter;
-import com.example.parafdigitalyokesen.model.GetHomeModel;
 import com.example.parafdigitalyokesen.model.GetSignDetailModel;
 import com.example.parafdigitalyokesen.model.InviteSignersModel;
 import com.example.parafdigitalyokesen.model.SignatureDetailModel;
 import com.example.parafdigitalyokesen.model.SignersModel;
 import com.example.parafdigitalyokesen.model.SimpleResponse;
+import com.example.parafdigitalyokesen.util.UtilFile;
 import com.example.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ResultSignature extends AppCompatActivity implements View.OnClickListener {
@@ -77,7 +62,8 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     SignatureDetailModel detailModel;
     Util util = new Util();
     PictureDrawable pd;
-
+    String choosenDate = "";
+    String choosenTime = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +81,6 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 
     @Override
@@ -146,6 +131,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
 
     private void setData() {
         pd = util.makeQRCOde(detailModel.getQr_code());
+
         ImageView iv = findViewById(R.id.ivQRScan);
         iv.setImageDrawable(pd);
 
@@ -196,12 +182,26 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         lvSigners.setNestedScrollingEnabled(false);
         ArrayList<InviteSignersModel> list = populateList(1);
         InviteSignersDialogAdapter invAdapter = new InviteSignersDialogAdapter(
-                this, list
+                this, list, false
         );
         lvSigners.setAdapter(invAdapter);
         Button btnContinue = dialog.findViewById(R.id.btnContinueInvite);
         Button btnCancel = dialog.findViewById(R.id.btnCancelInvite);
-        LinearLayout llAddSigners = findViewById(R.id.llAddSigners);
+        LinearLayout btnDueDate = dialog.findViewById(R.id.llDueDate);
+        LinearLayout btnTime = dialog.findViewById(R.id.llTimePicker);
+        LinearLayout llAddSigners = dialog.findViewById(R.id.llAddSigners);
+        btnDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dateTimePicker(dialog);
+            }
+        });
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timepIcker(dialog);
+            }
+        });
         llAddSigners.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,6 +210,14 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
                 model.setEtEmail("");
                 list.add(model);
                 invAdapter.notifyDataSetChanged();
+                if(list.size()<6){
+                    int data = list.size() * 90;
+
+                    data = util.dpToPx(data, ResultSignature.this);
+                    lvSigners.getLayoutParams().height = data;
+                    lvSigners.requestLayout();
+                }
+
             }
         });
         btnContinue.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +228,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
 //                EditText editText = viewListItem.findViewById(R.id.etDialogItemInvEmail);
 //                String string = editText.getText().toString();
 //                Log.d("Dialog Invite", string);
+                doInviteSigners(listSigners, choosenDate, choosenTime);
                 dismissDialog(dialog);
             }
         });
@@ -244,6 +253,40 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sharing(){
+        util.shareLink(this, "paraf.yokesen.com");
+    }
+
+
+    private void rename(){
+        dialogRename  = new Dialog(this);
+        dialogRename.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogRename.setContentView(R.layout.dialog_rename);
+        dialogRename.setCancelable(true);
+        dialogRename.show();
+        Button btnContinue = dialogRename.findViewById(R.id.btnContinueRename);
+        Button btnCancel = dialogRename.findViewById(R.id.btnCancelRename);
+        EditText etRename = dialogRename.findViewById(R.id.etRenameDoc);
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String rename = etRename.getText().toString();
+                doRename(rename);
+
+            }
+
+
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dismissDialog(dialogRename);
+            }
+        });
+    }
+
+    private void save(){
         Dialog dialog  = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_doctype);
@@ -283,64 +326,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 dismissDialog(dialog);
-                doShare(type);
-            }
-        });
-    }
-
-
-    private void rename(){
-        dialogRename  = new Dialog(this);
-        dialogRename.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogRename.setContentView(R.layout.dialog_rename);
-        dialogRename.setCancelable(true);
-        dialogRename.show();
-        Button btnContinue = dialogRename.findViewById(R.id.btnContinueRename);
-        Button btnCancel = dialogRename.findViewById(R.id.btnCancelRename);
-        EditText etRename = dialogRename.findViewById(R.id.etRenameDoc);
-
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String rename = etRename.getText().toString();
-                doRename(rename);
-
-            }
-
-
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialogRename);
-            }
-        });
-    }
-
-    private void save(){
-        Dialog dialog  = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_save);
-        dialog.setCancelable(true);
-        dialog.show();
-        Button btnContinue = dialog.findViewById(R.id.btnContinueSave);
-        Button btnCancel = dialog.findViewById(R.id.btnCancelSave);
-        TextView textTitle =dialog.findViewById(R.id.tvTitleDialogSave);
-        textTitle.setText(detailModel.getTitle() +"will be saved to Download");
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialog);
-                doSave();
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismissDialog(dialog);
+                doSave(type);
             }
         });
     }
@@ -536,165 +522,94 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         Intent intent = new Intent(this, RecreateSignActivity.class);
 
         intent.putExtra("id", detailModel.getId());
-        intent.putExtra("model", detailModel);
+        //intent.putExtra("model", detailModel);
         startActivity(intent);
     }
 
-    private void doSave() {
-
-    }
 
 
-    private void doShare(String type){
+
+    private void doSave(String type){
+        UtilFile utilFile = new UtilFile(this);
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                downloadFileAPI29((util.makeBitmap(pd)), type);
+                utilFile.downloadFileAPI29((util.makeBitmap(pd)), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }else{
-                downloadFile(util.makeBitmap(pd), type);
+                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }
-
         }
     }
 
-    private void downloadFile(Bitmap bitmap, String type) {
-        if(type.equals(typeShare.get(0))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + detailModel.getTitle()+ ".png");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            util.shareData(Uri.parse(f.toString()),"image/png", this);
-        } else  if(type.equals(typeShare.get(1))){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + detailModel.getTitle()+ ".jpg");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-            FileOutputStream fOut = null;
-            try {
-                fOut = new FileOutputStream(f);
-            } catch ( FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            try {
-                fOut.flush();
-                fOut.close();
-                MediaStore.Images.Media.insertImage(getContentResolver(),f.getAbsolutePath(),f.getName(),f.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            util.shareData(Uri.parse(f.toString()),"image/jpeg", this);
-        } else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
-        }
 
+
+    void doInviteSigners(ArrayList<String> emails, String date, String time){
+        Observable<SimpleResponse> putInviteSign = apiInterface.putInviteSign(token, detailModel.getId(), emails, date, time );
+        putInviteSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessInvite, this::onFailedInvite);
+    }
+
+    private void onSuccessInvite(SimpleResponse simpleResponse) {
+        if(simpleResponse != null){
+            util.toastMisc(this, "Successfully Add Signers!");
+            back();
+        }
+    }
+
+    private void onFailedInvite(Throwable throwable) {
+        util.toastError(this, "API INVITE ERROR", throwable);
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void downloadFileAPI29(Bitmap bitmap, String type) {
-        Log.d("FILETYPE", type);
+    //--------------------Date Picker
+    void dateTimePicker(Dialog dialog){
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        if(type.equals(typeShare.get(0))){
-            ContentValues contentValues = new ContentValues();
-            SignatureDetailModel detailModel = this.detailModel;
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, detailModel.getTitle()+detailModel.getCreatedBy()+".png");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/png");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
 
-            Uri itemUri = getContentResolver().insert(uri, contentValues);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
 
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    getContentResolver().update(itemUri, contentValues, null, null);
-                    Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                    util.shareData(itemUri, "image/png", this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, monthOfYear);
+                        c.set(Calendar.DATE, dayOfMonth);
+                        choosenDate = util.CalendarToDateString(c);
+                        TextView tvDate = dialog.findViewById(R.id.tvDueDate);
+                        tvDate.setText(choosenDate);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
 
-        }else  if(type.equals(typeShare.get(1))){
-            ContentValues contentValues = new ContentValues();
-            SignatureDetailModel detailModel = this.detailModel;
-            contentValues.put(MediaStore.Downloads.DISPLAY_NAME, detailModel.getTitle()+detailModel.getCreatedBy()+".jpg");
-            contentValues.put(MediaStore.Downloads.MIME_TYPE, "image/jpeg");
-            contentValues.put(MediaStore.Downloads.IS_PENDING, true);
-            Uri uri = null;
-            uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
 
-            Uri itemUri = getContentResolver().insert(uri, contentValues);
-
-            if (itemUri != null) {
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(itemUri);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.close();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, false);
-                    getContentResolver().update(itemUri, contentValues, null, null);
-                    Toast.makeText(this, "Successfully Download Image: "+ itemUri.getPath(),
-                            Toast.LENGTH_LONG).show();
-                    util.shareData(itemUri, "image/jpeg", this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else if (type.equals(typeShare.get(2))){
-            downloadPDF(bitmap);
-        }
     }
-    void downloadPDF(Bitmap bitmap){
-        String stringFilePath = Environment.getExternalStorageDirectory().getPath() + "/Download/"+detailModel.getTitle()+ detailModel.getCreatedBy() + ".pdf";
-        File file = new File(stringFilePath);
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
-        Paint paint = new Paint();
-        paint.setColor(Color.parseColor("#000000"));
+    //---------------------------------Time Picker------------------------
+    void timepIcker(Dialog dialog)
+    {
+        Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
 
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
 
-        page.getCanvas().drawBitmap(bitmap,0,0 , paint);
-        pdfDocument.finishPage(page);
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        }
-        catch (Exception e){
-            e.printStackTrace();
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
 
-        }
-        Uri.parse(new File("/sdcard/cats.jpg").toString());
-        pdfDocument.close();
-        util.shareData(Uri.parse(stringFilePath), "application/pdf", this);
-        Toast.makeText(this, "Successfully Download PDF: "+ file.getPath(),
-                Toast.LENGTH_LONG).show();
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+                        choosenTime = util.CalendarToTimeString(c);
+                        TextView tvTime = dialog.findViewById(R.id.tvAddTime);
+                        tvTime.setText(choosenTime);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+
     }
 }
