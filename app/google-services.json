@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "410794200467",
+    "project_id": "tekenyokesen",
+    "storage_bucket": "tekenyokesen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410794200467:android:51f286b3a5a34413ddac66",
+        "android_client_info": {
+          "package_name": "com.yokesen.parafdigitalyokesen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410794200467-lmda7mo35513h1n3b7vgsro3spnglgrn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yokesen.parafdigitalyokesen",
+            "certificate_hash": "9254cb0a52dbf00be46bc4fd4cc998de557665be"
+          }
+        },
+        {
+          "client_id": "410794200467-f90kmku571banb7b014f85pvuvb61oaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDypLkPqJMOKt2IwjdtFpNicJJ_DUASQ7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410794200467-f90kmku571banb7b014f85pvuvb61oaf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
