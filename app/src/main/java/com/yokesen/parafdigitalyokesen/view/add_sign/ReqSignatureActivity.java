@@ -557,7 +557,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             waitingDialog.show();
 
             try {
-                Log.d("FILE_GETNAMe", fileSending.getName());
+                //Log.d("FILE_GETNAMe", fileSending.getName());
                 RequestBody requestFile = null;
                 MultipartBody.Part body = null;
                 if(fileUri!=null){

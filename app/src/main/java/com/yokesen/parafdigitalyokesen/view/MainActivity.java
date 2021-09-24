@@ -276,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount acc = task.getResult(ApiException.class);
+
                 String email = acc.getEmail();
                 String displayName = acc.getDisplayName();
                 String token = acc.getIdToken();

@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -32,6 +34,8 @@ import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.MyContact;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.MyInformation;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.NotificationActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.SecurityPrivacyActivity;
+
+import java.util.Arrays;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -181,7 +185,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             if(GoogleSignIn.getLastSignedInAccount(getActivity()) != null){
                 googleSignInClient.signOut();
             }
-
+            if( AccessToken.getCurrentAccessToken() != null){
+                LoginManager.getInstance().logOut();
+            }
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
