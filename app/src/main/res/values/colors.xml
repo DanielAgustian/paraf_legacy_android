@@ -24,4 +24,6 @@
     <color name="colorHover">#F2F2F2</color>
     <color name="colorBlue">#FF2A79F0</color>
     <color name = "colorBackground">#FFFAFAFC</color>
+    <color name = "colorTextEmptyState">#FF22215B</color>
+    <color name="colorPasscode">#FFE0E0E0</color>
 </resources>

@@ -70,17 +70,29 @@
 
                             android:text="Getting Started with the App"/>
                         <ImageView
+                            android:id="@+id/ivStarted"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
                     </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tvStarted"
+                        android:layout_marginBottom="10dp"
+                        android:text="Lorem Ipsum"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBackground"
                         />
+
+
+
                     <RelativeLayout
                         android:focusable="true"
                         android:clickable="true"
@@ -96,12 +108,22 @@
 
                             android:text="Export on the App"/>
                         <ImageView
+                            android:id="@+id/ivExport"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
                     </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+
+                        android:id="@+id/tvExport"
+                        android:layout_marginBottom="10dp"
+                        android:text="Lorem Ipsum"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -121,13 +143,24 @@
                             android:textSize="14sp"
 
                             android:text="Managing Signatures"/>
+
                         <ImageView
+                            android:id="@+id/ivManage"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_arrow_right"
-                            app:tint="@color/colorLightGrayText"
-                            android:layout_alignParentEnd="true"/>
+                            app:tint="@color/colorLightGrayText" />
                     </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+
+                        android:id="@+id/tvManage"
+                        android:layout_marginBottom="10dp"
+                        android:text="Lorem Ipsum"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -148,12 +181,22 @@
 
                             android:text="Security and Privacy"/>
                         <ImageView
+                            android:id="@+id/ivSecurity"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
                     </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+
+                        android:id="@+id/tvSecurityFaq"
+                        android:layout_marginBottom="10dp"
+                        android:text="Lorem Ipsum"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -174,12 +217,22 @@
 
                             android:text="Troubleshooting the app"/>
                         <ImageView
+                            android:id="@+id/ivTroubleshoot"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
                     </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+
+                        android:id="@+id/tvTroubleShoot"
+                        android:layout_marginBottom="10dp"
+                        android:text="Lorem Ipsum"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"

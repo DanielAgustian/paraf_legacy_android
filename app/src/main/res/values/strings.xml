@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ParafDigitalYokesen</string>
+    <string name="app_name">Teken</string>
     <string name="title_activity_nav_bar">MainActivity</string>
     <string name="title_home"><font size="12">Home</font></string>
     <string name="title_sign"><font size="12">Sign</font></string>
@@ -22,5 +22,6 @@
     <string name="doctype_add_sign">Document Type <font color="#DB2D26">*</font></string>
     <string name="docFile_add_sign">Document File (Optional) <font color="#DB2D26">**</font></string>
     <string name="rationale_storage">This app needs access to your storage, so it can send files to server.</string>
-
+    <string name="facebook_app_id">378999260523663</string>
+    <string name="fb_login_protocol_scheme">fb378999260523663</string>
 </resources>

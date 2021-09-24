@@ -35,7 +35,7 @@ import com.yokesen.parafdigitalyokesen.view.ui.collab.RecreateCollabActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.draft.RespondSignature;
 import com.yokesen.parafdigitalyokesen.view.ui.draft.ResultAfterRespond;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
-import com.yokesen.parafdigitalyokesen.viewModel.refresh;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
@@ -237,10 +237,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
             public void onClick(View view) {
                 String rename = etRename.getText().toString();
                 doRename(rename);
-
             }
-
-
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

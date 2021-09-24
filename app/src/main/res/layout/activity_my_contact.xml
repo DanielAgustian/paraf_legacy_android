@@ -48,6 +48,7 @@
             android:background="@drawable/rounded_bg"
             >
             <EditText
+                android:id="@+id/etSearchContact"
                 android:drawableTint="@color/colorGrayText"
                 android:drawableLeft="@drawable/size_ic_search"
                 android:drawablePadding="10dp"
@@ -89,7 +90,31 @@
                 android:id="@+id/rvMyContact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_marginBottom="100dp"
+                android:id="@+id/llEmptyContact"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:src="@drawable/ic_emptycontact"
+                    android:layout_width="210dp"
+                    android:layout_height="180dp"/>
+                <TextView
+                    android:layout_marginTop="15dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorTextEmptyState"
+                    android:gravity="center_horizontal"
+                    android:text="You do not have any contact"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

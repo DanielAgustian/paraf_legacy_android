@@ -31,6 +31,7 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.model.GetSaveAllSign;
 import com.yokesen.parafdigitalyokesen.model.SaveSignModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
@@ -42,6 +43,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +51,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CollabResultActivity extends AppCompatActivity implements View.OnClickListener{
@@ -68,7 +71,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     Util util = new Util();
     String choosenDate = "";
     String choosenTime = "";
-
+    DisposableObserver disposableRefresh;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +79,28 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         where = getIntent().getIntExtra("type", 0);
         initData();
         initToolbar();
+        observe();
     }
+    private void observe() {
+        disposableRefresh = SignCollabState.getSubjectDetail().subscribeWith(new DisposableObserver<String>() {
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull String refresh) {
+                if(refresh.equals("ref")){
+                    initData();
+                }
+            }
 
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
     /*
      * where is identifier where are they from
      *  0=> DraftCompletedFragment
@@ -87,6 +110,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
      * 4=> FragmentRejected
      * */
     private void initData() {
+        typeShare.clear();
         typeShare.add("png");
         typeShare.add("jpg");
         typeShare.add("pdf");

@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
@@ -43,6 +46,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
+    GoogleSignInClient googleSignInClient;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -52,7 +56,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         preferencesRepo = new PreferencesRepo(getActivity());
         initComponent(root);
         initData();
+        initGoogleSignOut();
         return root;
+    }
+
+    private void initGoogleSignOut() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
     }
 
     @Override
@@ -148,6 +160,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         String token = preferencesRepo.getToken();
 
         Observable<SimpleResponse> callHome = apiInterface.logOutUser(token);
+
         try {
             callHome.subscribeOn(Schedulers.io()).
                     observeOn(AndroidSchedulers.mainThread()).
@@ -165,6 +178,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void onSuccessLogout(SimpleResponse simpleResponse) {
         if (simpleResponse!=null){
             preferencesRepo.deleteToken();
+            if(GoogleSignIn.getLastSignedInAccount(getActivity()) != null){
+                googleSignInClient.signOut();
+            }
+
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

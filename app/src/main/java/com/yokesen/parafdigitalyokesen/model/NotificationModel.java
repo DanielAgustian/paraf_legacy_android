@@ -12,6 +12,9 @@ public class NotificationModel {
     @SerializedName("collaboration_id")
     int collabId;
 
+    @SerializedName("document_id")
+    int documentId;
+
     @SerializedName("mesage")
     String title;
 
@@ -75,7 +78,11 @@ public class NotificationModel {
         return time;
     }
 
-    public int getCollabId() {
-        return collabId;
+//    public int getCollabId() {
+//        return collabId;
+//    }
+
+    public int getDocumentId() {
+        return documentId;
     }
 }

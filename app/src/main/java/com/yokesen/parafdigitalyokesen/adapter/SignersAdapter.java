@@ -18,15 +18,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yokesen.parafdigitalyokesen.R;
+import com.yokesen.parafdigitalyokesen.Repository.APIClient;
+import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
+import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
+import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.view.ui.collab.bottom_sheet.BottomSheetSeeQR;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHolder> {
-
+    Context context;
     View contactView;
     @NonNull
     @Override
@@ -40,6 +51,7 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        context = holder.itemView.getContext();
         SignersModel signers = mSigners.get(position);
         TextView tvName = holder.tvNameRv;
         tvName.setText(signers.getName());
@@ -106,10 +118,12 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         ivDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                delete(signers, holder.itemView.getContext());
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -164,6 +178,26 @@ public class SignersAdapter extends RecyclerView.Adapter<SignersAdapter.ViewHold
         this.type = type;
         this.id = id;
         this.fragmentManager = fragmentManager;
+    }
+    private void delete(SignersModel signers, Context context) {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(context);
+        String token = preferencesRepo.getToken();
+        //clickDataIntent(notif, context);
+        Observable<SimpleResponse> DeleteSigners = apiInterface.deleteCollabSigners(token, id, signers.getId());
+        Disposable subscribe = DeleteSigners.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                this::onSuccessDelete, this::onFailedDelete);
+    }
+
+    private void onFailedDelete(Throwable throwable){
+        Util util = new Util();
+        util.toastError(context, "API DELETE SIGNERS", throwable);
+    }
+
+    private void onSuccessDelete(SimpleResponse simpleResponse) {
+        if(simpleResponse !=null){
+            SignCollabState.getSubjectDetail().onNext("ref");
+        }
     }
 
 

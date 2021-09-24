@@ -187,10 +187,23 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
                     />
+            <FrameLayout
+                android:layout_weight="0.45"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <com.facebook.login.widget.LoginButton
+                    android:visibility="gone"
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp" />
                 <Button
+                    android:id="@+id/btnFacebook"
                     android:paddingVertical="10dp"
-                    android:layout_weight="0.45"
-                    android:layout_width="0dp"
+
+                    android:layout_width="match_parent"
                     android:backgroundTint="#FF0063F7"
                     android:text="Facebook"
                     android:textStyle="bold"
@@ -199,6 +212,9 @@
                     android:drawableTint="@color/white"
                     android:textColor="@color/white"
                     android:layout_height="wrap_content"/>
+
+            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout

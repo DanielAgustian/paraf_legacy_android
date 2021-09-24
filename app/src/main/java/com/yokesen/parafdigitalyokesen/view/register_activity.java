@@ -2,6 +2,7 @@ package com.yokesen.parafdigitalyokesen.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,8 +22,11 @@ import android.widget.TextView;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.R;
+import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.model.LoginModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.model.AuthModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 
 
 public class register_activity extends AppCompatActivity {
@@ -33,7 +37,8 @@ public class register_activity extends AppCompatActivity {
     ImageView ivPassRegister, ivConfirmPassRegister;
     APIInterface apiInterface;
     Util util = new Util();
-
+    Dialog dialog;
+    UtilWidget uw = new UtilWidget(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +85,10 @@ public class register_activity extends AppCompatActivity {
 
     private void doRegister(String email, String name, String password, String passwordConfirmation){
         AuthModel authModel = new AuthModel(email, name, password);
-        Observable<AuthModel> callRegister = apiInterface.registerUser(authModel);
-        callRegister.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::handleResult);
+
+        dialog = uw.makeLoadingDialog();
+        Observable<LoginModel> callRegister = apiInterface.registerUser(authModel);
+        callRegister.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::handleResult, this::handleError);
 //        callRegister.enqueue(new Callback<AuthModel>() {
 //            @Override
 //            public void onResponse(Call<AuthModel> call, Response<AuthModel> response) {
@@ -102,9 +109,17 @@ public class register_activity extends AppCompatActivity {
 //        });
     }
 
-    private void handleResult(AuthModel authModel) {
-        if(authModel !=null){
-            gotoRegister();
+    private void handleError(Throwable throwable) {
+        dialog.dismiss();
+        util.toastError(this, "API REGISTER", throwable);
+    }
+
+    private void handleResult(LoginModel loginModel) {
+        dialog.dismiss();
+        if(loginModel !=null){
+            PreferencesRepo preferencesRepo = new PreferencesRepo(this);
+            preferencesRepo.setToken(loginModel.getToken());
+            gotoNavBar();
         }else{
             Log.e("Error Data", "Error");
         }
@@ -168,9 +183,13 @@ public class register_activity extends AppCompatActivity {
 
     }
 
-
-    public void gotoRegister() {
+    private void gotoRegister(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void gotoNavBar() {
+        Intent intent = new Intent(this, NavBarActivity.class);
         startActivity(intent);
     }
     public void ShowHidePass(View view){

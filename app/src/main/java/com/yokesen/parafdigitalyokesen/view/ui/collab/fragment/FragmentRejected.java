@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,12 +24,13 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
 import com.yokesen.parafdigitalyokesen.model.SignModel;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
-import com.yokesen.parafdigitalyokesen.viewModel.refresh;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 
 import java.util.List;
 
@@ -61,7 +65,7 @@ public class FragmentRejected extends Fragment {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
             public void onNext(@io.reactivex.annotations.NonNull refresh refresh) {
-                if(refresh == com.yokesen.parafdigitalyokesen.viewModel.refresh.COLLAB_REJ){
+                if(refresh == com.yokesen.parafdigitalyokesen.constant.refresh.COLLAB_REJ){
                     initData();
                 }
             }
@@ -101,6 +105,16 @@ public class FragmentRejected extends Fragment {
         getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
 
+    private void initDataSort(String sort) {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
+        String token = preferencesRepo.getToken();
+
+        Observable<GetSignatureModel> getSignatureList = apiInterface.getCollabRejectedListSort(token, sort);
+        getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
     private void onFailed(Throwable throwable) {
         util.toastError(getContext(),"Collab Request List API", throwable);
     }
@@ -108,11 +122,23 @@ public class FragmentRejected extends Fragment {
     private void onSuccess(GetSignatureModel getSignatureModel) {
         if(getSignatureModel!=null){
             sign = getSignatureModel.getData();
-            initRecyclerView(root);
-            initComponent(root);
+            if(sign.size() > 0){
+                initRecyclerView(root);
+                initComponent(root);
+            }else{
+                emptyList(root);
+            }
+
         }
     }
+    private void emptyList(View root) {
 
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+        LinearLayout llEmptyList = root.findViewById(R.id.llEmptyList);
+        rvToday.setVisibility(View.GONE);
+        llEmptyList.setVisibility(View.VISIBLE);
+
+    }
     private void initComponent(View root){
         ivList = root.findViewById(R.id.listIconCollab);
 
@@ -161,6 +187,21 @@ public class FragmentRejected extends Fragment {
 
         spinnerLatest.setAdapter(adapterLatest);
 
+        spinnerLatest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0){
+                    initData();
+                } else{
+                    Variables var = new Variables();
+                    initDataSort(var.arraySpinner[i-1]);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }

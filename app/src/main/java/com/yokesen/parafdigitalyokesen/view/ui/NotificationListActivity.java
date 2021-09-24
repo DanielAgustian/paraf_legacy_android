@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
@@ -85,6 +86,7 @@ public class NotificationListActivity extends AppCompatActivity {
 
     private void onFailedGetNotif(Throwable throwable) {
         util.toastError(this, "API NOTIF LIST", throwable);
+
     }
 
     private void onSuccessGetNotif(GetNotifListModel getNotifListModel) {
@@ -98,11 +100,15 @@ public class NotificationListActivity extends AppCompatActivity {
     private void initRecyclerView(List<NotificationModel> model){
         rvNotif= findViewById(R.id.rvNotif);
         Log.d("NOTIFRECYCLERVIEW", "Begin");
+        if(model.size() > 0){
+            NotifListAdapter adapter = new NotifListAdapter(model);
+            rvNotif.setLayoutManager(new LinearLayoutManager(this));
 
-        NotifListAdapter adapter = new NotifListAdapter(model);
-        rvNotif.setLayoutManager(new LinearLayoutManager(this));
+            rvNotif.setAdapter(adapter);
+        } else{
+            emptyList();
+        }
 
-        rvNotif.setAdapter(adapter);
     }
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNotif);
@@ -128,6 +134,15 @@ public class NotificationListActivity extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+
+    private void emptyList(){
+        LinearLayout llRecycler =findViewById( R.id.llNotifRecycler);
+        LinearLayout llEmptyList = findViewById(R.id.llEmptyNotif);
+
+        llRecycler.setVisibility(View.GONE);
+        llEmptyList.setVisibility(View.VISIBLE);
     }
 
 

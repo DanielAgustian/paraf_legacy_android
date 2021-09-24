@@ -1,9 +1,11 @@
 package com.yokesen.parafdigitalyokesen.view.ui.collab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.adapter.CollabPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.yokesen.parafdigitalyokesen.view.ui.SearchActivity;
 
 public class CollabFragment extends Fragment {
     private TabLayout tabLayout;
@@ -42,7 +45,14 @@ public class CollabFragment extends Fragment {
             }
         }
         ).attach();
-
+        EditText etSearch = root.findViewById(R.id.etSearchCollab);
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         return root;
     }
 }

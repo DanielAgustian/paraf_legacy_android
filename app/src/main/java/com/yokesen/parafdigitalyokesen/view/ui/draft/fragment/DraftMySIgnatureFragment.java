@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yokesen.parafdigitalyokesen.R;
@@ -23,16 +26,18 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.adapter.DraftListAdapter;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
 import com.yokesen.parafdigitalyokesen.model.SignModel;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
-import com.yokesen.parafdigitalyokesen.viewModel.refresh;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -87,6 +92,7 @@ public class DraftMySIgnatureFragment extends Fragment {
     boolean isGrid = false;
     View root;
     DisposableObserver disposableRefresh;
+    Disposable disposableInitData, disposableSort;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,7 +111,7 @@ public class DraftMySIgnatureFragment extends Fragment {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
             public void onNext(@NonNull refresh refresh) {
-                if(refresh == com.yokesen.parafdigitalyokesen.viewModel.refresh.MY_SIGN){
+                if(refresh == com.yokesen.parafdigitalyokesen.constant.refresh.MY_SIGN){
                     initData();
                 }
             }
@@ -132,6 +138,8 @@ public class DraftMySIgnatureFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         disposableRefresh.dispose();
+        disposableInitData.dispose();
+
     }
 
     private void initData() {
@@ -141,20 +149,45 @@ public class DraftMySIgnatureFragment extends Fragment {
         String token = preferencesRepo.getToken();
         Log.d("HomeTOKEN", token);
         Observable<GetSignatureModel> getSignatureList = apiInterface.getMySignList(token);
-        getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+        disposableInitData = getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
+    private void initDataSort(String sort) {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
+
+        String token = preferencesRepo.getToken();
+        Observable<GetSignatureModel> getSignatureList = apiInterface.getMySignListSort(token, sort);
+        disposableSort = getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
 
     private void onFailed(Throwable throwable) {
-        Toast.makeText(getActivity(), "ERROR IN FETCHING API MySigantureList. Error:"+ throwable.getMessage(),
+        Toast.makeText(getActivity(), "ERROR IN FETCHING API My Siganture List. Error:"+ throwable.getMessage(),
                 Toast.LENGTH_LONG).show();
     }
 
     private void onSuccess(GetSignatureModel model) {
         if(model!=null){
             sign = model.getData();
-            initRecyclerView(root);
-            initComponent(root);
+            if(sign.size()>0){
+                initRecyclerView(root);
+                initComponent(root);
+            }else{
+                emptyList(root);
+            }
+
         }
+    }
+
+    private void emptyList(View root) {
+
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+        LinearLayout llEmptyList = root.findViewById(R.id.llEmptyList);
+        rvToday.setVisibility(View.GONE);
+        llEmptyList.setVisibility(View.VISIBLE);
+
+//      TextView tvEmptyNotice = root.findViewById(R.id.tvEmptyNotice);
+//      tvEmptyNotice.setText("My Signature is Empty");
     }
 
     private void initComponent(View root){
@@ -210,6 +243,21 @@ public class DraftMySIgnatureFragment extends Fragment {
 
         spinnerLatest.setAdapter(adapterLatest);
 
+        spinnerLatest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0){
+                    initData();
+                } else{
+                    Variables var = new Variables();
+                    initDataSort(var.arraySpinner[i-1]);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }

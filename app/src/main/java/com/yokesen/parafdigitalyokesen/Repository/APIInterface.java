@@ -41,12 +41,25 @@ public interface APIInterface {
 
     //------------------------Register Login API------------------------------------
     @POST("api/v1/register")
-    Observable<AuthModel> registerUser(@Body AuthModel auth);
+    Observable<LoginModel> registerUser(@Body AuthModel auth);
 
     @FormUrlEncoded
     @POST("api/v1/login")
     Observable<LoginModel> loginUser(@Field("email") String email, @Field("password") String password);
 
+    @FormUrlEncoded
+    @POST("api/v1/login/google")
+    Observable<LoginModel> loginGoogle(@Field("email") String email,
+                                       @Field("name") String name,
+                                       @Field("link_image") String link,
+                                       @Field("id") String id);
+
+    @FormUrlEncoded
+    @POST("api/v1/login/facebook")
+    Observable<LoginModel> loginFacebook(@Field("email") String email,
+                                       @Field("name") String name,
+                                       @Field("link_image") String link,
+                                       @Field("id") String id);
 
     @POST("api/v1/refresh")
     Observable<LoginModel> refreshToken(@Header("Authorization") String token);
@@ -94,7 +107,9 @@ public interface APIInterface {
     @GET("api/v1/user/my-contact")
     Observable<GetConnectModel> getMyContact(@Header("Authorization") String token);
 
-
+    @GET("api/v1/user/my-contact")
+    Observable<GetConnectModel> getMyContactSort(@Header("Authorization") String token,
+                                                 @Query("sort") String sort);
 
     //--------------------------- Add new Sign -------------------------------
     @GET("api/v1/categories")
@@ -139,6 +154,12 @@ public interface APIInterface {
     @GET("api/v1/sign/my-signature")
     Observable<GetSignatureModel> getMySignList(
             @Header("Authorization") String token
+    );
+
+    @GET("api/v1/sign/my-signature")
+    Observable<GetSignatureModel> getMySignListSort(
+            @Header("Authorization") String token,
+            @Query("sort") String sort
     );
 
     @GET("api/v1/sign/my-request")
@@ -284,6 +305,24 @@ public interface APIInterface {
             @Header("Authorization") String token
     );
 
+    @GET("api/v1/collab/requested")
+    Observable<GetSignatureModel> getCollabReqListSort(
+            @Header("Authorization") String token,
+            @Query("sort") String sort
+    );
+
+    @GET("api/v1/collab/rejected")
+    Observable<GetSignatureModel> getCollabRejectedListSort(
+            @Header("Authorization") String token,
+            @Query("sort") String sort
+    );
+
+    @GET("api/v1/collab/accepted")
+    Observable<GetSignatureModel> getCollabAcceptedListSort(
+            @Header("Authorization") String token,
+            @Query("sort") String sort
+    );
+
     //--------------------------Collab Detail--------------------------//
     @GET("api/v1/collab/{sign_id}/detail")
     Observable<GetMyReqDetailModel> getCollabDetail(
@@ -296,6 +335,13 @@ public interface APIInterface {
             @Header("Authorization") String token,
             @Path("collab_id") int collab_id,
             @Path("sign_id") int sign_id
+    );
+
+    @DELETE("api/v1/collab/{sign_id}/detail/{collab_id}/delete")
+    Observable<SimpleResponse> deleteCollabSigners(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId,
+            @Path("collab_id") int collabId
     );
     //-------------------------- Send document and request document--------------------------//
     @Multipart

@@ -33,4 +33,13 @@ public class UtilWidget {
         });
 
     }
+    public Dialog makeLoadingDialog(){
+        Dialog remindDialog = new Dialog(context);
+        remindDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        remindDialog.setContentView(R.layout.dialog_waiting);
+        remindDialog.show();
+        TextView textTitle =remindDialog.findViewById(R.id.tvTitleDialog);
+        textTitle.setVisibility(View.GONE);
+        return remindDialog;
+    }
 }

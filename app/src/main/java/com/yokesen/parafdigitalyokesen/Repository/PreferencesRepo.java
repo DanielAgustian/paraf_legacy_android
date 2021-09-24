@@ -3,9 +3,11 @@ package com.yokesen.parafdigitalyokesen.Repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.yokesen.parafdigitalyokesen.constant.Variables;
+
 public class PreferencesRepo {
     Context context;
-
+    Variables var = new Variables();
     public PreferencesRepo(Context context) {
         this.context = context;
     }

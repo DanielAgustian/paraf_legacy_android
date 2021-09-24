@@ -48,6 +48,8 @@
 
         </LinearLayout>
         <EditText
+            android:id="@+id/etSearchCollab"
+            android:focusable="false"
             android:drawableTint="@color/colorGrayText"
             android:drawableLeft="@drawable/size_ic_search"
             android:drawablePadding="10dp"

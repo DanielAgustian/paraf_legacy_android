@@ -1,9 +1,11 @@
 package com.yokesen.parafdigitalyokesen.view.ui.draft;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.adapter.DraftPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.yokesen.parafdigitalyokesen.view.ui.SearchActivity;
 
 public class DraftFragment extends Fragment {
 
@@ -29,6 +32,9 @@ public class DraftFragment extends Fragment {
 
         vpDraft = root.findViewById(R.id.vpDraft);
         vpDraft.setAdapter(new DraftPageAdapter(getActivity()));
+
+
+
         new TabLayoutMediator(
                 tabLayout, vpDraft, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -41,7 +47,14 @@ public class DraftFragment extends Fragment {
             }
         }
         ).attach();
-
+        EditText etSearch = root.findViewById(R.id.etSearchSign);
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         return root;
     }
 }

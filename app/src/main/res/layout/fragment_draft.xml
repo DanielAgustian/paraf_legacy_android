@@ -60,6 +60,8 @@
 
         </LinearLayout>
         <EditText
+            android:id="@+id/etSearchSign"
+            android:focusable="false"
             android:drawableTint="@color/colorGrayText"
             android:drawableLeft="@drawable/size_ic_search"
             android:drawablePadding="10dp"

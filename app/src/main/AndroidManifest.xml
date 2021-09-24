@@ -4,12 +4,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_teken_logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_teken_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParafDigitalYokesen">
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.ui.collab.RecreateCollabActivity"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.add_sign.ResultReqSignActivity"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.ui.collab.CollabResultActivity"/>

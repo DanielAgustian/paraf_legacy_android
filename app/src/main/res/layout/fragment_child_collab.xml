@@ -60,4 +60,27 @@
         android:id="@+id/rvListGridDraft"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/llEmptyList"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@drawable/ic_teken_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+        <TextView
+            android:id="@+id/tvEmptyNotice"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextEmptyState"
+            android:gravity="center_horizontal"
+            android:text="Notification Empty"
+            android:layout_marginHorizontal="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>

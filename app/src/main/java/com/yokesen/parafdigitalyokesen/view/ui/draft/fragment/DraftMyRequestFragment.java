@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yokesen.parafdigitalyokesen.R;
@@ -27,7 +29,7 @@ import com.yokesen.parafdigitalyokesen.adapter.DraftListAdapter;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
 import com.yokesen.parafdigitalyokesen.model.SignModel;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
-import com.yokesen.parafdigitalyokesen.viewModel.refresh;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 
 import java.util.List;
 
@@ -104,7 +106,7 @@ public class DraftMyRequestFragment extends Fragment {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
             public void onNext(@NonNull refresh refresh) {
-                if(refresh == com.yokesen.parafdigitalyokesen.viewModel.refresh.MY_REQ){
+                if(refresh == com.yokesen.parafdigitalyokesen.constant.refresh.MY_REQ){
                     initData();
                 }
             }
@@ -138,16 +140,27 @@ public class DraftMyRequestFragment extends Fragment {
     }
 
     private void onFailed(Throwable throwable) {
-        Toast.makeText(getActivity(), "ERROR IN FETCHING API MySigantureList. Error:"+ throwable.getMessage(),
+        Toast.makeText(getActivity(), "ERROR IN FETCHING API My Signature List. Error:"+ throwable.getMessage(),
                 Toast.LENGTH_LONG).show();
     }
 
     private void onSuccess(GetSignatureModel model) {
         if(model!=null){
             sign = model.getData();
-            initRecyclerView(root);
-            initComponent(root);
+            if(sign.size() > 0){
+                initRecyclerView(root);
+                initComponent(root);
+            }else{
+                emptyList(root);
+            }
+
         }
+    }
+    private void emptyList(View root) {
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+        LinearLayout llEmptyList = root.findViewById(R.id.llEmptyList);
+        rvToday.setVisibility(View.GONE);
+        llEmptyList.setVisibility(View.VISIBLE);
     }
 
     private void initComponent(View root){

@@ -1,4 +1,4 @@
-package com.yokesen.parafdigitalyokesen.viewModel;
+package com.yokesen.parafdigitalyokesen.constant;
 
 public enum refresh{
     COLLAB_ACC,
