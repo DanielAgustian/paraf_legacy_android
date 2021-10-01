@@ -35,9 +35,10 @@
                 android:text="Add Contact"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/_18ssp"
                 android:layout_gravity="center"
                 />
+<!--            android:textSize="20sp"-->
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
             android:paddingVertical="15dp"
@@ -59,13 +60,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorGrayText"
                         />
                     <EditText
                         android:id="@+id/etNameMyInfo"
                         android:layout_width="match_parent"
 
-                        android:layout_height="42dp"
+                        android:layout_height="@dimen/_42sdp"
                         android:hint="Input your name"
                         android:ems="10"
                         android:inputType="textPersonName"
@@ -78,13 +80,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Email"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorGrayText"
                         />
                     <EditText
                         android:id="@+id/etEmailMyInfo"
                         android:layout_width="match_parent"
 
-                        android:layout_height="42dp"
+                        android:layout_height="@dimen/_42sdp"
                         android:hint="Input Your Email"
                         android:ems="10"
                         android:inputType="textEmailAddress"

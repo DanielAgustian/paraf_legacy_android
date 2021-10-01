@@ -38,7 +38,7 @@
                 android:text="Details and Activity"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                 android:id="@+id/toolbar_titleResSign" />
         </androidx.appcompat.widget.Toolbar>
@@ -46,23 +46,23 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_10"
             android:background="@drawable/rounded_bg"
             android:orientation="vertical"
 
-            android:paddingVertical="15dp"
+            android:paddingVertical="@dimen/margin_15"
             >
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="15dp"
-                android:layout_marginTop="10dp"
+                android:paddingHorizontal="@dimen/margin_15"
+                android:layout_marginTop="@dimen/margin_10"
                 >
 
                 <LinearLayout
 
-                    android:layout_marginVertical="15dp"
+                    android:layout_marginVertical="@dimen/margin_15"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -72,7 +72,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             android:textColor="@color/colorLightGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/tvReqBYRespond"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             android:layout_gravity="right"
                             android:gravity="right"
                             android:textColor="@color/colorPrimary"
@@ -104,7 +104,7 @@
                             android:id="@+id/tvEmailRespond"
                             android:textColor="@color/colorLightGrayText"
                             android:layout_marginTop="5dp"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="nanas.kuning@gmail.com"/>
@@ -112,7 +112,7 @@
                 </LinearLayout>
                 <LinearLayout
 
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="@dimen/margin_15"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -122,7 +122,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             android:textColor="@color/colorLightGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold"
                             android:id="@+id/tvInitiatedRespond"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/font_12"
                             android:layout_gravity="right"
                             android:gravity="right"
                             android:layout_width="wrap_content"
@@ -156,42 +156,42 @@
                     android:background="@color/colorBackgroundBlue"/>
 
                 <LinearLayout
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginVertical="@dimen/margin_10"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:layout_marginBottom="7dp"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
                         android:textColor="@color/colorLightGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Document Name"/>
                     <TextView
                         android:id="@+id/tvDocNameRespond"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/font_13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pengajuan HKI 3 in 1 Ekspresiku Boardgame"
                         />
                     <TextView
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="@dimen/margin_20"
 
                         android:layout_marginBottom="7dp"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
                         android:textColor="@color/colorLightGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Description"/>
                     <TextView
                         android:id="@+id/tvDescRespond"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/font_13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pengalihan Hak Cipta-HKI/ Nanas Kuning-UMN No. Surat : 00000033104/UMN/HKI"
                         />
                     <LinearLayout
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="@dimen/margin_20"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
@@ -204,14 +204,14 @@
 
 
                                 android:layout_marginBottom="7dp"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/font_12"
                                 android:textColor="@color/colorLightGrayText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Category"/>
                             <TextView
                                 android:id="@+id/tvCategoryRespond"
-                                android:textSize="13sp"
+                                android:textSize="@dimen/font_13"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Surat Pribadi"
@@ -231,14 +231,14 @@
 
 
                                 android:layout_marginBottom="7dp"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/font_12"
                                 android:textColor="@color/colorLightGrayText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Type"/>
                             <TextView
                                 android:id="@+id/tvTypeRespond"
-                                android:textSize="13sp"
+                                android:textSize="@dimen/font_13"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Dokumen Resmi"
@@ -247,17 +247,17 @@
 
                     </LinearLayout>
                     <TextView
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="@dimen/margin_20"
 
                         android:layout_marginBottom="7dp"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
                         android:textColor="@color/colorLightGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Document Link"/>
                     <TextView
                         android:id="@+id/tvLinkRespond"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/font_13"
                         android:textColor="@color/colorBlue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -273,22 +273,22 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="@dimen/margin_20"
 
                                 android:layout_marginBottom="7dp"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/font_12"
                                 android:textColor="@color/colorLightGrayText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Status"/>
                             <TextView
                                 android:id="@+id/tvStatusRespond"
-                                android:textSize="13sp"
+                                android:textSize="@dimen/font_13"
                                 android:textColor="@color/colorSuccess"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Signed"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="@dimen/margin_10"
 
                                 />
                         </LinearLayout>
@@ -303,21 +303,21 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="@dimen/margin_20"
 
                                 android:layout_marginBottom="7dp"
-                                android:textSize="12sp"
+                                android:textSize="@dimen/font_12"
                                 android:textColor="@color/colorLightGrayText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Size"/>
                             <TextView
                                 android:id="@+id/tvSizeRespond"
-                                android:textSize="13sp"
+                                android:textSize="@dimen/font_13"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="156 KB"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="@dimen/margin_10"
                                 />
 
 
@@ -341,7 +341,7 @@
                     android:layout_height="wrap_content"
                     android:text="2 Person is left to sign"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/font_13"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -353,7 +353,7 @@
 
             <LinearLayout
                 android:background="@color/white"
-                android:layout_marginHorizontal="15dp"
+                android:layout_marginHorizontal="@dimen/margin_15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.recyclerview.widget.RecyclerView
@@ -366,9 +366,9 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginHorizontal="@dimen/margin_15"
                 >
                 <androidx.appcompat.widget.AppCompatButton
                     style="@style/buttonRed"
@@ -376,13 +376,13 @@
                     android:backgroundTint="@null"
                     android:text="Sign Now"
                     android:layout_gravity="center_vertical"
-                    android:paddingHorizontal="25dp"
+                    android:paddingHorizontal="@dimen/margin_25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
+                    android:layout_height="@dimen/margin_20"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     style="@style/buttonWhiteBigger"
@@ -393,14 +393,14 @@
                     android:text="Decline"
                     android:layout_gravity="center_vertical"
 
-                    android:paddingHorizontal="25dp"
+                    android:paddingHorizontal="@dimen/margin_25"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"/>
+                    android:layout_height="@dimen/margin_30"/>
             </LinearLayout>
 
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:orientation="horizontal"
-    android:paddingTop="10dp"
+    android:paddingTop="@dimen/margin_10"
     android:paddingHorizontal="5dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="@dimen/margin_10"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content">
@@ -11,17 +11,17 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/button_light_blue_bg"
         android:gravity="center"
-        android:layout_width="40dp"
-        android:layout_height="40dp">
+        android:layout_width="@dimen/icon_40"
+        android:layout_height="@dimen/icon_40">
         <ImageView
             android:id="@+id/ivNotifItem"
             android:src="@drawable/ic_notif_item"
             app:tint="@color/colorPrimary"
-            android:layout_width="18dp"
-            android:layout_height="18dp"/>
+            android:layout_width="@dimen/ic_20"
+            android:layout_height="@dimen/ic_20"/>
     </LinearLayout>
     <View
-        android:layout_width="15dp"
+        android:layout_width="@dimen/margin_15"
         android:layout_height="0dp"/>
     <LinearLayout
         android:orientation="vertical"
@@ -30,7 +30,7 @@
         <TextView
             android:id="@+id/tvNameNotif"
             android:text="LOrem Ipsum Dolor Amet"
-            android:textSize="14sp"
+            android:textSize="@dimen/font_14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -41,12 +41,12 @@
             android:id="@+id/tvDetails"
             android:textColor="@color/colorGrayText"
             android:layout_width="match_parent"
-            android:textSize="11sp"
+            android:textSize="@dimen/font_11"
             android:text="Eleanor Pena Request you a signature"
             android:layout_height="wrap_content"
             />
         <View
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_10"
             android:background="@color/colorLightGrayText"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>

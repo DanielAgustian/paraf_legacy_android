@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="@dimen/margin_20"
 
 
     android:orientation="vertical">
@@ -12,8 +12,8 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_15"
         android:weightSum="1.0"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:id="@+id/spinnerLatest"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/margin_10"
 
             android:paddingVertical="5dp" />
 
@@ -35,27 +35,28 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:clickable="true"
-
+                
                 android:id="@+id/listIconCollab"
                 android:src="@drawable/ic_list"
                 app:tint="@color/colorPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/ic_25"
+                android:layout_height="@dimen/ic_25"
                 />
             <ImageView
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/margin_20"
                 android:clickable="true"
                 android:id="@+id/gridIconCollab"
                 android:src="@drawable/ic_grid"
                 app:tint="@color/colorLightGrayText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/ic_25"
+                android:layout_height="@dimen/ic_25"
                 />
         </LinearLayout>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginLeft="@dimen/margin_15"
 
         android:id="@+id/rvListGridDraft"
         android:layout_width="match_parent"
@@ -68,18 +69,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:src="@drawable/ic_teken_logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:src="@drawable/ic_emptysign"
+            android:layout_width="@dimen/empty_pic_width"
+            android:layout_height="@dimen/empty_pic_height"/>
         <TextView
             android:id="@+id/tvEmptyNotice"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_15"
+            android:textSize="@dimen/font_16"
             android:textStyle="bold"
             android:textColor="@color/colorTextEmptyState"
             android:gravity="center_horizontal"
-            android:text="Notification Empty"
-            android:layout_marginHorizontal="20dp"
+            android:text="You do not have any signature yet"
+            android:layout_marginHorizontal="@dimen/margin_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

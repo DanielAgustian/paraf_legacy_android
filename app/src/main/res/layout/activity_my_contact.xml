@@ -35,13 +35,13 @@
                 android:text="My Contact"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                 />
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="15dp"
+            android:paddingVertical="@dimen/margin_15"
+            android:paddingHorizontal="@dimen/margin_15"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,8 +52,8 @@
                 android:drawableTint="@color/colorGrayText"
                 android:drawableLeft="@drawable/size_ic_search"
                 android:drawablePadding="10dp"
-                android:layout_marginTop="10dp"
-                android:textSize="14sp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:textSize="@dimen/font_14"
                 android:paddingVertical="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 ></EditText>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="15dp"/>
+                android:layout_height="@dimen/margin_15"/>
             <LinearLayout
                 android:weightSum="1.0"
                 android:layout_width="match_parent"
@@ -85,12 +85,14 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
 
                 android:id="@+id/rvMyContact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <LinearLayout
+
                 android:layout_marginBottom="100dp"
                 android:id="@+id/llEmptyContact"
                 android:visibility="gone"
@@ -100,11 +102,11 @@
                 android:layout_height="match_parent">
                 <ImageView
                     android:src="@drawable/ic_emptycontact"
-                    android:layout_width="210dp"
-                    android:layout_height="180dp"/>
+                    android:layout_width="@dimen/empty_pic_width"
+                    android:layout_height="@dimen/empty_pic_height"/>
                 <TextView
-                    android:layout_marginTop="15dp"
-                    android:textSize="16sp"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:textSize="@dimen/font_16"
                     android:textStyle="bold"
                     android:textColor="@color/colorTextEmptyState"
                     android:gravity="center_horizontal"

@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="10dp"
-    android:layout_marginBottom="20dp"
+    android:paddingHorizontal="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/margin_20"
 
     >
     <ImageView
         android:id="@+id/ivSignList"
         android:layout_marginTop="4dp"
         android:background="@color/colorBackgroundBlue"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/ic_60"
+        android:layout_height="@dimen/ic_60"
         />
     <LinearLayout
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -29,7 +29,7 @@
                 android:layout_marginBottom="7dp"
                 android:id="@+id/tvTitleSignList"
                 android:layout_width="wrap_content"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_14"
                 android:textColor="@color/black"
                 android:text="Pengajuan HKI “MYSA” Family Boardgame"
                 android:layout_height="wrap_content"/>
@@ -39,11 +39,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorLightGrayText"
-                android:textSize="11sp"
+                android:textSize="@dimen/font_11"
                 android:text="Created by Apel"
                 />
             <TextView
-                android:textSize="11sp"
+                android:textSize="@dimen/font_11"
                 android:id="@+id/tvStatusListDraft"
                 android:textColor="@color/colorPending"
                 android:text="Lorem by Lorem"

@@ -2,6 +2,7 @@ package com.yokesen.parafdigitalyokesen.Repository;
 
 
 
+import com.google.gson.annotations.SerializedName;
 import com.yokesen.parafdigitalyokesen.model.AuthModel;
 import com.yokesen.parafdigitalyokesen.model.GetCollabViewModel;
 import com.yokesen.parafdigitalyokesen.model.GetConnectModel;
@@ -10,9 +11,12 @@ import com.yokesen.parafdigitalyokesen.model.GetHomeModel;
 import com.yokesen.parafdigitalyokesen.model.GetMyInfoModel;
 import com.yokesen.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetNotifListModel;
+import com.yokesen.parafdigitalyokesen.model.GetNotifSettingsModel;
+import com.yokesen.parafdigitalyokesen.model.GetPasscodeModel;
 import com.yokesen.parafdigitalyokesen.model.GetProfileModel;
 import com.yokesen.parafdigitalyokesen.model.GetSaveAllSign;
 import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
+import com.yokesen.parafdigitalyokesen.model.GetSignNumberModel;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.LoginModel;
@@ -118,6 +122,8 @@ public interface APIInterface {
     @GET("api/v1/types")
     Observable<GetTypeCategoryModel> getTypes(@Header("Authorization") String token);
 
+    @GET("api/v1/document/sign-number")
+    Observable<GetSignNumberModel> getSignNumber(@Header("Authorization") String token);
 
     @Multipart
     @POST("api/v1/qr-sign/sign-yourself")
@@ -129,8 +135,23 @@ public interface APIInterface {
                                                  @Part("type_id") RequestBody type_id,
                                                  @Part("description") RequestBody description,
                                                  @Part("link") RequestBody link,
-                                                 @Part MultipartBody.Part file
+                                                 @Part MultipartBody.Part file,
+                                                 @Part("sign_number") RequestBody signNumber
                                           );
+    @Multipart
+    @POST("api/v1/qr-sign/sign-yourself")
+    Observable<GetSignDetailModel> addNewSignWithCode(@Header("Authorization") String token,
+                                              @Part("user_name") RequestBody user_name,
+                                              @Part("user_email") RequestBody user_email,
+                                              @Part("name") RequestBody name,
+                                              @Part("category_id") RequestBody category_id,
+                                              @Part("type_id") RequestBody type_id,
+                                              @Part("description") RequestBody description,
+                                              @Part("link") RequestBody link,
+                                              @Part MultipartBody.Part file,
+                                              @Part("sign_number") RequestBody signNumber,
+                                              @Part("code") RequestBody code
+    );
     @Multipart
     @POST("api/v1/qr-sign/request-signature")
     Observable<GetSignDetailModel> addReqSign(@Header("Authorization") String token,
@@ -145,9 +166,27 @@ public interface APIInterface {
                                               @Part ("expired_date_at") RequestBody date,
                                               @Part ("expired_time_at") RequestBody time,
                                               @Part ("message") RequestBody message,
-                                              @Query("email[]") ArrayList<String> email
+                                              @Query("email[]") ArrayList<String> email,
+                                              @Part("sign_number") RequestBody signNumber
     );
-
+    @Multipart
+    @POST("api/v1/qr-sign/request-signature")
+    Observable<GetSignDetailModel> addReqSignWithCode(@Header("Authorization") String token,
+                                              @Part("user_name") RequestBody user_name,
+                                              @Part("user_email") RequestBody user_email,
+                                              @Part("name") RequestBody name,
+                                              @Part("category_id") RequestBody category_id,
+                                              @Part("type_id") RequestBody type_id,
+                                              @Part("description") RequestBody description,
+                                              @Part("link") RequestBody link,
+                                              @Part MultipartBody.Part file,
+                                              @Part ("expired_date_at") RequestBody date,
+                                              @Part ("expired_time_at") RequestBody time,
+                                              @Part ("message") RequestBody message,
+                                              @Query("email[]") ArrayList<String> email,
+                                              @Part("sign_number") RequestBody signNumber,
+                                                      @Part("code") RequestBody code
+    );
 
     /*---------------------------------- Get Signature List--------------------------------------*/
 
@@ -214,10 +253,28 @@ public interface APIInterface {
             @Part("link") RequestBody link,
             @Part MultipartBody.Part file,
             @Part("expired_date_at") RequestBody date,
-            @Part("expired_time_at") RequestBody time
+            @Part("expired_time_at") RequestBody time,
+            @Part("sign_number") RequestBody signNumber
     );
 
-
+    @Multipart
+    @POST("api/v1/collab/{sign_id}/recreate")
+    Observable<GetSignDetailModel> putRecreateSignCollabWithCode(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId,
+            @Part("user_name") RequestBody user_name,
+            @Part("user_email") RequestBody user_email,
+            @Part("name") RequestBody name,
+            @Part("category_id") RequestBody category_id,
+            @Part("type_id") RequestBody type_id,
+            @Part("description") RequestBody description,
+            @Part("link") RequestBody link,
+            @Part MultipartBody.Part file,
+            @Part("expired_date_at") RequestBody date,
+            @Part("expired_time_at") RequestBody time,
+            @Part("sign_number") RequestBody signNumber,
+            @Part("code") RequestBody code
+    );
 
     @Multipart
     @POST("api/v1/sign/my-signature/{sign_id}/recreate")
@@ -231,9 +288,25 @@ public interface APIInterface {
             @Part("type_id") RequestBody type_id,
             @Part("description") RequestBody description,
             @Part("link") RequestBody link,
-            @Part MultipartBody.Part file
+            @Part MultipartBody.Part file,
+            @Part("sign_number") RequestBody signNumber
     );
-
+    @Multipart
+    @POST("api/v1/sign/my-signature/{sign_id}/recreate")
+    Observable<GetSignDetailModel> putRecreateSignWithCode(
+            @Header("Authorization") String token,
+            @Path("sign_id") int signId,
+            @Part("user_name") RequestBody user_name,
+            @Part("user_email") RequestBody user_email,
+            @Part("name") RequestBody name,
+            @Part("category_id") RequestBody category_id,
+            @Part("type_id") RequestBody type_id,
+            @Part("description") RequestBody description,
+            @Part("link") RequestBody link,
+            @Part MultipartBody.Part file,
+            @Part("sign_number") RequestBody signNumber,
+            @Part("code") RequestBody code
+    );
     @FormUrlEncoded
     @POST("api/v1/document/{sign_id}/invite-signer")
     Observable<SimpleResponse> putInviteSign(
@@ -403,6 +476,47 @@ public interface APIInterface {
             @Path("id_notif") int id
     );
 
+    //-------------------------- SECURITY API ----------------------------------------//
+    @FormUrlEncoded
+    @POST("api/v1/user/passcode")
+    Observable<SimpleResponse> CreatePasscode(
+            @Header("Authorization") String token,
+            @Field("passcode") String passcode
+    );
 
 
+    @GET("api/v1/user/passcode")
+    Observable<GetPasscodeModel> GetPasscode(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/user/toggle-passcode")
+    Observable<SimpleResponse> TogglePasscode(
+            @Header("Authorization") String token
+    );
+
+    //-------------------------------- Notif Settings -----------------------------------//
+    @GET("api/v1/notifications/settings")
+    Observable<GetNotifSettingsModel> GetNotifSettings(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/notifications/settings/toggle")
+    Observable<SimpleResponse> ToggleNotifSetting(
+            @Header("Authorization") String token
+    );
+    @GET("api/v1/notifications/settings/toggle-request")
+    Observable<SimpleResponse> ToggleRequestSetting(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/notifications/settings/toggle-accepted")
+    Observable<SimpleResponse> ToggleAcceptedSetting(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/notifications/settings/toggle-rejected")
+    Observable<SimpleResponse> ToggleRejectedSetting(
+            @Header("Authorization") String token
+    );
 }

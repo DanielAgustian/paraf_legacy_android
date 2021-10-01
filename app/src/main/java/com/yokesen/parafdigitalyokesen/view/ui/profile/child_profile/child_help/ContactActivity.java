@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,16 +15,57 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.yokesen.parafdigitalyokesen.R;
+import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+
+import java.util.Calendar;
 
 public class ContactActivity extends AppCompatActivity {
     Switch switchGoogle, switchPhone;
+    PreferencesRepo preferencesRepo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+        preferencesRepo = new PreferencesRepo(this);
         initToolbar();
         initComponent();
     }
+
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
+
+
+
     public void initToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarContact);
         setSupportActionBar(toolbar);

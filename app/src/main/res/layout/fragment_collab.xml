@@ -17,9 +17,9 @@
         android:layout_height="match_parent">
         <LinearLayout
 
-            android:paddingHorizontal="15dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingTop="@dimen/margin_20"
+            android:paddingBottom="@dimen/margin_10"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,7 +35,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
+                        android:textSize="@dimen/font_22"
                         android:textColor="@color/colorGrayText"
                         android:textStyle="bold"
 
@@ -52,23 +52,23 @@
             android:focusable="false"
             android:drawableTint="@color/colorGrayText"
             android:drawableLeft="@drawable/size_ic_search"
-            android:drawablePadding="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="35dp"
-            android:layout_marginHorizontal="15dp"
-            android:textSize="12sp"
-            android:paddingVertical="10dp"
+            android:drawablePadding="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_marginBottom="@dimen/margin_35"
+            android:layout_marginHorizontal="@dimen/margin_15"
+            android:textSize="@dimen/font_12"
+            android:paddingVertical="@dimen/margin_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_hint"
             android:background="@drawable/rounded_edittext"
 
-            ></EditText>
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="30dp"
-            android:layout_marginBottom="15dp"
+            android:paddingHorizontal="@dimen/margin_30"
+            android:layout_marginBottom="@dimen/margin_15"
             >
             <com.google.android.material.tabs.TabLayout
                 android:tabStripEnabled="false"

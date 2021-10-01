@@ -34,7 +34,7 @@
                 android:text="Help"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                 />
         </androidx.appcompat.widget.Toolbar>
@@ -60,19 +60,19 @@
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlStartedFAQ"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Getting Started with the App"/>
                         <ImageView
                             android:id="@+id/ivStarted"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/Ic_password_width"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -80,7 +80,8 @@
                     <TextView
                         android:visibility="gone"
                         android:id="@+id/tvStarted"
-                        android:layout_marginBottom="10dp"
+                        android:textSize="@dimen/font_14"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:text="Lorem Ipsum"
                         android:textColor="@color/colorLightGrayText"
                         android:layout_width="match_parent"
@@ -98,19 +99,19 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlCExportFAQ"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Export on the App"/>
                         <ImageView
                             android:id="@+id/ivExport"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/Ic_password_width"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -119,8 +120,9 @@
                         android:visibility="gone"
 
                         android:id="@+id/tvExport"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:text="Lorem Ipsum"
+                        android:textSize="@dimen/font_14"
                         android:textColor="@color/colorLightGrayText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -134,27 +136,27 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlManageFAQ"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Managing Signatures"/>
 
                         <ImageView
                             android:id="@+id/ivManage"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/Ic_password_width"
+                            android:layout_height="@dimen/ic_password_height"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText" />
                     </RelativeLayout>
                     <TextView
                         android:visibility="gone"
-
+                        android:textSize="@dimen/font_14"
                         android:id="@+id/tvManage"
                         android:layout_marginBottom="10dp"
                         android:text="Lorem Ipsum"
@@ -171,19 +173,19 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlSecurityFAQ"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Security and Privacy"/>
                         <ImageView
                             android:id="@+id/ivSecurity"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/Ic_password_width"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -207,19 +209,19 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlTroubleShoot"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Troubleshooting the app"/>
                         <ImageView
                             android:id="@+id/ivTroubleshoot"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/Ic_password_width"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>

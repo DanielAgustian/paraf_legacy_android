@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -21,6 +22,9 @@ import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.Util;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+
+import java.util.Calendar;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,14 +41,48 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             diffPassValidation = false,
             sameOldNewValidation = false;
     Util util = new Util();
-
+    PreferencesRepo preferencesRepo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        preferencesRepo = new PreferencesRepo(this);
         initToolbar();
         initComponent();
     }
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
+
+
 
     //-------------------------------Logic to API--------------------------
     private void doChangePassword(){

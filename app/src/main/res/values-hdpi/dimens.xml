@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">14dp</dimen>
+    <dimen name="activity_vertical_margin">14dp</dimen>
+
+    <dimen name="font_18">16sp</dimen>
+    <dimen name="font_16">14sp</dimen>
+    <dimen name="font_14">12sp</dimen>
+    <dimen name="font_13">11sp</dimen>
+    <dimen name="font_12">10sp</dimen>
+    <dimen name="font_11">10sp</dimen>
+    <dimen name="font_10">9sp</dimen>
+    <dimen name = "font_32">28sp</dimen>
+    <dimen name="font_20">17sp</dimen>
+    <dimen name="font_22">19sp</dimen>
+
+    <dimen name = "logo_height">62dp</dimen>
+    <dimen name = "logo_width">62dp</dimen>
+
+    <dimen name="margin_25">20dp</dimen>
+    <dimen name="margin_30">25dp</dimen>
+    <dimen name="margin_15">10dp</dimen>
+    <dimen name="margin_20">15dp</dimen>
+    <dimen name="margin_10">8dp</dimen>
+    <dimen name="margin_35">30dp</dimen>
+    <dimen name = "ic_password_height">17dp</dimen>
+    <dimen name = "Ic_password_width">17dp</dimen>
+
+    <dimen name = "ic_20">17dp</dimen>
+    <dimen name="ic_25">22dp</dimen>
+    <dimen name="qr_height">90dp</dimen>
+    <dimen name="qr_width">90dp</dimen>
+    <dimen name="icon_40">37dp</dimen>
+    <dimen name="ic_45">40dp</dimen>
+    <dimen name="ic_30">27dp</dimen>
+    <dimen name="keypad_height">65dp</dimen>
+    <dimen name= "ic_16">15dp</dimen>
+    <dimen name="ic_80">72dp</dimen>
+    <dimen name="ic_60">55dp</dimen>
+
+    <dimen name="empty_pic_height">195dp</dimen>
+    <dimen name="empty_pic_width">165dp</dimen>
+
+    <dimen name="splash_height">90dp</dimen>
+    <dimen name="splash_width">90dp</dimen>
+
+    <dimen name="font_splash">22sp</dimen>
+
+
+</resources>

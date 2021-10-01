@@ -16,6 +16,9 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+
+import java.util.Calendar;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,16 +27,49 @@ import io.reactivex.schedulers.Schedulers;
 public class DeclineReason extends AppCompatActivity {
     EditText etDeclineReason;
     int id;
+    PreferencesRepo preferencesRepo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decline_reason);
 
          id = getIntent().getIntExtra("id", -1) ;
-
+        preferencesRepo = new PreferencesRepo(this);
         initToolbar();
         initComponent();
     }
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
+
 
     public void initComponent(){
         etDeclineReason = findViewById(R.id.etDeclineReason);

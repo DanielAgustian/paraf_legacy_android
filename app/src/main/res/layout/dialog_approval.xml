@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:padding="15dp"
+    android:padding="@dimen/margin_15"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
     <TextView
@@ -12,7 +12,7 @@
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/font_18"
         android:text="Your Request has been Send"/>
 
     <TextView
@@ -26,10 +26,10 @@
 
         android:gravity="center_horizontal"
         android:text="If the owner has given a response, there will be an incoming notification"
-        android:textSize="14sp" />
+        android:textSize="@dimen/font_14" />
     <Button
         android:id="@+id/btnCloseDialog"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_15"
         android:layout_below="@id/tvTitleData"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"

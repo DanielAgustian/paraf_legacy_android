@@ -52,8 +52,8 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_bg"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="15dp"
+            android:paddingHorizontal="@dimen/margin_20"
+            android:paddingVertical="@dimen/margin_15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
             <TextView
@@ -61,12 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginTop="@dimen/margin_25"
+                android:layout_marginBottom="@dimen/margin_25"
                 android:text="Please make your signature and complete the
 following data"
                 android:textColor="@color/colorGrayText"
-                android:textSize="14dp"
+                android:textSize="@dimen/font_14"
                 android:textStyle="bold" />
 
 
@@ -78,14 +78,14 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/name_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
             <EditText
 
                 android:paddingVertical="5dp"
                 android:id="@+id/etNameSignYour"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:layout_height="42dp"
                 android:hint="Input your name"
                 android:ems="10"
@@ -101,13 +101,13 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/email_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
             <EditText
                 android:id="@+id/etEmailNewSign"
                 android:layout_width="match_parent"
 
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:layout_height="42dp"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -125,13 +125,13 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/docname_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
             <EditText
                 android:id="@+id/etDocNameNewSign"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:theme="@style/editTextLogin"
@@ -147,14 +147,14 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/doccategory_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
 
             <Spinner
                 android:id="@+id/spinnerCategoryNewSign"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:background="@drawable/spinner_bg"
 
                 android:paddingVertical="5dp" />
@@ -166,7 +166,7 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/doctype_add_sign"
-                android:textSize="14sp" />
+                android:textSize="@dimen/font_14" />
 
 
 
@@ -174,7 +174,7 @@ following data"
                 android:id="@+id/spinnerDocTypeyNewSign"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:background="@drawable/spinner_bg"
 
                 android:paddingVertical="5dp" />
@@ -186,13 +186,13 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Description (Optional)"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
             <EditText
                 android:id="@+id/etDescNewSign"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:ems="10"
 
                 android:theme="@style/editTextLogin"
@@ -210,13 +210,13 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Document's Link (Optional)"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
 
             <EditText
                 android:id="@+id/etLinkNewSign"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:theme="@style/editTextLogin"
@@ -232,7 +232,7 @@ following data"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/docFile_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
             <LinearLayout
                 android:background="@color/colorBackgroundBlue"
                 android:paddingHorizontal="15dp"
@@ -249,16 +249,16 @@ following data"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <ImageView
-                            android:layout_marginRight="20dp"
-                            android:layout_width="20dp"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_width="@dimen/ic_20"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_pdf_placeholder"
-                            android:layout_height="20dp"/>
+                            android:layout_height="@dimen/ic_20"/>
                         <TextView
                             android:id="@+id/tvDoneUpload"
                             android:text="blabla.pdf"
                             android:layout_gravity="center_vertical"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
                             android:textColor="@color/colorGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -267,11 +267,11 @@ following data"
                     <ImageView
                         android:id="@+id/ivEmptyFile"
                         android:layout_alignParentRight="true"
-                        android:layout_width="20dp"
+                        android:layout_width="@dimen/ic_20"
                         app:tint="@color/colorError"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_cross_icon"
-                        android:layout_height="20dp"/>
+                        android:layout_height="@dimen/ic_20"/>
                 </RelativeLayout>
 
 
@@ -288,17 +288,17 @@ following data"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="@dimen/margin_20"
 
-                        android:layout_width="20dp"
+                        android:layout_width="@dimen/ic_20"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_pdf_placeholder"
-                        android:layout_height="20dp"/>
+                        android:layout_height="@dimen/ic_20"/>
                     <TextView
                         android:id="@+id/tvWaitingUpload"
                         android:text="blabla.pdf"
                         android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/font_14"
                         android:textColor="@color/colorGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -334,7 +334,7 @@ following data"
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
 
                         android:textColor="@color/colorPrimary"
                         android:text="Upload Your File"/>
@@ -343,24 +343,24 @@ following data"
 
             </LinearLayout>
             <TextView
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="@dimen/margin_35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorError"
-                android:textSize="11sp"
+                android:textSize="@dimen/font_12"
                 android:text="** Max. size 10MB | Format (.pdf, .doc, .jpg, .jpeg, .png)"
 
                 />
             <Button
                 android:id="@+id/btnSignYourself"
                 style="@style/buttonLogin"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Signature" />
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"/>
+                android:layout_height="@dimen/margin_35"/>
         </LinearLayout>
 
 

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +33,59 @@ import okhttp3.RequestBody;
 
 public class Util {
 
+    public String changeFormatDate(String date){
+        String[] data = date.split(" ");
+        String month = "";
+        String tempMonth = data[1].toLowerCase();
+        if(tempMonth.contains("janu")){
+            month = "01";
+        } else if(tempMonth.contains("feb")){
+            month = "02";
+        } else if (tempMonth.contains("mar")){
+            month = "03";
+        }else if (tempMonth.contains("apr")){
+            month = "04";
+        }else if (tempMonth.contains("may")|| tempMonth.contains("mei")){
+            month = "05";
+        } else if (tempMonth.contains("june")){
+            month = "06";
+        }else if (tempMonth.contains("jul")){
+            month = "07";
+        }else if (tempMonth.contains("aug")){
+            month = "08";
+        }else if (tempMonth.contains("sept")){
+            month = "09";
+        }else if (tempMonth.contains("oct")){
+            month = "10";
+        }else if (tempMonth.contains("nov")){
+            month = "11";
+        }else if (tempMonth.contains("dec")){
+            month = "12";
+        }else{
+            month = "01";
+        }
+        return data[2]+"-"+month+"-"+data[0];
+    }
+
+
+    public boolean patternEmail(String email){
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public String signNumber(int idPerson, int counter){
+//        YTI/ID/Counter/DD/MM/yyyy
+        Calendar calendar = Calendar.getInstance();
+        String mYear = String.valueOf(calendar.get(Calendar.YEAR));
+        String mMonth = String.valueOf((calendar.get(Calendar.MONTH)+1));
+        String mDay = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        String sign = "#YTI/"+idPerson+"/"+counter+"/"+mDay+"/"+ mMonth + "/"+ mYear;
+        return sign;
+    }
+
+    public boolean intToBool(int x){
+        return x == 1;
+    }
+
     public String milisNow(){
         Date date = new Date();
         long timeMilli = date.getTime();
@@ -55,9 +109,9 @@ public class Util {
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Teken Yokesen");
             String shareMessage= "\nLet me recommend you this application\n\n";
-            shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+            shareMessage = shareMessage + link +"\n\n";
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             context.startActivity(Intent.createChooser(shareIntent, "choose one"));
         } catch(Exception e) {

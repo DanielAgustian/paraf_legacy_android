@@ -41,7 +41,7 @@
                 android:layout_gravity="center"
                 android:text="Send Final Document"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -72,17 +72,17 @@
                 >
                 <ImageView
                     android:layout_gravity="center_vertical"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="@dimen/ic_16"
+                    android:layout_height="@dimen/ic_16"
                     android:src="@drawable/ic_circle_plus"
                     app:tint="@color/colorPrimary"
                     />
                 <View
-                    android:layout_width="15dp"
+                    android:layout_width="@dimen/margin_15"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/font_14"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
                     android:text="Add Signers"
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/docFile_add_sign"
-                android:textSize="14dp" />
+                android:textSize="@dimen/font_14" />
             <LinearLayout
                 android:background="@color/colorBackgroundBlue"
                 android:paddingHorizontal="15dp"
@@ -115,16 +115,16 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <ImageView
-                            android:layout_marginRight="20dp"
-                            android:layout_width="20dp"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_width="@dimen/Ic_password_width"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_pdf_placeholder"
-                            android:layout_height="20dp"/>
+                            android:layout_height="@dimen/ic_password_height"/>
                         <TextView
                             android:id="@+id/tvDoneUploadFinal"
                             android:text="blabla.pdf"
                             android:layout_gravity="center_vertical"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
                             android:textColor="@color/colorGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -133,11 +133,11 @@
                     <ImageView
                         android:id="@+id/ivEmptyFileFinal"
                         android:layout_alignParentRight="true"
-                        android:layout_width="20dp"
+                        android:layout_width="@dimen/Ic_password_width"
                         app:tint="@color/colorError"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_cross_icon"
-                        android:layout_height="20dp"/>
+                        android:layout_height="@dimen/ic_password_height"/>
                 </RelativeLayout>
 
 
@@ -154,17 +154,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="@dimen/margin_20"
 
-                        android:layout_width="20dp"
+                        android:layout_width="@dimen/Ic_password_width"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_pdf_placeholder"
-                        android:layout_height="20dp"/>
+                        android:layout_height="@dimen/ic_password_height"/>
                     <TextView
                         android:id="@+id/tvWaitingUploadFinal"
                         android:text="blabla.pdf"
                         android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/font_14"
                         android:textColor="@color/colorGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -201,7 +201,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
 
                         android:textColor="@color/colorPrimary"
                         android:text="Upload Your File"/>
@@ -210,11 +210,11 @@
 
             </LinearLayout>
             <TextView
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorError"
-                android:textSize="11sp"
+                android:textSize="@dimen/font_12"
                 android:text="** Max. size 10MB | Format (.pdf, .doc, .jpg, .jpeg, .png)"
 
                 />
@@ -228,7 +228,7 @@
                 android:text="Message (Optional)"
                 android:textColor="@color/colorLightGrayText"
 
-                android:textSize="14sp" />
+                android:textSize="@dimen/font_14" />
             <EditText
                 android:id="@+id/etMsgFinal"
                 android:layout_width="match_parent"
@@ -241,11 +241,12 @@
 
                 android:paddingVertical="5dp" />
             <TextView
-                android:layout_marginBottom="30dp"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/margin_30"
                 android:id="@+id/tvCountMSG"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="@dimen/font_10"
                 android:text="27/50"
 
                 android:textColor="@color/colorSuccess"
@@ -254,8 +255,10 @@
 
 
             <Button
+                android:layout_marginTop="@dimen/margin_30"
+
                 android:id="@+id/btnFinalDoc"
-                android:layout_marginBottom="35dp"
+                android:layout_marginBottom="@dimen/margin_35"
                 style="@style/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -31,16 +31,21 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.model.GetSignNumberModel;
+import com.yokesen.parafdigitalyokesen.model.SignNumberModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.SignatureDetailModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -55,19 +60,19 @@ public class SignYourselfActivity extends AppCompatActivity  {
     private Uri fileUri;
     private int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     File fileSending;
-    private boolean nameValidator, emailValidator, documentNameValidator;
+    private boolean nameValidator, emailValidator, documentNameValidator, kodeValidator = false;
 
     Button btnContinue, btnCancel ;
     private Dialog customDialog, waitingDialog;
-    LinearLayout llWaitingData, llDoneData, llUploadData;
+    LinearLayout llWaitingData, llDoneData, llUploadData, llKode;
     //SignYourselfViewModel VM;
     Util util;
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     List<TypeCategoryModel> category, types;
     TypeCategoryModel selectedCategory, selectedTypes;
-
-    EditText etName, etEmail, etDocumentName, etDescription, etLink;
+    UtilWidget utiWidget = new UtilWidget(this);
+    EditText etName, etEmail, etDocumentName, etDescription, etLink, etSignNumber, etKode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +80,45 @@ public class SignYourselfActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_sign_yourself);
         initNetwork();
         getPermission();
-        initComponent();
+        initSignNumber();
+        //initComponent();
         initSpinner();
         initDialog();
         initDialogWaiting();
 
+    }
+
+
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
     }
 
     private void initNetwork() {
@@ -87,6 +126,16 @@ public class SignYourselfActivity extends AppCompatActivity  {
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
     }
+
+
+    private void initSignNumber() {
+        String token = preferencesRepo.getToken();
+        Observable<GetSignNumberModel> getSignNumber= apiInterface.getSignNumber(token);
+        getSignNumber.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessSignNumber, this::onFailedSignNumber);
+
+    }
+
+
 
     public void initSpinner(){
         String token = preferencesRepo.getToken();
@@ -134,7 +183,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
         util.changeColorEditText(etName, nameValidator, this);
         util.changeColorEditText(etEmail, emailValidator, this);
         util.changeColorEditText(etDocumentName, documentNameValidator, this);
-        if(!nameValidator && !emailValidator && !documentNameValidator){
+        if(!nameValidator && !emailValidator && !documentNameValidator ){
             return true;
         }else{
             return false;
@@ -147,50 +196,118 @@ public class SignYourselfActivity extends AppCompatActivity  {
             try {
 
                 //Log.d("FILE_GETNAMe", fileSending.getName());
-               if(fileUri != null){
-                   RequestBody requestFile =
-                           RequestBody.create(
-                                   MediaType.parse(getContentResolver().getType(fileUri)),
-                                   fileSending
-                           );
-                   MultipartBody.Part body =
-                           MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+                if(selectedTypes.getId() == 3){
+
+                    String kode = etKode.getText().toString();
+
+                    if(kode.length() == 6){
+                        //NEED TO SEND KODE
+                        if(fileUri != null){
+                            RequestBody requestFile =
+                                    RequestBody.create(
+                                            MediaType.parse(getContentResolver().getType(fileUri)),
+                                            fileSending
+                                    );
+                            MultipartBody.Part body =
+                                    MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
 
 
-                   String token = preferencesRepo.getToken();
-                   Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSign(
-                           token,
-                           util.requestBodyString(etName.getText().toString()),
-                           util.requestBodyString(etEmail.getText().toString()),
-                           util.requestBodyString(etDocumentName.getText().toString()),
-                           util.requestBodyString(String.valueOf(selectedCategory.getId())),
-                           util.requestBodyString(String.valueOf(selectedTypes.getId())),
-                           util.requestBodyString(etDescription.getText().toString()),
-                           util.requestBodyString(etLink.getText().toString()),
-                           body
-                   );
-                   postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                            String token = preferencesRepo.getToken();
+                            Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSignWithCode(
+                                    token,
+                                    util.requestBodyString(etName.getText().toString()),
+                                    util.requestBodyString(etEmail.getText().toString()),
+                                    util.requestBodyString(etDocumentName.getText().toString()),
+                                    util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                    util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                    util.requestBodyString(etDescription.getText().toString()),
+                                    util.requestBodyString(etLink.getText().toString()),
+                                    body,
+                                    util.requestBodyString(etSignNumber.getText().toString()),
+                                    util.requestBodyString(etKode.getText().toString())
+                            );
+                            postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
 
-               }else{
-                   RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+                        }
+                        else{
+                            RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
 
-                   MultipartBody.Part body = MultipartBody.Part.createFormData("attachment", "", attachmentEmpty);
+                            MultipartBody.Part body = MultipartBody.Part.createFormData("attachment", "", attachmentEmpty);
 
-                   String token = preferencesRepo.getToken();
-                   Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSign(
-                           token,
-                           util.requestBodyString(etName.getText().toString()),
-                           util.requestBodyString(etEmail.getText().toString()),
-                           util.requestBodyString(etDocumentName.getText().toString()),
-                           util.requestBodyString(String.valueOf(selectedCategory.getId())),
-                           util.requestBodyString(String.valueOf(selectedTypes.getId())),
-                           util.requestBodyString(etDescription.getText().toString()),
-                           util.requestBodyString(etLink.getText().toString()),
-                           body
-                   );
-                   postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                            String token = preferencesRepo.getToken();
+                            Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSignWithCode(
+                                    token,
+                                    util.requestBodyString(etName.getText().toString()),
+                                    util.requestBodyString(etEmail.getText().toString()),
+                                    util.requestBodyString(etDocumentName.getText().toString()),
+                                    util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                    util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                    util.requestBodyString(etDescription.getText().toString()),
+                                    util.requestBodyString(etLink.getText().toString()),
+                                    body,
+                                    util.requestBodyString(etSignNumber.getText().toString()),
+                                    util.requestBodyString(etKode.getText().toString())
+                            );
+                            postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
 
-               }
+                        }
+                    }else{
+                        utiWidget.makeApprovalDialog("Code Error", "Please write only 6 characters in kode textbox!");
+                    }
+
+                }else{
+                    // No need to send Kode
+                    if(fileUri != null){
+                        RequestBody requestFile =
+                                RequestBody.create(
+                                        MediaType.parse(getContentResolver().getType(fileUri)),
+                                        fileSending
+                                );
+                        MultipartBody.Part body =
+                                MultipartBody.Part.createFormData("file", fileSending.getName(), requestFile);
+
+
+                        String token = preferencesRepo.getToken();
+                        Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSign(
+                                token,
+                                util.requestBodyString(etName.getText().toString()),
+                                util.requestBodyString(etEmail.getText().toString()),
+                                util.requestBodyString(etDocumentName.getText().toString()),
+                                util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                util.requestBodyString(etDescription.getText().toString()),
+                                util.requestBodyString(etLink.getText().toString()),
+                                body,
+                                util.requestBodyString(etSignNumber.getText().toString())
+
+                        );
+                        postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+
+                    }
+                    else{
+                        RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+
+                        MultipartBody.Part body = MultipartBody.Part.createFormData("attachment", "", attachmentEmpty);
+
+                        String token = preferencesRepo.getToken();
+                        Observable<GetSignDetailModel> postNewSign = apiInterface.addNewSign(
+                                token,
+                                util.requestBodyString(etName.getText().toString()),
+                                util.requestBodyString(etEmail.getText().toString()),
+                                util.requestBodyString(etDocumentName.getText().toString()),
+                                util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                util.requestBodyString(etDescription.getText().toString()),
+                                util.requestBodyString(etLink.getText().toString()),
+                                body,
+                                util.requestBodyString(etSignNumber.getText().toString())
+                        );
+                        postNewSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+
+                    }
+                }
+
+
             }catch (Exception e){
                 e.printStackTrace();
                 waitingDialog.dismiss();
@@ -212,6 +329,22 @@ public class SignYourselfActivity extends AppCompatActivity  {
         gotoResultPage(model.getHome());
     }
 
+
+    //---------------------Method for Get Sign Number--------------------------------
+    private void onFailedSignNumber(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API Sign Number. Try again",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessSignNumber(GetSignNumberModel getSignNumberModel) {
+        if(getSignNumberModel!=null){
+            SignNumberModel model = getSignNumberModel.getHome();
+            String signnumber = util.signNumber(model.getUserId(), model.getCounter());
+            initComponent(signnumber);
+        }
+
+    }
+
     //---------------------Method For Get Types Spinner-------------------------------
 
     private void onFailedTypes(Throwable throwable) {
@@ -226,15 +359,21 @@ public class SignYourselfActivity extends AppCompatActivity  {
         }
     }
     private void getDataSpinnerTypes(){
+        llKode = findViewById(R.id.llKode);
         Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeyNewSign);
-        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
-        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, R.layout.simple_spinner_item, types);
+        adapterDocType.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerDocType.setAdapter(adapterDocType);
         spinnerDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getSelectedItem();
                 Log.d("CategorySelected", selectedTypes.getName());
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                } else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -264,9 +403,9 @@ public class SignYourselfActivity extends AppCompatActivity  {
         Spinner spinnerCategory = findViewById(R.id.spinnerCategoryNewSign);
         ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.simple_spinner_item,
                 category);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterCategory.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerCategory.setAdapter(adapterCategory);
 
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -291,7 +430,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
 
 
     //------------------------------ Initialize Component-----------------
-    public void initComponent(){
+    public void initComponent(String signNumber){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSignYourself);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -332,12 +471,17 @@ public class SignYourselfActivity extends AppCompatActivity  {
                 emptyFile();
             }
         });
-
+        etSignNumber = findViewById(R.id.etSignNumber);
+        etSignNumber.setText(signNumber);
         etName = findViewById(R.id.etNameSignYour);
+        etName.setText(preferencesRepo.getNameProfile());
         etEmail = findViewById(R.id.etEmailNewSign);
+        etEmail.setEnabled(false);
+        etEmail.setText(preferencesRepo.getEmailProfile());
         etDocumentName = findViewById(R.id.etDocNameNewSign);
         etDescription = findViewById(R.id.etDescNewSign);
         etLink = findViewById(R.id.etLinkNewSign);
+        etKode = findViewById(R.id.etKode);
     }
 
 

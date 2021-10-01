@@ -181,7 +181,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void onSuccessLogout(SimpleResponse simpleResponse) {
         if (simpleResponse!=null){
-            preferencesRepo.deleteToken();
+            preferencesRepo.logOut();
             if(GoogleSignIn.getLastSignedInAccount(getActivity()) != null){
                 googleSignInClient.signOut();
             }

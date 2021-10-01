@@ -78,6 +78,8 @@ public class MyReqDetailModel implements Serializable {
     @SerializedName("can_download")
     private boolean canDownload;
 
+    @SerializedName("code")
+    private String code;
 
     public boolean isCanSign() {
         return canSign;
@@ -239,5 +241,9 @@ public class MyReqDetailModel implements Serializable {
 
     public String getSignNumber() {
         return signNumber;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

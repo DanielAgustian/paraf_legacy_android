@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="@dimen/margin_15"
 
         tools:context=".view.MainActivity"
         android:orientation="vertical">
@@ -31,43 +31,43 @@
         <!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
 
         <ImageView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/margin_30"
             android:layout_gravity="center"
-            android:layout_width="70dp"
+            android:layout_width="@dimen/logo_width"
             app:tint="@color/colorPrimary"
             android:src="@drawable/ic_app_teken"
-            android:layout_height="70dp"/>
+            android:layout_height="@dimen/logo_height"/>
 
         <TextView
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="@dimen/margin_30"
             android:text="Welcome to Paraf!"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/colorGrayText"
-            android:textSize="32sp"
+            android:textSize="@dimen/font_32"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tvWelcome2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="@dimen/margin_25"
             android:text="Enter your credentials to continue"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:textColor="@color/colorGrayText"
-            android:textSize="12sp"
+            android:textSize="@dimen/font_12"
             android:textStyle="bold"
             />
         <TextView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/margin_30"
             android:text="Email"
             android:layout_marginLeft="3dp"
             android:textColor="@color/colorGrayText"
-            android:textSize="16sp"
+            android:textSize="@dimen/font_14"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -81,11 +81,11 @@
             android:inputType="textPersonName"
             android:theme="@style/editTextLogin"/>
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_20"
             android:text="Name"
             android:layout_marginLeft="3dp"
             android:textColor="@color/colorGrayText"
-            android:textSize="16sp"
+            android:textSize="@dimen/font_14"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -99,11 +99,11 @@
             android:inputType="textPersonName"
             android:theme="@style/editTextLogin"/>
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_20"
             android:text="Password"
             android:layout_marginLeft="3dp"
             android:textColor="@color/colorGrayText"
-            android:textSize="16sp"
+            android:textSize="@dimen/font_14"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -124,8 +124,8 @@
 
             <ImageView
                 android:id="@+id/show_pass_btnSU"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/Ic_password_width"
+                android:layout_height="@dimen/ic_password_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
@@ -136,11 +136,11 @@
                 android:src="@drawable/ic_hide" />
         </RelativeLayout>
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_20"
             android:text="Confirm Password"
             android:layout_marginLeft="3dp"
             android:textColor="@color/colorGrayText"
-            android:textSize="16sp"
+            android:textSize="@dimen/font_14"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -161,8 +161,8 @@
 
             <ImageView
                 android:id="@+id/show_pass_btnCPSU"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/Ic_password_width"
+                android:layout_height="@dimen/ic_password_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
@@ -180,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="I Accept Terms and Condition"
-                android:textSize="12sp"
+                android:textSize="@dimen/font_12"
 
                 android:textColor="@color/colorGrayText"
                 />
@@ -188,7 +188,7 @@
         </RelativeLayout>
 
         <Button
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/margin_15"
             android:id="@+id/btnRegister"
             style="@style/buttonLogin"
             android:layout_width="match_parent"
@@ -196,13 +196,14 @@
             android:text="Register" />
 
         <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_10"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_marginRight="5dp"
+                android:textSize="@dimen/font_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Already have an account?"
@@ -212,6 +213,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign In"
+                android:textSize="@dimen/font_14"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlue"
                 />

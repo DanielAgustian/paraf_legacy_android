@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="@dimen/margin_35"
         android:gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -18,14 +18,14 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:tint="@color/colorPrimary"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="@dimen/margin_30"
             android:src="@drawable/ic_app_teken"/>
         <TextView
             android:text="TEKEN"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:letterSpacing="0.4"
-            android:textSize="24sp"
+            android:textSize="@dimen/font_splash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

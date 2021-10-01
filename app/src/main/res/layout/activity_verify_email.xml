@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="@dimen/margin_15"
 
         tools:context=".view.MainActivity"
         android:orientation="vertical">
@@ -21,7 +21,7 @@
 
 
         <ImageView
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="@dimen/margin_35"
             android:layout_gravity="center"
 
             android:layout_width="wrap_content"
@@ -33,24 +33,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/margin_30"
             android:text="Verify Your Email"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/colorGrayText"
-            android:textSize="32sp"
+            android:textSize="@dimen/font_32"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tvWelcome2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_20"
             android:text="Please check your email to take 4 digit \n
 code for continue"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:textColor="#FF848484"
-            android:textSize="12sp"
+            android:textSize="@dimen/font_12"
             android:textStyle="bold"
             />
 
@@ -66,13 +66,14 @@ code for continue"
 
         <TextView
             android:clickable="true"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/margin_15"
             android:id="@+id/tvResendCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Resend Code"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
+            android:textSize="@dimen/font_16"
             android:textColor="@color/colorBlue"
             />
 
@@ -81,8 +82,8 @@ code for continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/buttonLogin"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="@dimen/margin_30"
+            android:layout_marginBottom="@dimen/margin_20"
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="@color/white"

@@ -49,8 +49,11 @@ public class SignatureDetailModel implements Serializable {
     @SerializedName("size")
     private String size;
 
+    @SerializedName("sign_number")
+    private String signNumber;
 
-
+    @SerializedName("code")
+    private String kode;
     public SignatureDetailModel(String title, String time, int id) {
         this.title = title;
         this.time = time;
@@ -148,6 +151,14 @@ public class SignatureDetailModel implements Serializable {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getSignNumber() {
+        return signNumber;
+    }
+
+    public String getKode() {
+        return kode;
     }
 
     public static List<SignModel> generateList(){

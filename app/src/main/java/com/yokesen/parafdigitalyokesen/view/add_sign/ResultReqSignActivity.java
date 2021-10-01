@@ -35,6 +35,8 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
+import com.yokesen.parafdigitalyokesen.util.DynamicLinkUtil;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.yokesen.parafdigitalyokesen.adapter.SignersAdapter;
@@ -44,6 +46,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -82,7 +86,36 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
         initToolbar();
         initComponent();
     }
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
 
     @Override
     protected void onDestroy() {
@@ -231,48 +264,51 @@ public class ResultReqSignActivity extends AppCompatActivity implements View.OnC
     }
 
     private void sharing(){
-        Dialog dialog  = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_doctype);
-        dialog.setCancelable(true);
-        dialog.show();
-        Button btnContinue = dialog.findViewById(R.id.btnContinueType);
-        Button btnCancel = dialog.findViewById(R.id.btnCancelType);
-        RadioButton rbPng = dialog.findViewById(R.id.radio_png);
-        RadioButton rbJpg = dialog.findViewById(R.id.radio_jpeg);
-        RadioButton rbPdf = dialog.findViewById(R.id.radio_pdf);
-        rbJpg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                type = typeShare.get(1);
-            }
-        });
-        rbPng.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                type = typeShare.get(0);
-            }
-        });
-        rbPdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                type = typeShare.get(2);
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismissDialog(dialog);
-
-            }
-        });
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismissDialog(dialog);
-                doShare(type);
-            }
-        });
+        DynamicLinkUtil dlUtil = new DynamicLinkUtil(this);
+        Variables var = new Variables();
+        util.shareLink(this, dlUtil.dynamicLinkParaf(var.typeSign[2], detailModel.getId()));
+//        Dialog dialog  = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.dialog_doctype);
+//        dialog.setCancelable(true);
+//        dialog.show();
+//        Button btnContinue = dialog.findViewById(R.id.btnContinueType);
+//        Button btnCancel = dialog.findViewById(R.id.btnCancelType);
+//        RadioButton rbPng = dialog.findViewById(R.id.radio_png);
+//        RadioButton rbJpg = dialog.findViewById(R.id.radio_jpeg);
+//        RadioButton rbPdf = dialog.findViewById(R.id.radio_pdf);
+//        rbJpg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                type = typeShare.get(1);
+//            }
+//        });
+//        rbPng.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                type = typeShare.get(0);
+//            }
+//        });
+//        rbPdf.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                type = typeShare.get(2);
+//            }
+//        });
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dismissDialog(dialog);
+//
+//            }
+//        });
+//        btnContinue.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dismissDialog(dialog);
+//                doShare(type);
+//            }
+//        });
     }
 
 

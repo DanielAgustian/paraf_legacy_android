@@ -34,6 +34,8 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.model.GetSignNumberModel;
+import com.yokesen.parafdigitalyokesen.model.SignNumberModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
@@ -41,6 +43,7 @@ import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.InviteSignersModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,7 +61,7 @@ import okhttp3.RequestBody;
 
 public class ReqSignatureActivity extends AppCompatActivity implements View.OnClickListener{
     Button btnContinue, btnCancel, btnDueDate, btnTime;
-    LinearLayout llUploadData, llWaitingData, llDoneData, llAddSigners;
+    LinearLayout llUploadData, llWaitingData, llDoneData, llAddSigners, llKode;
     ListView lvSigners;
     private Dialog customDialog, waitingDialog;
     private Uri fileUri;
@@ -73,7 +76,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     InviteSignersDialogAdapter invAdapter;
     ArrayList<InviteSignersModel> list;
 
-    private EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage;
+    private EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage, etKode, etSignNUmber;
     private final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     private String filePath, choosenDate = "", choosenTime = "";
     int progress = 0;
@@ -87,7 +90,8 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         initSpinner();
         initDialog();
         initDialogWaiting();
-        initComponent();
+        initSignNumber();
+        //initComponent();
     }
     @Override
     public void onClick(View view) {
@@ -104,6 +108,13 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+
+    private void initSignNumber() {
+        String token = preferencesRepo.getToken();
+        Observable<GetSignNumberModel> getSignNumber= apiInterface.getSignNumber(token);
+        getSignNumber.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessSignNumber, this::onFailedSignNumber);
+
+    }
 
     //------------------------File Picker Method---------------------------------
     private void emptyFile() {
@@ -217,6 +228,23 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     }
     //----------------------------------------------------------------
 
+    //---------------------Method for Get Sign Number--------------------------------
+    private void onFailedSignNumber(Throwable throwable) {
+        Toast.makeText(this, "ERROR IN FETCHING API Sign Number. Try again",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void onSuccessSignNumber(GetSignNumberModel getSignNumberModel) {
+        if(getSignNumberModel!=null){
+            SignNumberModel model = getSignNumberModel.getHome();
+            String signnumber = util.signNumber(model.getUserId(), model.getCounter());
+            initComponent(signnumber);
+        }
+
+    }
+
+
+
 
     //---------------------------Date picker----------------------
     void dateTimePicker(){
@@ -228,8 +256,6 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
-
-
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
@@ -357,10 +383,10 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         }
     }
     private void getDataSpinnerTypes(){
-
+        llKode = findViewById(R.id.llKode);
         Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeReqSign);
-        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
-        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, R.layout.simple_spinner_item, types);
+        adapterDocType.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerDocType.setAdapter(adapterDocType);
 
         spinnerDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -368,6 +394,11 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getSelectedItem();
                 Log.d("CategorySelected", selectedTypes.getName());
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                } else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -378,7 +409,36 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
     //-----------------------Method for Category Spinner -----------------------
 
     private void onFailedCategory(Throwable throwable) {
@@ -397,9 +457,9 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         Spinner spinnerCategory = findViewById(R.id.spinnerCategoryReqSign);
         ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.simple_spinner_item,
                 category);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterCategory.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerCategory.setAdapter(adapterCategory);
 
 
@@ -446,7 +506,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         waitingDialog.setCancelable(false);
     }
 
-    public void initComponent(){
+    public void initComponent(String number){
         llUploadData = findViewById(R.id.uploadDataReq);
         btnDueDate = findViewById(R.id.btnDueDate);
         btnTime = findViewById(R.id.btnTime);
@@ -469,13 +529,17 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         ImageView ivEmptyFile = findViewById(R.id.ivEmptyFileReq);
         ivEmptyFile.setOnClickListener(this);
 
+        etSignNUmber  = findViewById(R.id.etSignNumber);
+        etSignNUmber.setText(number);
         etName = findViewById(R.id.etNameSignYour);
+        etName.setText(preferencesRepo.getNameProfile());
         etEmail = findViewById(R.id.etEmailNewSign);
+        etEmail.setText(preferencesRepo.getEmailProfile());
         etDocumentName = findViewById(R.id.etDocNameNewSign);
         etDescription = findViewById(R.id.etDescNewSign);
         etLink = findViewById(R.id.etLinkNewSign);
         etMessage = findViewById(R.id.etMsgNewSign);
-
+        etKode = findViewById(R.id.etKode);
 
     }
     void gotoResultPage(int id){
@@ -487,46 +551,54 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     }
 
     //=-----------------------------Method for Add SIgn------------------
-
+    boolean nameValidator = false,
+            emailValidator=false,
+            documentNameValidator =false,
+            dateValidator = false,
+            timeValidator = false,
+            emailListValidator = false;
     private boolean validation(){
-        boolean nameValidator = false,
-                emailValidator=false,
-                documentNameValidator =false,
-                dateValidator = false,
-                timeValidator = false,
-                emailListValidator = false;
+
+
         if(etName.getText().toString().trim().length()< 1){
+
             nameValidator = true;
         }else{
             nameValidator = false;
         }
 
         if(etEmail.getText().toString().trim().length()< 5){
+
             emailValidator = true;
         }else{
             emailValidator = false;
         }
 
         if(etDocumentName.getText().toString().trim().length()< 1){
+
             documentNameValidator = true;
         }else{
             documentNameValidator = false;
         }
 
-        if (choosenDate != ""){
+        if (!choosenDate.equals("") ){
             dateValidator = false;
         }else{
+
             dateValidator = true;
         }
-        if(choosenTime != ""){
+        if(!choosenTime.equals("") ){
             timeValidator = false;
         } else{
+
             timeValidator = true;
         }
 
         if(getDataEmails().size() < 1){
+
             emailListValidator = true;
         } else{
+
             emailListValidator = false;
         }
 
@@ -543,8 +615,12 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
             utiWidget.makeApprovalDialog("No Email", "Please write at least one email address");
         }
 
+        //util.toastMisc(this, util.stb(nameValidator)+ " "+util.stb(emailValidator)+" "+util.stb(documentNameValidator)+ " "+util.stb(dateValidator)+" "+util.stb(timeValidator)+ " "+util.stb(emailListValidator));
+//        Log.d("VALIDATOR", util.stb(nameValidator)+ " "+util.stb(emailValidator));
+//        Log.d("VALIDATOR2", util.stb(documentNameValidator)+ " "+util.stb(dateValidator));
+//        Log.d("VALIDATOR3", util.stb(timeValidator)+ " "+util.stb(emailListValidator));
         if(!nameValidator && !emailValidator && !documentNameValidator
-                && !dateValidator && !timeValidator){
+                && !dateValidator && !timeValidator && !emailListValidator){
             return true;
         }else{
             return false;
@@ -552,6 +628,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     }
 
     void addSignMethod(){
+        //util.toastMisc(this, "ADD SIGN");
         if (validation()){
 
             waitingDialog.show();
@@ -560,6 +637,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                 //Log.d("FILE_GETNAMe", fileSending.getName());
                 RequestBody requestFile = null;
                 MultipartBody.Part body = null;
+
                 if(fileUri!=null){
                     requestFile =
                             RequestBody.create(
@@ -576,25 +654,58 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
 
 
 
-                String token = preferencesRepo.getToken();
-                Observable<GetSignDetailModel> addReqSign = apiInterface.addReqSign(
-                        token,
-                        util.requestBodyString(etName.getText().toString()),
-                        util.requestBodyString(etEmail.getText().toString()),
-                        util.requestBodyString(etDocumentName.getText().toString()),
-                        util.requestBodyString(String.valueOf(selectedCategory.getId())),
-                        util.requestBodyString(String.valueOf(selectedTypes.getId())),
-                        util.requestBodyString(etDescription.getText().toString()),
-                        util.requestBodyString(etLink.getText().toString()),
-                        body,
-                        util.requestBodyString(choosenDate),
-                        util.requestBodyString(choosenTime),
-                        util.requestBodyString(etMessage.getText().toString()),
-                        getDataEmails()
-                );
-                addReqSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                if(selectedTypes.getId() == 3){
+                    String kode = etKode.getText().toString();
+                    if(kode.length() == 6){
+                        String token = preferencesRepo.getToken();
+                        Observable<GetSignDetailModel> addReqSign = apiInterface.addReqSignWithCode(
+                                token,
+                                util.requestBodyString(etName.getText().toString()),
+                                util.requestBodyString(etEmail.getText().toString()),
+                                util.requestBodyString(etDocumentName.getText().toString()),
+                                util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                util.requestBodyString(etDescription.getText().toString()),
+                                util.requestBodyString(etLink.getText().toString()),
+                                body,
+                                util.requestBodyString(choosenDate),
+                                util.requestBodyString(choosenTime),
+                                util.requestBodyString(etMessage.getText().toString()),
+                                getDataEmails(),
+                                util.requestBodyString(etSignNUmber.getText().toString()),
+                                util.requestBodyString(etKode.getText().toString())
+                        );
+                        addReqSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                    }else{
+                        utiWidget.makeApprovalDialog("Code Error", "Please write only 6 characters in kode textbox!");
+                    }
+                }else{
+
+
+                    String token = preferencesRepo.getToken();
+                    Observable<GetSignDetailModel> addReqSign = apiInterface.addReqSign(
+                            token,
+                            util.requestBodyString(etName.getText().toString()),
+                            util.requestBodyString(etEmail.getText().toString()),
+                            util.requestBodyString(etDocumentName.getText().toString()),
+                            util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                            util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                            util.requestBodyString(etDescription.getText().toString()),
+                            util.requestBodyString(etLink.getText().toString()),
+                            body,
+                            util.requestBodyString(choosenDate),
+                            util.requestBodyString(choosenTime),
+                            util.requestBodyString(etMessage.getText().toString()),
+                            getDataEmails(),
+                            util.requestBodyString(etSignNUmber.getText().toString())
+                    );
+                    addReqSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                }
+
+
             }catch (Exception e){
                 e.printStackTrace();
+                util.toastMisc(this, e.getMessage());
                 waitingDialog.dismiss();
             }
 

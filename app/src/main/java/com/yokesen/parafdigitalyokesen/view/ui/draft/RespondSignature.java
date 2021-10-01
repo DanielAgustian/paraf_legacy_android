@@ -23,7 +23,9 @@ import com.yokesen.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -52,7 +54,36 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
         initToolbar();
         iniComponent();
     }
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
     void InitData(){
         id = getIntent().getIntExtra("id", -1) ;
 

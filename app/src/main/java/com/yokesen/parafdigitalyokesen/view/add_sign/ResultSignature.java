@@ -29,6 +29,8 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
+import com.yokesen.parafdigitalyokesen.util.DynamicLinkUtil;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.yokesen.parafdigitalyokesen.adapter.SignersAdapter;
@@ -39,6 +41,7 @@ import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
 import com.yokesen.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +63,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     SignatureDetailModel detailModel;
+    //SignatureDetailModel detailModel;
     Util util = new Util();
     PictureDrawable pd;
     String choosenDate = "";
@@ -77,6 +81,37 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         initComponent();
     }
 
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
 
     @Override
     protected void onDestroy() {
@@ -129,6 +164,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
     private void setData() {
         pd = util.makeQRCOde(detailModel.getQr_code());
 
@@ -164,6 +200,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
 
         TextView tvSize = findViewById(R.id.tvSizeRes);
         tvSize.setText(detailModel.getSize());
+
+        TextView tvStatusSign = findViewById(R.id.tvStatusSign);
+        tvStatusSign.setText("Sign Number: " + detailModel.getSignNumber());
     }
 
     private void onFailed(Throwable throwable) {
@@ -253,7 +292,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sharing(){
-        util.shareLink(this, "paraf.yokesen.com");
+        DynamicLinkUtil dlUtil = new DynamicLinkUtil(this);
+        Variables var = new Variables();
+        util.shareLink(this, dlUtil.dynamicLinkParaf(var.typeSign[0], detailModel.getId()));
     }
 
 
@@ -582,6 +623,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
                         tvDate.setText(choosenDate);
                     }
                 }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
 
 

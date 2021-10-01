@@ -2,29 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:paddingTop="10dp"
+android:paddingTop="@dimen/margin_10"
 android:paddingHorizontal="15sp"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-android:paddingBottom="15dp">
+android:paddingBottom="@dimen/margin_15">
 <!--    android:background="@drawable/rounded_bg"-->
     <ImageView
         android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:layout_width="35dp"
+        android:layout_width="@dimen/margin_35"
         android:layout_height="3dp"
         android:src="@drawable/bottom_nav_icon"
         />
 <LinearLayout
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="@dimen/margin_15"
     android:paddingVertical="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/ivBotNavInfo"
         android:layout_gravity="center_vertical"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="@dimen/icon_40"
+        android:layout_height="@dimen/icon_40"
+        android:layout_marginRight="@dimen/margin_20"
         android:src="@color/colorPrimary"/>
     <LinearLayout
         android:layout_gravity="center_vertical"
@@ -39,8 +39,8 @@ android:paddingBottom="15dp">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Who needs to sign?"
-            android:layout_marginBottom="10dp"
-            android:textSize="16sp" />
+            android:layout_marginBottom="@dimen/margin_10"
+            android:textSize="@dimen/font_16" />
         <TextView
 
             android:id="@+id/tvDetailsInfo"
@@ -49,13 +49,13 @@ android:paddingBottom="15dp">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Created, 12 June 2021 | 09.25"
-            android:textSize="12sp" />
+            android:textSize="@dimen/font_12" />
     </LinearLayout>
 
 </LinearLayout>
 
 <View
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@color/colorPrimaryLight"/>
@@ -64,7 +64,7 @@ android:paddingBottom="15dp">
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/button_flat_white"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_10"
         android:paddingVertical="8dp"
         android:layout_width="match_parent"
         android:weightSum="1.0"
@@ -74,17 +74,17 @@ android:paddingBottom="15dp">
             app:tint="@color/colorLightGrayText"
             android:src="@drawable/ic_info"
 
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/ic_20"
+            android:layout_height="@dimen/ic_20"
             />
 
         <TextView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/margin_15"
             android:text="Details and Activities"
-            android:textSize="12sp"
+            android:textSize="@dimen/font_12"
             android:textColor="@color/colorLightGrayText"
             />
     </LinearLayout>
@@ -93,7 +93,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -102,17 +102,17 @@ android:paddingBottom="15dp">
     <ImageView
         app:tint="@color/colorLightGrayText"
         android:src="@drawable/ic_save"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Save this sign"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorLightGrayText"
         />
 </LinearLayout>
@@ -121,7 +121,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -131,17 +131,17 @@ android:paddingBottom="15dp">
         app:tint="@color/colorLightGrayText"
         android:src="@drawable/ic_share"
 
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Share this sign"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorLightGrayText"
         />
 </LinearLayout>
@@ -152,7 +152,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -162,17 +162,17 @@ android:paddingBottom="15dp">
         app:tint="@color/colorLightGrayText"
         android:src="@drawable/ic_regen"
 
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Re-create"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorLightGrayText"
         />
 </LinearLayout>
@@ -181,7 +181,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -191,22 +191,22 @@ android:paddingBottom="15dp">
 
         android:src="@drawable/ic_bell"
         app:tint="@color/colorPrimary"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Remind Signers"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorLightGrayText"
         />
 </LinearLayout>
 <View
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@color/colorPrimaryLight"/>
@@ -215,7 +215,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -225,17 +225,17 @@ android:paddingBottom="15dp">
         app:tint="@color/colorLightGrayText"
         android:src="@drawable/ic_rename"
 
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Rename"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorLightGrayText"
         />
 </LinearLayout>
@@ -245,7 +245,7 @@ android:paddingBottom="15dp">
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/button_flat_white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/margin_10"
     android:paddingVertical="8dp"
     android:layout_width="match_parent"
     android:weightSum="1.0"
@@ -255,21 +255,21 @@ android:paddingBottom="15dp">
         app:tint="@color/colorError"
         android:src="@drawable/ic_delete"
 
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/ic_20"
+        android:layout_height="@dimen/ic_20"
         />
 
     <TextView
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/margin_15"
         android:text="Delete"
-        android:textSize="12sp"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/colorError"
         />
 </LinearLayout>
 <LinearLayout
     android:layout_width="wrap_content"
-    android:layout_height="20dp"/>
+    android:layout_height="@dimen/margin_20"/>
 </LinearLayout>

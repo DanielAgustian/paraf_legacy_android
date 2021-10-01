@@ -10,21 +10,60 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.yokesen.parafdigitalyokesen.R;
+import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.ContactSupportActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.DisclaimerActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.FAQActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.PrivacyPolicyActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.TermConditionActivity;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+
+import java.util.Calendar;
 
 public class HelpActivity extends AppCompatActivity implements View.OnClickListener{
-
+    PreferencesRepo preferencesRepo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        preferencesRepo = new PreferencesRepo(this);
         initToolbar();
         initComponent();
     }
+
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){

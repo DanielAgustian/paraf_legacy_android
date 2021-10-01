@@ -3,6 +3,7 @@ package com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,9 @@ import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.GetMyInfoModel;
 import com.yokesen.parafdigitalyokesen.model.MyInformationModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+
+import java.util.Calendar;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,7 +32,7 @@ public class MyInformation extends AppCompatActivity {
 
     EditText etName, etEmail, etPhone, etInitial, etCompany;
     APIInterface apiInterface;
-
+    PreferencesRepo preferencesRepo;
     MyInformationModel model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +44,40 @@ public class MyInformation extends AppCompatActivity {
         initData();
     }
 
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
     //------------------------------Get My Info Data-------------------------------
     private void initData() {
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        PreferencesRepo preferencesRepo = new PreferencesRepo(this);
+        preferencesRepo = new PreferencesRepo(this);
 
         String token = preferencesRepo.getToken();
         Observable<GetMyInfoModel> callHome = apiInterface.getMyInfo(token);

@@ -16,9 +16,9 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
-            android:paddingHorizontal="15dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingTop="@dimen/margin_20"
+            android:paddingBottom="@dimen/margin_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -36,7 +36,7 @@
                         android:textSize="22sp"
                         android:textColor="@color/colorGrayText"
                         android:textStyle="bold"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:text="Profile"/>
 
                 </LinearLayout>
@@ -63,8 +63,8 @@
 
         </LinearLayout>
         <LinearLayout
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="15dp"
+            android:paddingVertical="@dimen/margin_15"
+            android:paddingHorizontal="@dimen/margin_15"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -88,14 +88,14 @@
                             />
                         <LinearLayout
                             android:orientation="vertical"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="@dimen/margin_15"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
                                 android:layout_marginTop="5dp"
                                 android:text="Nanas Kuning"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="@dimen/font_18"
                                 android:textStyle="bold"
                                 android:id="@+id/tvProfileName"
                                 android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/colorLightGrayText"
-                                android:textSize="14sp"
+                                android:textSize="@dimen/font_14"
                                 android:text="nanaskuning @gmail.com"
                                 />
                         </LinearLayout>
@@ -116,24 +116,24 @@
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="15dp"/>
+                        android:layout_height="@dimen/margin_15"/>
                     <RelativeLayout
                         android:background="@drawable/button_flat_white"
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlMyInfo"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="My Information"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -148,18 +148,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlChangePassword"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Change Password"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -174,18 +174,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlMyContact"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="My Contact"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -200,18 +200,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlNotification"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Notification"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -226,18 +226,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlSecurity"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Security &amp; Privacy"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -252,18 +252,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlHelp"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Help"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -278,19 +278,19 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlLogOut"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
                             android:textStyle="bold"
                             android:textColor="@color/colorError"
                             android:text="Log Out"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorError"
                             android:layout_alignParentEnd="true"/>

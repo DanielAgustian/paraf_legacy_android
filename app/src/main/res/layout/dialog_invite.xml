@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
+    android:padding="@dimen/margin_15"
 
     >
     <TextView
@@ -14,11 +14,11 @@
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/font_18"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="Invite Signers"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/margin_10"
         />
 
     <ListView
@@ -39,17 +39,17 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_gravity="center_vertical"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/ic_16"
+            android:layout_height="@dimen/ic_16"
             android:src="@drawable/ic_circle_plus"
             app:tint="@color/colorPrimary"
             />
         <View
-            android:layout_width="15dp"
+            android:layout_width="@dimen/margin_15"
             android:layout_height="1dp"/>
         <TextView
             android:layout_gravity="center_vertical"
-            android:textSize="12sp"
+            android:textSize="@dimen/font_12"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:text="Add Signers"
@@ -59,7 +59,7 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_15"
         android:id="@+id/tvTitleDueData"
         android:layout_below="@+id/llAddSigners"
         android:layout_width="wrap_content"
@@ -83,19 +83,19 @@
             android:backgroundTint="@null"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.45"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="10dp"
-            android:layout_marginRight="10dp"
+            android:paddingVertical="@dimen/margin_10"
+            android:paddingHorizontal="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
             android:layout_width="0dp"
             android:gravity="center_vertical|center_horizontal"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="@dimen/ic_20"
+                android:layout_height="@dimen/ic_20"
                 android:src="@drawable/ic_date"
                 app:tint="@color/colorPrimary"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 />
             <TextView
                 android:gravity="center_vertical"
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Due Date"
-                android:textSize="11sp"
+                android:textSize="@dimen/font_12"
                 />
         </LinearLayout>
 
@@ -118,18 +118,18 @@
             android:backgroundTint="@null"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.45"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="10dp"
+            android:paddingVertical="@dimen/margin_10"
+            android:paddingHorizontal="@dimen/margin_10"
             android:layout_width="0dp"
             android:gravity="center_vertical|center_horizontal"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="@dimen/ic_20"
+                android:layout_height="@dimen/ic_20"
                 android:src="@drawable/ic_time"
                 app:tint="@color/colorPrimary"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 />
             <TextView
                 android:layout_gravity="center_horizontal"
@@ -138,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Time"
-                android:textSize="11sp"
+                android:textSize="@dimen/font_12"
                 />
         </LinearLayout>
     </LinearLayout>

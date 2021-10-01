@@ -35,6 +35,7 @@ import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.SignatureDetailModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.add_sign.ResultSignature;
 
 import java.io.File;
@@ -72,7 +73,7 @@ public class RecreateSignActivity extends AppCompatActivity {
     int id;
     SignatureDetailModel detailModel;
 
-    EditText etName, etEmail, etDocumentName, etDescription, etLink;
+    EditText etName, etEmail, etDocumentName, etDescription, etLink, etSignNumber, etKode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,22 +189,50 @@ public class RecreateSignActivity extends AppCompatActivity {
 
                     body = MultipartBody.Part.createFormData("attachment", "", requestFile);
                 }
+                Observable<GetSignDetailModel> postRecreateSign = null;
+                if(selectedTypes.getId() == 3){
 
+                    if(etKode.getText().toString().length() == 6){
+                        postRecreateSign = apiInterface.putRecreateSignWithCode(
+                                token,
+                                detailModel.getId(),
+                                util.requestBodyString(etName.getText().toString()),
+                                util.requestBodyString(etEmail.getText().toString()),
+                                util.requestBodyString(etDocumentName.getText().toString()),
+                                util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                util.requestBodyString(etDescription.getText().toString()),
+                                util.requestBodyString(etLink.getText().toString()),
+                                body,
+                                util.requestBodyString(etSignNumber.getText().toString()),
+                                util.requestBodyString(etKode.getText().toString())
+                        );
+                        postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
 
-                String token = preferencesRepo.getToken();
-                Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSign(
-                        token,
-                        detailModel.getId(),
-                        util.requestBodyString(etName.getText().toString()),
-                        util.requestBodyString(etEmail.getText().toString()),
-                        util.requestBodyString(etDocumentName.getText().toString()),
-                        util.requestBodyString(String.valueOf(selectedCategory.getId())),
-                        util.requestBodyString(String.valueOf(selectedTypes.getId())),
-                        util.requestBodyString(etDescription.getText().toString()),
-                        util.requestBodyString(etLink.getText().toString()),
-                        body
-                );
-                postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                    }else{
+                        UtilWidget uw = new UtilWidget(this);
+                        uw.makeApprovalDialog("Code shall only have 6 character", "Please change the code.");
+                    }
+
+                }else{
+                    postRecreateSign = apiInterface.putRecreateSign(
+                            token,
+                            detailModel.getId(),
+                            util.requestBodyString(etName.getText().toString()),
+                            util.requestBodyString(etEmail.getText().toString()),
+                            util.requestBodyString(etDocumentName.getText().toString()),
+                            util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                            util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                            util.requestBodyString(etDescription.getText().toString()),
+                            util.requestBodyString(etLink.getText().toString()),
+                            body,
+                            util.requestBodyString(etSignNumber.getText().toString())
+
+                    );
+                    postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                }
+                //String token = preferencesRepo.getToken();
+
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -241,8 +270,8 @@ public class RecreateSignActivity extends AppCompatActivity {
     private void getDataSpinnerTypes(){
 
         Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeyNewSign);
-        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
-        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, R.layout.simple_spinner_item, types);
+        adapterDocType.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerDocType.setAdapter(adapterDocType);
 
         for (int i=0; i< types.size(); i++){
@@ -250,19 +279,30 @@ public class RecreateSignActivity extends AppCompatActivity {
             if(element.getName().equals(detailModel.getType())){
                 spinnerDocType.setSelection(i);
                 recreateType = i;
+
             }
         }
+        LinearLayout llKode = findViewById(R.id.llKode);
         spinnerDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getSelectedItem();
                 Log.d("CategorySelected", selectedTypes.getName());
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                }else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getItemAtPosition(recreateType);
-
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                }else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -286,9 +326,9 @@ public class RecreateSignActivity extends AppCompatActivity {
         Spinner spinnerCategory = findViewById(R.id.spinnerCategoryNewSign);
         ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.simple_spinner_item,
                 category);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterCategory.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerCategory.setAdapter(adapterCategory);
 
         for(int i=0; i< category.size() ; i++){
@@ -296,6 +336,7 @@ public class RecreateSignActivity extends AppCompatActivity {
             if(element.getName().equals(detailModel.getCategory())){
                 spinnerCategory.setSelection(i);
                 recreateCategory = i;
+
             }
         }
 
@@ -355,18 +396,24 @@ public class RecreateSignActivity extends AppCompatActivity {
                 emptyFile();
             }
         });
-
+        etSignNumber = findViewById(R.id.etSignNumber);
         etName = findViewById(R.id.etNameSignYour);
         etEmail = findViewById(R.id.etEmailNewSign);
         etDocumentName = findViewById(R.id.etDocNameNewSign);
         etDescription = findViewById(R.id.etDescNewSign);
         etLink = findViewById(R.id.etLinkNewSign);
+        etKode = findViewById(R.id.etKode);
         if(detailModel !=null){
+            etSignNumber.setText(detailModel.getSignNumber());
             etName.setText(detailModel.getCreatedBy());
             etEmail.setText(detailModel.getEmail());
             etDocumentName.setText(detailModel.getTitle());
             etDescription.setText(detailModel.getDescription());
             etLink.setText(detailModel.getLink());
+            if(detailModel.getKode()!= null){
+                etKode.setText(detailModel.getKode());
+            }
+
         }
     }
 

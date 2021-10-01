@@ -43,6 +43,8 @@ import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,7 +85,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
     InviteSignersDialogAdapter invAdapter;
 
     MyReqDetailModel detailModel;
-    EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage;
+    EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage, etSignNumber, etKode;
 
     String choosenDate = "", choosenTime= "";
     @Override
@@ -95,6 +97,37 @@ public class RecreateCollabActivity extends AppCompatActivity {
         initData();
         initDialog();
         initDialogWaiting();
+    }
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
     }
 
     private int getIntentData() {
@@ -216,22 +249,51 @@ public class RecreateCollabActivity extends AppCompatActivity {
                     body = MultipartBody.Part.createFormData("attachment", "", requestFile);
                 }
 
-                String token = preferencesRepo.getToken();
-                Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSignCollab(
-                        token,
-                        detailModel.getId(),
-                        util.requestBodyString(etName.getText().toString()),
-                        util.requestBodyString(etEmail.getText().toString()),
-                        util.requestBodyString(etDocumentName.getText().toString()),
-                        util.requestBodyString(String.valueOf(selectedCategory.getId())),
-                        util.requestBodyString(String.valueOf(selectedTypes.getId())),
-                        util.requestBodyString(etDescription.getText().toString()),
-                        util.requestBodyString(etLink.getText().toString()),
-                        body,
-                        util.requestBodyString(choosenDate),
-                        util.requestBodyString(choosenTime)
-                );
-                postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+                if(selectedTypes.getId() == 3){
+                    if(etKode.getText().toString().length() == 6){
+                        String token = preferencesRepo.getToken();
+                        Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSignCollabWithCode(
+                                token,
+                                detailModel.getId(),
+                                util.requestBodyString(etName.getText().toString()),
+                                util.requestBodyString(etEmail.getText().toString()),
+                                util.requestBodyString(etDocumentName.getText().toString()),
+                                util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                                util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                                util.requestBodyString(etDescription.getText().toString()),
+                                util.requestBodyString(etLink.getText().toString()),
+                                body,
+                                util.requestBodyString(choosenDate),
+                                util.requestBodyString(choosenTime),
+                                util.requestBodyString(etSignNumber.getText().toString()),
+                                util.requestBodyString(etKode.getText().toString())
+                        );
+                        postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+
+                    }else{
+                        UtilWidget uw =new UtilWidget(this);
+                        uw.makeApprovalDialog("Code shall only have 6 character", "Please change the code.");
+                    }
+                }else{
+                    String token = preferencesRepo.getToken();
+                    Observable<GetSignDetailModel> postRecreateSign = apiInterface.putRecreateSignCollab(
+                            token,
+                            detailModel.getId(),
+                            util.requestBodyString(etName.getText().toString()),
+                            util.requestBodyString(etEmail.getText().toString()),
+                            util.requestBodyString(etDocumentName.getText().toString()),
+                            util.requestBodyString(String.valueOf(selectedCategory.getId())),
+                            util.requestBodyString(String.valueOf(selectedTypes.getId())),
+                            util.requestBodyString(etDescription.getText().toString()),
+                            util.requestBodyString(etLink.getText().toString()),
+                            body,
+                            util.requestBodyString(choosenDate),
+                            util.requestBodyString(choosenTime),
+                            util.requestBodyString(etSignNumber.getText().toString())
+                    );
+                    postRecreateSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessAddSign, this::onFailedAddSign);
+
+                }
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -269,8 +331,8 @@ public class RecreateCollabActivity extends AppCompatActivity {
     private void getDataSpinnerTypes(){
 
         Spinner spinnerDocType = findViewById(R.id.spinnerDocTypeReqSign);
-        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, android.R.layout.simple_spinner_item, types);
-        adapterDocType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TypeCategoryModel> adapterDocType = new ArrayAdapter<TypeCategoryModel>(this, R.layout.simple_spinner_item, types);
+        adapterDocType.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerDocType.setAdapter(adapterDocType);
 
         for (int i=0; i< types.size(); i++){
@@ -280,17 +342,27 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 recreateType = i;
             }
         }
+        LinearLayout llKode = findViewById(R.id.llKode);
         spinnerDocType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getSelectedItem();
                 Log.d("CategorySelected", selectedTypes.getName());
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                }else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 selectedTypes = (TypeCategoryModel) spinnerDocType.getItemAtPosition(recreateType);
-
+                if(selectedTypes.getId() == 3){
+                    llKode.setVisibility(View.VISIBLE);
+                }else{
+                    llKode.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -314,9 +386,9 @@ public class RecreateCollabActivity extends AppCompatActivity {
         Spinner spinnerCategory = findViewById(R.id.spinnerCategoryReqSign);
         ArrayAdapter<TypeCategoryModel> adapterCategory = new ArrayAdapter<TypeCategoryModel>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.simple_spinner_item,
                 category);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterCategory.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinnerCategory.setAdapter(adapterCategory);
 
         for(int i=0; i< category.size() ; i++){
@@ -376,6 +448,11 @@ public class RecreateCollabActivity extends AppCompatActivity {
         llWaitingData = findViewById(R.id.waitingUploadDataReq);
         llWaitingData.setVisibility(View.GONE);
 
+        LinearLayout llAddSigners = findViewById(R.id.llAddSigners);
+        llAddSigners.setVisibility(View.GONE);
+        TextView tvSigners = findViewById(R.id.tvSignersTitle);
+        tvSigners.setVisibility(View.GONE);
+
         ImageView ivEmptyFile = findViewById(R.id.ivEmptyFileReq);
         ivEmptyFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,22 +460,33 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 emptyFile();
             }
         });
-
+        etSignNumber = findViewById(R.id.etSignNumber);
         etName = findViewById(R.id.etNameSignYour);
         etEmail = findViewById(R.id.etEmailNewSign);
         etDocumentName = findViewById(R.id.etDocNameNewSign);
         etDescription = findViewById(R.id.etDescNewSign);
         etLink = findViewById(R.id.etLinkNewSign);
+        etKode = findViewById(R.id.etKode);
         if(detailModel !=null){
             etName.setText(detailModel.getCreatedBy());
             etEmail.setText(detailModel.getEmailReq());
             etDocumentName.setText(detailModel.getTitle());
             etDescription.setText(detailModel.getDescription());
             etLink.setText(detailModel.getLink());
+            etSignNumber.setText(detailModel.getSignNumber());
+            if(detailModel.getCode() != null){
+                etKode.setText(detailModel.getCode());
+            }
         }
         etMessage = findViewById(R.id.etMsgNewSign);
         btnDueDate = findViewById(R.id.btnDueDate);
+        choosenDate = util.changeFormatDate(detailModel.getDueDate());
+        btnDueDate.setText(choosenDate);
+
+
         btnTime = findViewById(R.id.btnTime);
+        choosenTime = detailModel.getTime();
+        btnTime.setText(choosenTime);
 
         btnDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -603,6 +691,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
                         btnDueDate.setText(choosenDate);
                     }
                 }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
 
 

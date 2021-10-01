@@ -11,7 +11,7 @@
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/font_18"
         android:text="Data Confirmation"/>
     <TextView
         android:layout_marginTop="5dp"
@@ -20,13 +20,13 @@
         android:layout_height="wrap_content"
 
         android:layout_gravity="center_horizontal"
-        android:textSize="14sp"
+        android:textSize="@dimen/font_14"
         android:gravity="center_horizontal"
         android:text="Are you sure the data you entered is correct?"
         />
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_10"
 
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"

@@ -31,9 +31,11 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
 import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.model.GetSaveAllSign;
 import com.yokesen.parafdigitalyokesen.model.SaveSignModel;
+import com.yokesen.parafdigitalyokesen.util.DynamicLinkUtil;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.yokesen.parafdigitalyokesen.adapter.SignersAdapter;
@@ -43,6 +45,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.ArrayList;
@@ -81,6 +84,39 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         initToolbar();
         observe();
     }
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+
+        if(isActive == 1 && passcode!= null && passcode.equals("")){
+            long intervetion = 30 * 60 * 1000;
+            long milisNow = Calendar.getInstance().getTimeInMillis();
+            long milisSelisih = milisNow - milisStart;
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        //biometricPrompt();
+    }
+
+
     private void observe() {
         disposableRefresh = SignCollabState.getSubjectDetail().subscribeWith(new DisposableObserver<String>() {
             @Override
@@ -186,16 +222,40 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
 
         TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
 
+        TextView tvSignNumber = findViewById(R.id.tvSignNumber);
+        tvSignNumber.setText(data.getSignNumber());
+
         String status = data.getStatus().toLowerCase();
+        LinearLayout llRejected = findViewById(R.id.llRejected);
+        LinearLayout llApproved = findViewById(R.id.llApproved);
+        tvPerson = findViewById(R.id.tvPersonRespond);
+
+//        if(where == 2){
+//            llSave.setVisibility(View.GONE);
+//            llRejected.setVisibility(View.GONE);
+//        } else if (where == 3){
+//
+//        } else if (where == 4){
+//            //Rejected
+//
+//        }
+
         if(status.contains("wait")){
+            llSave.setVisibility(View.GONE);
+            llRejected.setVisibility(View.GONE);
             tvStatus.setTextColor(getResources().getColor(R.color.colorPending));
         } else if(status.contains("accept")){
+            llRemind.setVisibility(View.GONE);
+            llRejected.setVisibility(View.GONE);
             tvStatus.setTextColor(getResources().getColor(R.color.colorSuccess));
             llRespond.setBackground(getResources().getDrawable(R.color.colorBackgroundGreen));
             tvPersonRespond.setText("Everyone has already signed");
             tvPersonRespond.setTextColor(getResources().getColor(R.color.colorSuccess));
             llSentFinal.setVisibility(View.VISIBLE);
         }else if(status.contains("reject")){
+            llApproved.setVisibility(View.GONE);
+            tvPerson.setText("Sign Rejected");
+            tvPerson.setTextColor(ContextCompat.getColor(this, R.color.colorError));
             tvStatus.setTextColor(getResources().getColor(R.color.colorError));
             tvPersonRespond.setText("Sign Rejected");
             tvRejectedReason.setText(data.getReason());
@@ -280,22 +340,6 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
 
         llSentFinal = findViewById(R.id.llSentDocCollabRes);
         llSentFinal.setOnClickListener(this);
-
-        LinearLayout llRejected = findViewById(R.id.llRejected);
-        LinearLayout llApproved = findViewById(R.id.llApproved);
-        tvPerson = findViewById(R.id.tvPersonRespond);
-        if(where == 2){
-            llSave.setVisibility(View.GONE);
-            llRejected.setVisibility(View.GONE);
-        } else if (where == 3){
-            llRemind.setVisibility(View.GONE);
-            llRejected.setVisibility(View.GONE);
-        } else if (where == 4){
-            //Rejected
-            llApproved.setVisibility(View.GONE);
-            tvPerson.setText("Sign Rejected");
-            tvPerson.setTextColor(ContextCompat.getColor(this, R.color.colorError));
-        }
 
     }
 
@@ -767,7 +811,9 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
 
 
     private void doShare(String type){
-        util.shareLink(this, "paraf.yokesen.com");
+        DynamicLinkUtil dlUtil = new DynamicLinkUtil(this);
+        Variables var = new Variables();
+        util.shareLink(this, dlUtil.dynamicLinkParaf(var.typeSign[2], detailModel.getId()));
     }
 
     private void doRemind() {
@@ -822,6 +868,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
                         tvDate.setText(choosenDate);
                     }
                 }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
 
 

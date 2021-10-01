@@ -12,6 +12,7 @@
         android:theme="@style/Theme.ParafDigitalYokesen">
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+        <activity android:name=".view.ui.profile.child_profile.security.PasscodeView"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.ui.collab.RecreateCollabActivity"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.add_sign.ResultReqSignActivity"/>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.ui.collab.CollabResultActivity"/>
@@ -50,7 +51,16 @@
         <activity android:name="com.yokesen.parafdigitalyokesen.view.add_sign.ResultSignature" />
         <activity android:name="com.yokesen.parafdigitalyokesen.view.add_sign.ReqSignatureActivity" />
         <activity android:name="com.yokesen.parafdigitalyokesen.view.add_sign.SignYourselfActivity" />
-        <activity android:name="com.yokesen.parafdigitalyokesen.view.NavBarActivity" />
+        <activity android:name="com.yokesen.parafdigitalyokesen.view.NavBarActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="teken.yokesen.com"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
         <activity android:name="com.yokesen.parafdigitalyokesen.view.ui.draft.RespondSignature" />
         <activity android:name="com.yokesen.parafdigitalyokesen.view.register_activity" />
         <activity android:name="com.yokesen.parafdigitalyokesen.view.MainActivity" />

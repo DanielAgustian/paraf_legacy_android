@@ -35,13 +35,13 @@
                 android:text="Notification"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                 />
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="15dp"
+            android:paddingVertical="@dimen/margin_15"
+            android:paddingHorizontal="@dimen/margin_15"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,20 +57,20 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="15dp"/>
+                        android:layout_height="@dimen/margin_15"/>
                     <RelativeLayout
                         android:background="@drawable/button_flat_white"
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlFaq"
-                        android:paddingTop="15dp"
+                        android:paddingTop="@dimen/margin_15"
                         android:paddingBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Notification"/>
                         <Switch
@@ -89,10 +89,9 @@
                         android:layout_marginBottom="10dp"
                         android:text="Force closing the app may cause notifications to arrive late or not be delivered."
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="@dimen/font_10"
                         android:textColor="@color/colorLightGrayText"
                         />
-
                     <View
 
                         android:layout_width="match_parent"
@@ -102,13 +101,13 @@
                     <RelativeLayout
 
 
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="New Request Sign"/>
                         <Switch
@@ -124,13 +123,13 @@
                     <RelativeLayout
 
 
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Sign Request Accepted"/>
                         <Switch
@@ -146,13 +145,13 @@
                     <RelativeLayout
 
 
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Sign Request Rejected"/>
                         <Switch

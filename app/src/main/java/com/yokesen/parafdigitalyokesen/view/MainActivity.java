@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -240,11 +241,16 @@ public class MainActivity extends AppCompatActivity {
 
     boolean validation(String email, String password){
         boolean passValidator = false, emailValidator= false;
-        if(email.trim().equals("")){
-            emailValidator = true;
-        }else{
+        if(!email.trim().equals("") && util.patternEmail(email)){
             emailValidator = false;
+        }else{
+            emailValidator = true;
         }
+//        if(email.trim().equals("") ){
+//
+//        }else{
+//            emailValidator = false;
+//        }
         util.changeColorEditText(etEmail, emailValidator, this);
 
         if(password.trim().equals("") || password.trim().length()<6){

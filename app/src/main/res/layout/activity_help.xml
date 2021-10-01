@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="56dp"
     android:background="@color/colorBackground"
      >
     <LinearLayout
@@ -35,13 +34,13 @@
                 android:text="Help"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                 />
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="15dp"
+            android:paddingVertical="@dimen/margin_15"
+            android:paddingHorizontal="@dimen/margin_15"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,24 +56,24 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="15dp"/>
+                        android:layout_height="@dimen/margin_15"/>
                     <RelativeLayout
                         android:background="@drawable/button_flat_white"
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlFaq"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="FAQ"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_password_height"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -89,18 +88,18 @@
                         android:clickable="true"
                         android:background="@drawable/button_flat_white"
                         android:id="@+id/rlContactSupport"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Contact Support"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_password_height"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -115,18 +114,18 @@
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlTerms"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Terms and Condition"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_password_height"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -141,18 +140,18 @@
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlPrivacyPolicy"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Privacy Policy"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_password_height"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>
@@ -167,18 +166,18 @@
                         android:focusable="true"
                         android:clickable="true"
                         android:id="@+id/rlDisclaimer"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Disclaimer"/>
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/ic_password_height"
+                            android:layout_height="@dimen/ic_password_height"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/colorLightGrayText"
                             android:layout_alignParentEnd="true"/>

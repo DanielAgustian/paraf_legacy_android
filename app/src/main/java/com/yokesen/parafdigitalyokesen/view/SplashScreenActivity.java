@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.FirebaseApp;
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.LoginModel;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,6 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        FirebaseApp.initializeApp(this);
         Timer obRunTime = new Timer();
         obRunTime.schedule(new TimerTask() {
             @Override
@@ -68,9 +71,25 @@ public class SplashScreenActivity extends AppCompatActivity {
         if(loginModel!= null){
             PreferencesRepo preferencesRepo = new PreferencesRepo(this);
             preferencesRepo.setToken(loginModel.getToken());
-            gotoNavigationBar();
+            int allowPassCode = preferencesRepo.getAllowPasscode();
+            String passcode = preferencesRepo.getPasscode();
+            if(allowPassCode != 0 && !passcode.equals("")){
+                gotoPasswordView();
+            }else{
+                gotoNavigationBar();
+            }
+
         }
     }
+
+    public void gotoPasswordView(){
+        Intent intent = new Intent(this, PasscodeView.class);
+        finish();
+        intent.putExtra("from", "splash");
+        startActivity(intent);
+    }
+
+
     public void gotoNavigationBar() {
         Intent intent = new Intent(this, NavBarActivity.class);
         finish();

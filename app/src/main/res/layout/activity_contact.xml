@@ -35,13 +35,13 @@
                 android:text="Contact"
                 android:textStyle="bold"
                 android:textColor="@color/colorGrayText"
-                android:textSize="20sp"
+                android:textSize="@dimen/font_20"
                 android:layout_gravity="center"
                  />
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="15dp"
+            android:paddingVertical="@dimen/margin_15"
+            android:paddingHorizontal="@dimen/margin_15"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,17 +57,17 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="15dp"/>
+                        android:layout_height="@dimen/margin_15"/>
                     <RelativeLayout
 
 
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="@dimen/margin_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Google"/>
                         <Switch
@@ -96,7 +96,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/font_14"
 
                             android:text="Phone Contact"/>
                         <Switch
@@ -112,10 +112,10 @@
                     <TextView
 
                         android:layout_width="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:text="Link your contacts and quickly add recipients when sharing signed, or when sending a signature request. Don’t worry, we do not upload or save your contacts anywhere."
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="@dimen/font_10"
                         android:textColor="@color/colorLightGrayText"
                         />
 

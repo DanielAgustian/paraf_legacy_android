@@ -15,11 +15,13 @@
     <string name="code_hint"><font size="14">Input Code From Your Email</font></string>
     <string name="search_hint"><font size="12">Search your signature</font></string>
     <string name="name_add_sign">Name <font color="#DB2D26">*</font></string>
+    <string name="sign_number">Sign Number <font color="#DB2D26">*</font></string>
     <string name="accept_tnc">I Accept Terms and Condition</string>
     <string name="email_add_sign">Email <font color="#DB2D26">*</font></string>
     <string name="docname_add_sign">Document Name <font color="#DB2D26">*</font></string>
     <string name="doccategory_add_sign">Document Category <font color="#DB2D26">*</font></string>
     <string name="doctype_add_sign">Document Type <font color="#DB2D26">*</font></string>
+    <string name="kode_add_sign">Kode <font color="#DB2D26">***</font></string>
     <string name="docFile_add_sign">Document File (Optional) <font color="#DB2D26">**</font></string>
     <string name="rationale_storage">This app needs access to your storage, so it can send files to server.</string>
     <string name="facebook_app_id">378999260523663</string>

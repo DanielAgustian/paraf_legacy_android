@@ -23,6 +23,8 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.Variables;
+import com.yokesen.parafdigitalyokesen.util.DynamicLinkUtil;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.model.SignModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
@@ -454,7 +456,17 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
 
 
     private void doShare(){
-        util.shareLink(getContext(), "paraf.yokesen.com");
+        DynamicLinkUtil dlUtil = new DynamicLinkUtil(getActivity());
+        Variables var = new Variables();
+        String type = "";
+        if(where == 0){
+            type = var.typeSign[0];
+        }else if (where == 1){
+            type = var.typeSign[1];
+        } else{
+            type = var.typeSign[2];
+        }
+        util.shareLink(getActivity(), dlUtil.dynamicLinkParaf(type, sign.getId()));
     }
 
     private void doRemind() {

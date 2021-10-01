@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:paddingTop="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="15dp">
+    android:paddingBottom="@dimen/margin_15">
     <!--    android:background="@drawable/rounded_bg"-->
     <ImageView
         android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:layout_width="35dp"
+        android:layout_width="@dimen/margin_35"
         android:layout_height="3dp"
         android:src="@drawable/bottom_nav_icon"
         />
@@ -20,9 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Who needs to sign?"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="16dp" />
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_15"
+        android:textSize="@dimen/font_16" />
 
     <View
         android:layout_width="match_parent"
@@ -34,26 +34,26 @@
         android:focusable="true"
         android:background="@drawable/button_flat_white"
         android:orientation="horizontal"
-        android:paddingVertical="18dp"
-        android:paddingHorizontal="30dp"
+        android:paddingVertical="@dimen/margin_15"
+        android:paddingHorizontal="@dimen/margin_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
             app:tint="@color/colorPrimary"
 
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/ic_25"
+            android:layout_height="@dimen/ic_25"
             android:src="@drawable/ic_sign_yourself"/>
         <LinearLayout
             android:orientation="vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/margin_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign Yourself"
-                android:textSize="14dp"
+                android:textSize="@dimen/font_14"
                 android:textColor="@color/colorGrayText"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Only You"
-                android:textSize="12dp"
+                android:textSize="@dimen/font_12"
                 android:textColor="@color/colorLightGrayText"
                 />
         </LinearLayout>
@@ -77,25 +77,25 @@
         android:focusable="true"
         android:background="@drawable/button_flat_white"
         android:orientation="horizontal"
-        android:paddingVertical="18dp"
-        android:paddingHorizontal="30dp"
+        android:paddingVertical="@dimen/margin_15"
+        android:paddingHorizontal="@dimen/margin_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
             app:tint="@color/colorPrimary"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/ic_25"
+            android:layout_height="@dimen/ic_25"
             android:src="@drawable/ic_req_sign"/>
         <LinearLayout
             android:orientation="vertical"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/margin_15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Request Signature"
-                android:textSize="14dp"
+                android:textSize="@dimen/font_14"
                 android:textColor="@color/colorGrayText"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="People in a different location than you, including yourself"
-                android:textSize="12dp"
+                android:textSize="@dimen/font_12"
                 android:textColor="@color/colorLightGrayText"
                 />
         </LinearLayout>
@@ -115,6 +115,6 @@
         android:background="@color/colorDividerLightBlue"/>
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="20dp"/>
+        android:layout_height="@dimen/margin_20"/>
 
 </LinearLayout>

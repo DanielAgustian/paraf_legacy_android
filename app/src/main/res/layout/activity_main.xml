@@ -13,30 +13,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="@dimen/margin_15"
 
         tools:context=".view.MainActivity"
         android:orientation="vertical">
 
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@color/colorPrimary"-->
-<!--            android:minHeight="?attr/actionBarSize"-->
-<!--            android:theme="@style/ToolBarLogin"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>-->
 
             <ImageView
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_30"
                 android:layout_gravity="center"
-                android:layout_width="70dp"
+                android:layout_width="@dimen/logo_width"
                 app:tint="@color/colorPrimary"
                 android:src="@drawable/ic_app_teken"
-                android:layout_height="70dp"/>
+                android:layout_height="@dimen/logo_width"/>
 
         <TextView
             android:id="@+id/tvWelcome"
@@ -44,10 +33,10 @@
             android:layout_height="wrap_content"
 
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="@dimen/margin_30"
             android:text="Welcome Back!"
             android:textColor="@color/colorGrayText"
-            android:textSize="32sp"
+            android:textSize="@dimen/font_32"
             android:textStyle="bold" />
 
         <TextView
@@ -55,20 +44,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/margin_15"
                 android:text="Stay signed in with your account to make creating sign easier"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:textColor="@color/colorGrayText"
-                android:textSize="12sp"
+                android:textSize="@dimen/font_12"
                 android:textStyle="bold"
                 />
             <TextView
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_30"
                 android:text="Email"
                 android:layout_marginLeft="3dp"
                 android:textColor="@color/colorGrayText"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_14"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -83,11 +72,11 @@
                 android:inputType="textPersonName"
                 android:theme="@style/editTextLogin"/>
             <TextView
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/margin_20"
                 android:text="Password"
                 android:layout_marginLeft="3dp"
                 android:textColor="@color/colorGrayText"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_14"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -108,8 +97,8 @@
 
                     <ImageView
                         android:id="@+id/show_pass_btn"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/Ic_password_width"
+                        android:layout_height="@dimen/ic_password_height"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
@@ -127,7 +116,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Keep Me Signed In"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
 
                         android:textColor="@color/colorGrayText"
                         />
@@ -141,13 +130,13 @@
                         android:text="Forgot Password?"
 
                         android:textColor="@color/colorPrimary"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_12"
                         android:textStyle="bold"
                         />
             </RelativeLayout>
 
         <Button
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/margin_15"
             android:id="@+id/btnLogin"
             style="@style/buttonLogin"
             android:layout_width="match_parent"
@@ -155,11 +144,11 @@
             android:text="Sign In" />
 
             <TextView
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginTop="@dimen/margin_25"
+                android:layout_marginBottom="@dimen/margin_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/font_12"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="Or continue with"
@@ -176,6 +165,7 @@
                     android:backgroundTint="@color/colorBackgroundBlue"
                     android:letterSpacing="0"
                     android:text="Google"
+                    android:textSize="@dimen/font_16"
                     android:paddingVertical="10dp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/ic_google_icon"
@@ -202,7 +192,7 @@
                 <Button
                     android:id="@+id/btnFacebook"
                     android:paddingVertical="10dp"
-
+                    android:textSize="@dimen/font_14"
                     android:layout_width="match_parent"
                     android:backgroundTint="#FF0063F7"
                     android:text="Facebook"
@@ -218,18 +208,20 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_10"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
                 <TextView
+                    android:textSize="@dimen/font_14"
                     android:layout_marginRight="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You don't have an account?"
                     />
                 <TextView
+                    android:textSize="@dimen/font_14"
                     android:id="@+id/tvSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
