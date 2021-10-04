@@ -84,7 +84,6 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         token = preferencesRepo.getToken();
         initComponent(v);
 
-
         return v;
     }
 
@@ -94,9 +93,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         tvTitle.setText(sign.getTitle());
 
         TextView tvDetails = v.findViewById(R.id.tvDetailsInfo);
-        tvDetails.setText("Created at "+sign.getTime());
-
-
+        tvDetails.setText(sign.getTime());
 
         LinearLayout llDetails = v.findViewById(R.id.llDetailsDraft);
         LinearLayout llSave = v.findViewById(R.id.llSaveDraft);
@@ -105,6 +102,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         LinearLayout llRename = v.findViewById(R.id.llRenameDraft);
         LinearLayout llDelete = v.findViewById(R.id.llDeleteDraft);
         LinearLayout llRemind = v.findViewById(R.id.llRemindDraft);
+
         llDetails.setOnClickListener(this);
         llSave.setOnClickListener(this);
         llShare.setOnClickListener(this);

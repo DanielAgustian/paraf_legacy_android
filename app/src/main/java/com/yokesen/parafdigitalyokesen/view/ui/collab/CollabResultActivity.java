@@ -218,7 +218,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         LinearLayout llRespond = findViewById(R.id.llRespond);
 
         TextView tvPersonRespond = findViewById(R.id.tvPersonRespond);
-        tvPersonRespond.setText(data.getTotalSigners()+ "person left to sign");
+        tvPersonRespond.setText(data.getTotalSigners()+ " person left to sign");
 
         TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);
 
