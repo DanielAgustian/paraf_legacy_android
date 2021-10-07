@@ -134,9 +134,9 @@ public class MyReqDetailModel implements Serializable {
     }
 
     public String getQr_code() {
-        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
-        String text = new String(data, StandardCharsets.UTF_8);
-        return text;
+//        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
+//        String text = new String(data, StandardCharsets.UTF_8);
+        return qr_code;
     }
 
     public void setQr_code(String qr_code) {

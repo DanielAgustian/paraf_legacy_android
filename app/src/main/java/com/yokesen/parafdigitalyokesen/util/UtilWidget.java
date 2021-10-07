@@ -2,19 +2,32 @@ package com.yokesen.parafdigitalyokesen.util;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yokesen.parafdigitalyokesen.R;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.concurrent.Executor;
 
 public class UtilWidget {
@@ -66,6 +79,9 @@ public class UtilWidget {
                     Toast.makeText(context,
                             "You dont have any fingerprint recorded.", Toast.LENGTH_SHORT)
                             .show();
+                    Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                    context.startActivity(intent);
+
                 }
                 Toast.makeText(context,
                         "Authentication error: " + errString, Toast.LENGTH_SHORT)
@@ -98,5 +114,41 @@ public class UtilWidget {
         biometricPrompt.authenticate(promptInfo);
 
     }
+    public static class DownLoadImageTask extends AsyncTask<String,Void, Bitmap> {
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        /*
+            doInBackground(Params... params)
+                Override this method to perform a computation on a background thread.
+         */
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                /*
+                    decodeStream(InputStream is)
+                        Decode an input stream into a bitmap.
+                 */
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){ // Catch the download exception
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        /*
+            onPostExecute(Result result)
+                Runs on the UI thread after doInBackground(Params...).
+         */
+        protected void onPostExecute(Bitmap result){
+            imageView.setImageBitmap(result);
+        }
+    }
+
 
 }

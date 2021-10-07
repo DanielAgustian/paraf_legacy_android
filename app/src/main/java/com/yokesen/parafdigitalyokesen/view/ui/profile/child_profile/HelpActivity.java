@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.ContactSupportActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.DisclaimerActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.child_help.FAQActivity;
@@ -49,18 +50,26 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
 

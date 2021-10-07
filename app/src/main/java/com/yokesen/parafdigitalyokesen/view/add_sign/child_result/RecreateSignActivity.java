@@ -30,6 +30,7 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
@@ -37,10 +38,13 @@ import com.yokesen.parafdigitalyokesen.model.SignatureDetailModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.add_sign.ResultSignature;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -84,6 +88,46 @@ public class RecreateSignActivity extends AppCompatActivity {
         initNetwork();
 
     }
+
+    long milisStart = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        milisStart = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String passcode = preferencesRepo.getPasscode();
+        int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
+
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                Intent intent = new Intent(this, PasscodeView.class);
+                startActivity(intent);
+            }
+        }
+
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
+    }
+
 
     private void getIntentData() {
         Intent intent = getIntent();
@@ -250,7 +294,7 @@ public class RecreateSignActivity extends AppCompatActivity {
 
     private void onSuccessAddSign(GetSignDetailModel model) {
         waitingDialog.dismiss();
-
+        refreshMySign();
         gotoResultPage(detailModel.getId());
     }
 
@@ -573,5 +617,8 @@ public class RecreateSignActivity extends AppCompatActivity {
         intent.putExtra("where", "mysign");
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+    private void refreshMySign(){
+        SignCollabState.getSubject().onNext(refresh.MY_SIGN);
     }
 }

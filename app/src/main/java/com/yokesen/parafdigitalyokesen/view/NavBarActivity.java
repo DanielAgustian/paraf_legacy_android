@@ -1,6 +1,8 @@
 package com.yokesen.parafdigitalyokesen.view;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -35,6 +38,7 @@ import com.yokesen.parafdigitalyokesen.model.ProfileModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.add_sign.ResultSignature;
+import com.yokesen.parafdigitalyokesen.view.ui.QrScanResultActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.bottom_sheet_nav.BottomSheetNav;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -139,18 +143,26 @@ public class NavBarActivity  extends AppCompatActivity {
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
     private void biometricPrompt() {
@@ -173,23 +185,30 @@ public class NavBarActivity  extends AppCompatActivity {
                             deepLink = pendingDynamicLinkData.getLink();
                             myLink = deepLink.toString();
                             String [] data =  myLink.split("/");
-                            int id = Integer.parseInt(data[6]);
-                            if(data[4].equals(var.typeSign[0])){
+                            if(data[3].equals("c")){
+                                Intent intent= new Intent(NavBarActivity.this, QrScanResultActivity.class);
+                                intent.putExtra("qrCode", data[4]);
+                                startActivity(intent);
+                            }else{
+                                int id = Integer.parseInt(data[6]);
+                                if(data[4].equals(var.typeSign[0])){
 
-                                Intent intent= new Intent(NavBarActivity.this, ResultSignature.class);
-                                intent.putExtra("where", "mysign");
-                                intent.putExtra("id", id);
-                                startActivity(intent);
-                            } else if (data[4].equals(var.typeSign[1])){
+                                    Intent intent= new Intent(NavBarActivity.this, ResultSignature.class);
+                                    intent.putExtra("where", "mysign");
+                                    intent.putExtra("id", id);
+                                    startActivity(intent);
+                                } else if (data[4].equals(var.typeSign[1])){
 
-                                Intent intent= new Intent(NavBarActivity.this, ResultAfterRespond.class);
-                                intent.putExtra("id", id);
-                                startActivity(intent);
-                            } else if (data[4].equals(var.typeSign[2])){
-                                Intent intent = new Intent(NavBarActivity.this, CollabResultActivity.class);
-                                intent.putExtra("id", id);
-                                startActivity(intent);
+                                    Intent intent= new Intent(NavBarActivity.this, ResultAfterRespond.class);
+                                    intent.putExtra("id", id);
+                                    startActivity(intent);
+                                } else if (data[4].equals(var.typeSign[2])){
+                                    Intent intent = new Intent(NavBarActivity.this, CollabResultActivity.class);
+                                    intent.putExtra("id", id);
+                                    startActivity(intent);
+                                }
                             }
+
                         }
 
                         // Handle the deep link. For example, open the linked
@@ -207,4 +226,6 @@ public class NavBarActivity  extends AppCompatActivity {
                     }
                 });
     }
+
+
 }

@@ -1,19 +1,29 @@
 package com.yokesen.parafdigitalyokesen.view.ui.profile;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -24,10 +34,14 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
-import com.yokesen.parafdigitalyokesen.util.Util;
-import com.yokesen.parafdigitalyokesen.model.GetProfileModel;
+import com.yokesen.parafdigitalyokesen.model.GetMyInfoModel;
+import com.yokesen.parafdigitalyokesen.model.MyInformationModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.util.Util;
+import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.MainActivity;
+import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.qr_scanner.QrScannerActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.ChangePasswordActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.HelpActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.MyContact;
@@ -35,22 +49,32 @@ import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.MyInformati
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.NotificationActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.SecurityPrivacyActivity;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
-
+    int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
     private ProfileViewModel mViewModel;
     TextView tvName, tvEmail;
+    ImageView circleAvatar;
+    Dialog waitingDialog;
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     GoogleSignInClient googleSignInClient;
+    UtilWidget uw = new UtilWidget(getActivity());
+    Util util = new Util();
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -59,8 +83,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(getActivity());
         initComponent(root);
+        initDialogWaiting();
         initData();
         initGoogleSignOut();
+
+
         return root;
     }
 
@@ -82,7 +109,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         String token = preferencesRepo.getToken();
 
-        Observable<GetProfileModel> callHome = apiInterface.getProfile(token);
+        Observable<GetMyInfoModel> callHome = apiInterface.getMyInfo(token);
         try {
             callHome.subscribeOn(Schedulers.io()).
                     observeOn(AndroidSchedulers.mainThread()).
@@ -98,16 +125,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 Toast.LENGTH_LONG).show();
     }
 
-    private void onSuccess(GetProfileModel model) {
+    private void onSuccess(GetMyInfoModel model) {
         if(model != null){
-            tvName.setText(model.getHome().getName());
-            tvEmail.setText(model.getHome().getEmail());
+            MyInformationModel myInfo = model.getHome();
+            tvName.setText(myInfo.getName());
+            tvEmail.setText(myInfo.getEmail());
+            if (myInfo.getPhoto() != null){
+                new UtilWidget.DownLoadImageTask(circleAvatar).execute(myInfo.getPhoto());
+            }
         }
     }
 
     public void initComponent(View root){
         tvName = root.findViewById(R.id.tvProfileName);
         tvEmail = root.findViewById(R.id.tvProfileEmail);
+        circleAvatar = root.findViewById(R.id.circleAvatarProfile);
+
         RelativeLayout rlMyInfo = root.findViewById(R.id.rlMyInfo);
         rlMyInfo.setOnClickListener(this);
 
@@ -128,11 +161,42 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         RelativeLayout rlLogOut = root.findViewById(R.id.rlLogOut);
         rlLogOut.setOnClickListener(this);
+
+        RelativeLayout rlScanQR = root.findViewById(R.id.rlScanQr);
+        rlScanQR.setOnClickListener(this);
+
+        LinearLayout llEditButton = root.findViewById(R.id.editPPLL);
+        llEditButton.setOnClickListener(this);
+
+        TextView tvVerify =  root.findViewById(R.id.tvVerifyLink);
+        String content = "Please verify your email address, verify email";
+
+        ClickableSpan spannable = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                clickVerify();
+            }
+        };
+        int startIndex = content.indexOf("verify email");
+        int lastIndex = startIndex + "verify email".length();
+        SpannableString spannableString = new SpannableString(content);
+        spannableString.setSpan(spannable, startIndex, lastIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        tvVerify.setText(spannableString);
+        tvVerify.setHighlightColor(getResources().getColor(R.color.colorBackgroundTab));
+        tvVerify.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void clickVerify() {
+        util.toastMisc(getContext(), "clicked");
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.rlScanQr:
+                gotoProfileChild(QrScannerActivity.class);
+                break;
             case R.id.rlMyInfo:
                 gotoProfileChild(MyInformation.class);
                 break;
@@ -154,11 +218,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.rlLogOut:
                 logOut();
                 break;
+            case R.id.editPPLL:
+                editProfilePicture();
+                break;
             default:
                 Log.d("ProfileFragment", "Error Data");
                 break;
         }
     }
+
+
 
     private void logOut() {
         String token = preferencesRepo.getToken();
@@ -198,5 +267,75 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent(getActivity(), childProfile);
         startActivity(intent);
     }
+    private void editProfilePicture() {
+        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
+        chooseFile.setType("image/*");
+        chooseFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+
+        startActivityForResult(chooseFile, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data !=null){
+            if(requestCode == EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE){
+
+                waitingDialog.show();
+               Uri uri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                    circleAvatar.setImageBitmap(bitmap);
+                    UtilFile uf = new UtilFile(getContext());
+                    File file = uf.convertURiToFile(uri);
+                    sentFile(file, uri);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Util util = new Util();
+                    util.toastMisc(getContext(), "Error in Get File");
+                    waitingDialog.dismiss();
+                }
+            }
+        }
+    }
+
+    private void sentFile(File file, Uri uri){
+        RequestBody requestFile =
+                RequestBody.create(
+                        MediaType.parse(getContext().getContentResolver().getType(uri)),
+                        file
+                );
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+        String token = preferencesRepo.getToken();
+        Observable<SimpleResponse> postPhoto = apiInterface.editPhoto(
+                token,
+                body
+        );
+        postPhoto.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessPhoto, this::onFailedAddSign);
+
+    }
+
+    private void onFailedAddSign(Throwable throwable) {
+        Util util = new Util();
+        util.toastError(getContext(), "API EDIT PHOTO", throwable);
+        waitingDialog.dismiss();
+    }
+
+    private void onSuccessPhoto(SimpleResponse response) {
+        if(response != null){
+            initData();
+            waitingDialog.dismiss();
+        }
+    }
+
+    public void initDialogWaiting(){
+        waitingDialog = new Dialog(getContext());
+        waitingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        waitingDialog.setContentView(R.layout.dialog_waiting);
+        waitingDialog.setCancelable(false);
+    }
 }

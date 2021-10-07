@@ -23,6 +23,7 @@ import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.SearchListAdapter;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
 import com.yokesen.parafdigitalyokesen.model.SignModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.ArrayList;
@@ -45,7 +46,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     Util util = new Util();
+    LinearLayout llLoading;
     SearchModel modelSearch = new SearchModel();
+    RecyclerView rvSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,17 +57,20 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
         token = preferencesRepo.getToken();
+        initLoadingComp();
         loadValue();
         loadData(-1);
         initSuggestion();
         initComponent();
     }
+
     long milisStart = 0;
     @Override
     protected void onPause() {
         super.onPause();
         milisStart = Calendar.getInstance().getTimeInMillis();
     }
+
 
     @Override
     protected void onRestart() {
@@ -76,19 +82,36 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
+
+
+
+    private void initLoadingComp() {
+        llLoading = findViewById(R.id.llLoading);
+        rvSearch = findViewById(R.id.rvSearchSuggest);
+    }
+
+
     private void loadValue() {
         Arrays.fill(suggestionBol, false);
         textViewSuggestion.add(findViewById(R.id.flexLL1));
@@ -191,6 +214,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     };
 
     private void loadData(int type) {
+        beginLoading();
         if(type == -1){
             Observable<GetSignatureModel> GetSearchData = apiInterface.GetSearchData(token);
             GetSearchData.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
@@ -290,10 +314,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
     
     private void setRecyclerView(List<SignModel> sign, int type){
-        RecyclerView rvSearch = findViewById(R.id.rvSearchSuggest);
+
         SearchListAdapter adapter =  new SearchListAdapter(sign,  getSupportFragmentManager(), type);
         rvSearch.setAdapter(adapter);
         rvSearch.setLayoutManager(new LinearLayoutManager(this));
+        endLoading();
     }
     //------------------------ LOGIC FOR SUGGESTION BUTTON----------------------------------
     private void clickButton(int index){
@@ -316,6 +341,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    void beginLoading(){
+        llLoading.setVisibility(View.VISIBLE);
+        rvSearch.setVisibility(View.GONE);
+    }
 
-
+    void endLoading(){
+        llLoading.setVisibility(View.GONE);
+        rvSearch.setVisibility(View.VISIBLE);
+    }
 }

@@ -19,6 +19,9 @@ public class SignatureDetailModel implements Serializable {
     @SerializedName("email")
     private String email;
 
+    @SerializedName("document_name")
+    private String documentName;
+
     @SerializedName("name")
     private String title;
 
@@ -54,6 +57,16 @@ public class SignatureDetailModel implements Serializable {
 
     @SerializedName("code")
     private String kode;
+
+    @SerializedName("file")
+    private String file;
+
+    @SerializedName("date_created")
+    private String dateCreated;
+
+    @SerializedName("time")
+    private String timeHour;
+
     public SignatureDetailModel(String title, String time, int id) {
         this.title = title;
         this.time = time;
@@ -61,9 +74,9 @@ public class SignatureDetailModel implements Serializable {
     }
 
     public String getQr_code() {
-        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
-        String text = new String(data, StandardCharsets.UTF_8);
-        return text;
+//        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
+//        String text = new String(data, StandardCharsets.UTF_8);
+        return qr_code;
     }
 
     public String getCreatedBy() {
@@ -159,6 +172,22 @@ public class SignatureDetailModel implements Serializable {
 
     public String getKode() {
         return kode;
+    }
+
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public String getTimeHour() {
+        return timeHour;
     }
 
     public static List<SignModel> generateList(){

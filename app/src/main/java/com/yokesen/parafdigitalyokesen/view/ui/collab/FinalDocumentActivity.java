@@ -29,6 +29,7 @@ import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
 import com.yokesen.parafdigitalyokesen.model.InviteSignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.io.File;
@@ -92,18 +93,26 @@ public class FinalDocumentActivity extends AppCompatActivity implements View.OnC
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
     private void initNetwork() {

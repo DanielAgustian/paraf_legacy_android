@@ -37,6 +37,8 @@
     <dimen name="keypad_height">60dp</dimen>
     <dimen name= "ic_16">15dp</dimen>
     <dimen name="ic_60">52dp</dimen>
+    <dimen name="ic_65">58dp</dimen>
+
     <dimen name="empty_pic_height">190dp</dimen>
     <dimen name="empty_pic_width">160dp</dimen>
 

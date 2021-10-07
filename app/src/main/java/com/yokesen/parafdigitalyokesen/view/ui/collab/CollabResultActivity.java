@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
@@ -70,10 +72,11 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     MyReqDetailModel detailModel;
-    PictureDrawable pd;
+    Bitmap pd;
     Util util = new Util();
     String choosenDate = "";
     String choosenTime = "";
+    String statusCollab = "";
     DisposableObserver disposableRefresh;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,18 +105,26 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
 
@@ -183,7 +194,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         pd = util.makeQRCOde(data.getQr_code());
 
         ImageView iv = findViewById(R.id.ivQRScan);
-        iv.setImageDrawable(pd);
+        iv.setImageBitmap(pd);
 
         TextView tvCreatedBy = findViewById(R.id.tvCreatedBy);
         tvCreatedBy.setText(data.getCreatedBy());
@@ -226,6 +237,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
         tvSignNumber.setText(data.getSignNumber());
 
         String status = data.getStatus().toLowerCase();
+        statusCollab = status;
         LinearLayout llRejected = findViewById(R.id.llRejected);
         LinearLayout llApproved = findViewById(R.id.llApproved);
         tvPerson = findViewById(R.id.tvPersonRespond);
@@ -734,6 +746,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     private void onSuccessRename(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             dismissDialog(dialogRename);
+            refreshCollab();
             initData();
         }
     }
@@ -746,6 +759,7 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     private void onSuccessDelete(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             dismissDialog(deleteDialog);
+            refreshCollab();
             initData();
         }
     }
@@ -781,24 +795,24 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     private void savingSign(List<SaveSignModel> saveModel) {
         UtilFile utilFile = new UtilFile(this);
         for (int i=0; i<saveModel.size(); i++){
-            PictureDrawable pdList = util.makeQRCOde(saveModel.get(i).getQr_code());
+            Bitmap pdList = util.makeQRCOde(saveModel.get(i).getQr_code());
             ImageView iv = findViewById(R.id.emptyDrawable);
-            iv.setImageDrawable(pdList);
+            iv.setImageBitmap(pdList);
             if(type.equals("") ){
             }else{
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                    utilFile.downloadFileAPI29(util.makeBitmap(pdList), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                    utilFile.downloadFileAPI29(pdList, type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
                 }else{
-                    utilFile.downloadFile(util.makeBitmap(pdList), type, typeShare, detailModel.getTitle()+util.milisNow());
+                    utilFile.downloadFile(pdList, type, typeShare, detailModel.getTitle()+util.milisNow());
                 }
             }
         }
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                utilFile.downloadFileAPI29(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                utilFile.downloadFileAPI29(pd, type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }else{
-                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                utilFile.downloadFile(pd, type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }
         }
 
@@ -833,11 +847,13 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
     void doInviteSigners(ArrayList<String> emails, String date, String time){
         Observable<SimpleResponse> putInviteSign = apiInterface.putInviteSign(token, detailModel.getId(), emails, date, time );
         putInviteSign.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessInvite, this::onFailedInvite);
+
     }
 
     private void onSuccessInvite(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
-            back();
+            refreshCollab();
+            initData();
         }
     }
 
@@ -911,6 +927,17 @@ public class CollabResultActivity extends AppCompatActivity implements View.OnCl
             list.add(invModel);
         }
         return list;
+    }
+
+
+    private void refreshCollab(){
+        if(statusCollab.contains("wait")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_WAIT);
+        } else if (statusCollab.contains("accept")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_ACC);
+        } else if (statusCollab.contains("rej")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_REJ);
+        }
     }
 
 

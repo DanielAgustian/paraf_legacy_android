@@ -21,6 +21,7 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.adapter.SignersMyRequestAdapter;
 import com.yokesen.parafdigitalyokesen.model.GetDownloadModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.SignersAdapter;
@@ -29,6 +30,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.Calendar;
@@ -77,18 +79,26 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
 
@@ -117,7 +127,7 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
         RecyclerView rv = findViewById(R.id.rvRespondResultDraft);
         rv.setNestedScrollingEnabled(false);
 
-        SignersAdapter adapter =  new SignersAdapter(signers, 2, getSupportFragmentManager(), id);
+        SignersMyRequestAdapter adapter =  new SignersMyRequestAdapter(signers,  getSupportFragmentManager(), id);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -158,7 +168,7 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
                 layoutAccepted.setVisibility(View.VISIBLE);
                 layoutRejected.setVisibility(View.GONE);
                 ImageView ivQRScan = findViewById(R.id.ivQRScanResultRespond);
-                ivQRScan.setImageDrawable(util.makeQRCOde(model.getQr_code()));
+                ivQRScan.setImageBitmap(util.makeQRCOde(model.getQr_code()));
             }
         } else if (model.getStatus().toLowerCase().equals("rejected")){
             TextView tvRejectedReason = findViewById(R.id.tvRejectedReason);

@@ -15,8 +15,11 @@ import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.Calendar;
 
@@ -39,6 +42,12 @@ public class DeclineReason extends AppCompatActivity {
         initComponent();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        back();
+    }
+
     long milisStart = 0;
     @Override
     protected void onPause() {
@@ -56,18 +65,26 @@ public class DeclineReason extends AppCompatActivity {
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
 
@@ -97,7 +114,11 @@ public class DeclineReason extends AppCompatActivity {
 
     }
     public void back(){
-        this.finish();
+
+        Intent intent= new Intent(this, RespondSignature.class);
+        intent.putExtra("id", id);
+        finish();
+        startActivity(intent);
     }
     public void getToResult(){
 
@@ -124,14 +145,18 @@ public class DeclineReason extends AppCompatActivity {
 
     private void onSuccessRejected(SimpleResponse simpleResponse) {
         if (simpleResponse!=null){
+            refreshMyReq();
             Intent intent = new Intent(this, ResultAfterRespond.class);
             intent.putExtra("Result", 0);
             intent.putExtra("id", id);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
             startActivity(intent);
         }
     }
-
+    private void refreshMyReq(){
+        SignCollabState.getSubject().onNext(refresh.MY_REQ);
+    }
 
 
 

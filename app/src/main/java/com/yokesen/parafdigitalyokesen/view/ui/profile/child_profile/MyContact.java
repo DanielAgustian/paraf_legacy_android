@@ -26,6 +26,7 @@ import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.MyContactListAdapter;
 import com.yokesen.parafdigitalyokesen.model.ContactModel;
 import com.yokesen.parafdigitalyokesen.model.GetConnectModel;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.ArrayList;
@@ -43,14 +44,22 @@ public class MyContact extends AppCompatActivity {
     PreferencesRepo preferencesRepo;
     Util util = new Util();
     List<ContactModel> contactList = new ArrayList<>();
+    LinearLayout llWaiting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_contact);
+        initComponentLoading();
         initData();
         initToolbar();
         initSpinner();
         initComponent();
+    }
+
+    private void initComponentLoading() {
+        llWaiting = findViewById(R.id.llWaiting);
+        rvContact = findViewById(R.id.rvMyContact);
     }
 
 
@@ -71,18 +80,26 @@ public class MyContact extends AppCompatActivity {
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
     private void initComponent() {
@@ -106,12 +123,12 @@ public class MyContact extends AppCompatActivity {
     }
     private void initRecyclerView(List<ContactModel> contact){
         rvContact= findViewById(R.id.rvMyContact);
-
         MyContactListAdapter contactListAdapter = new MyContactListAdapter(contact);
 
         rvContact.setLayoutManager(new LinearLayoutManager(this));
         //rvToday.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvContact.setAdapter(contactListAdapter);
+        endLoading();
     }
     public void initSpinner(){
         String[] spinnerList = new String[]{
@@ -142,6 +159,7 @@ public class MyContact extends AppCompatActivity {
     }
 
     private void initData() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
         String token = preferencesRepo.getToken();
@@ -149,6 +167,7 @@ public class MyContact extends AppCompatActivity {
         callHome.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
     private void initDataSort(String sort) {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         preferencesRepo = new PreferencesRepo(this);
         String token = preferencesRepo.getToken();
@@ -156,6 +175,7 @@ public class MyContact extends AppCompatActivity {
         callHome.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
     private void onFailed(Throwable throwable) {
+        endLoading();
         util.toastError(this, "API GET CONTACT", throwable);
     }
 
@@ -173,7 +193,7 @@ public class MyContact extends AppCompatActivity {
 
     private void emptyList() {
 
-        rvContact = findViewById(R.id.rvMyContact);
+
         LinearLayout llEmptyList = findViewById(R.id.llEmptyContact);
         rvContact.setVisibility(View.GONE);
         llEmptyList.setVisibility(View.VISIBLE);
@@ -217,5 +237,14 @@ public class MyContact extends AppCompatActivity {
 
     public void back(){
         this.finish();
+    }
+
+    private void beginLoading(){
+        llWaiting.setVisibility(View.VISIBLE);
+        rvContact.setVisibility(View.GONE);
+    }
+    private void endLoading(){
+        llWaiting.setVisibility(View.GONE);
+        rvContact.setVisibility(View.VISIBLE);
     }
 }

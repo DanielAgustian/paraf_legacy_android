@@ -87,7 +87,7 @@ public class DraftListAdapter extends RecyclerView.Adapter<DraftListAdapter.View
 
         //Log.d("QRCODE", sign.getQr_code());
         tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary));
-        ivList.setImageDrawable(util.makeQRCOde(sign.getQr_code()));
+        ivList.setImageBitmap(util.makeQRCOde(sign.getQr_code()));
 
         if(type == 0 ){
             tvStatus.setVisibility(View.GONE);

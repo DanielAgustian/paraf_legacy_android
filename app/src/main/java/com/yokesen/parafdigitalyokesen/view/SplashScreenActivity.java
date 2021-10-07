@@ -11,6 +11,8 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.model.LoginModel;
+import com.yokesen.parafdigitalyokesen.util.Util;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.util.Timer;
@@ -73,6 +75,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             preferencesRepo.setToken(loginModel.getToken());
             int allowPassCode = preferencesRepo.getAllowPasscode();
             String passcode = preferencesRepo.getPasscode();
+
+            int allowBiometric = preferencesRepo.getBiometric();
+            if(allowBiometric != 0){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+
             if(allowPassCode != 0 && !passcode.equals("")){
                 gotoPasswordView();
             }else{

@@ -19,11 +19,15 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.adapter.SignersAdapter;
+import com.yokesen.parafdigitalyokesen.adapter.SignersMyRequestAdapter;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.model.GetMyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.Calendar;
 import java.util.List;
@@ -71,18 +75,26 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
     void InitData(){
         id = getIntent().getIntExtra("id", -1) ;
@@ -143,7 +155,7 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
     public void initRecyclerView(List<SignersModel> signers){
         RecyclerView rv = findViewById(R.id.rvRespondDraft);
         rv.setNestedScrollingEnabled(false);
-        SignersAdapter adapter =  new SignersAdapter(signers, 1, getSupportFragmentManager(), detailModel.getId());
+        SignersMyRequestAdapter adapter =  new SignersMyRequestAdapter(signers,  getSupportFragmentManager(), detailModel.getId());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -194,11 +206,14 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
 
     private void onSuccessAccept(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
+            refreshMyReq();
+            finish();
             Intent intent = new Intent(this, ResultAfterRespond.class);
             intent.putExtra("id" ,id);
             intent.putExtra("Result", 1);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+
         }
     }
 
@@ -211,7 +226,11 @@ public class RespondSignature extends AppCompatActivity implements View.OnClickL
         Intent intent = new Intent(this, DeclineReason.class);
 
         intent.putExtra("id" , id);
+        finish();
         startActivity(intent);
+    }
+    private void refreshMyReq(){
+        SignCollabState.getSubject().onNext(refresh.MY_REQ);
     }
 
 }

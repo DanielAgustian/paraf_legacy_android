@@ -43,6 +43,7 @@ public class FragmentRejected extends Fragment {
     ImageView ivList, ivGrid;
     boolean isGrid = false;
     RecyclerView rvToday;
+    LinearLayout llLoading;
     List<SignModel> sign;
     View root;
     Util util = new Util();
@@ -54,13 +55,16 @@ public class FragmentRejected extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_child_collab, container, false);
-
+        initLoadingComp(root);
         initData();
         initSpinner(root);
         observe();
         return root;
     }
-
+    private void initLoadingComp(View root) {
+        llLoading = root.findViewById(R.id.llLoading);
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+    }
     private void observe() {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
@@ -91,11 +95,12 @@ public class FragmentRejected extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initData();
+        //initData();
     }
 
 
     private void initData() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -106,6 +111,7 @@ public class FragmentRejected extends Fragment {
     }
 
     private void initDataSort(String sort) {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -173,6 +179,7 @@ public class FragmentRejected extends Fragment {
         //rvToday.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvToday.setLayoutManager(isGrid ? new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL):new LinearLayoutManager(getActivity()));
         rvToday.setAdapter(adapter);
+        endLoading();
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
@@ -203,5 +210,14 @@ public class FragmentRejected extends Fragment {
 
             }
         });
+    }
+    void beginLoading(){
+        llLoading.setVisibility(View.VISIBLE);
+        rvToday.setVisibility(View.GONE);
+    }
+
+    void endLoading(){
+        llLoading.setVisibility(View.GONE);
+        rvToday.setVisibility(View.VISIBLE);
     }
 }

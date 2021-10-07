@@ -36,6 +36,7 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.model.InviteSignersModel;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.model.GetMyReqDetailModel;
@@ -45,6 +46,7 @@ import com.yokesen.parafdigitalyokesen.model.MyReqDetailModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,7 +88,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
 
     MyReqDetailModel detailModel;
     EditText etName, etEmail, etDocumentName, etDescription, etLink, etMessage, etSignNumber, etKode;
-
+    String statusCollab = "";
     String choosenDate = "", choosenTime= "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,18 +118,26 @@ public class RecreateCollabActivity extends AppCompatActivity {
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
     private int getIntentData() {
@@ -482,7 +492,7 @@ public class RecreateCollabActivity extends AppCompatActivity {
         btnDueDate = findViewById(R.id.btnDueDate);
         choosenDate = util.changeFormatDate(detailModel.getDueDate());
         btnDueDate.setText(choosenDate);
-
+        statusCollab = detailModel.getStatus().toLowerCase();
 
         btnTime = findViewById(R.id.btnTime);
         choosenTime = detailModel.getTime();
@@ -720,5 +730,14 @@ public class RecreateCollabActivity extends AppCompatActivity {
                 }, mHour, mMinute, false);
         timePickerDialog.show();
 
+    }
+    private void refreshCollab(){
+        if(statusCollab.contains("wait")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_WAIT);
+        } else if (statusCollab.contains("accept")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_ACC);
+        } else if (statusCollab.contains("rej")){
+            SignCollabState.getSubject().onNext(refresh.COLLAB_REJ);
+        }
     }
 }

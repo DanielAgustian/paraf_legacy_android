@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+
+    <TextView
+        android:text="ADad"
+        android:id="@+id/tvTabTitle"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:textSize="@dimen/font_13"
+
+        android:textStyle="bold"
+        android:textColor="@color/colorGrayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+
+        android:id="@+id/llBadge"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:background="@drawable/badge_tab_bg"
+        android:paddingVertical="2dp"
+        android:paddingHorizontal="4dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvBadge"
+            android:text="0"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_11"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</RelativeLayout>

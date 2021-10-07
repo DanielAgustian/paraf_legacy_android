@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.constant.Variables;
+import com.yokesen.parafdigitalyokesen.constant.refresh;
 import com.yokesen.parafdigitalyokesen.util.DynamicLinkUtil;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.adapter.InviteSignersDialogAdapter;
@@ -40,8 +42,10 @@ import com.yokesen.parafdigitalyokesen.model.SignatureDetailModel;
 import com.yokesen.parafdigitalyokesen.model.SignersModel;
 import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
+import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.add_sign.child_result.RecreateSignActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
+import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +69,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     SignatureDetailModel detailModel;
     //SignatureDetailModel detailModel;
     Util util = new Util();
-    PictureDrawable pd;
+    Bitmap pd;
     String choosenDate = "";
     String choosenTime = "";
     @Override
@@ -99,18 +103,26 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
 
     @Override
@@ -169,7 +181,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         pd = util.makeQRCOde(detailModel.getQr_code());
 
         ImageView iv = findViewById(R.id.ivQRScan);
-        iv.setImageDrawable(pd);
+        iv.setImageBitmap(pd);
 
         TextView tvCreatedBy = findViewById(R.id.tvCreatedBy);
         tvCreatedBy.setText(detailModel.getCreatedBy());
@@ -538,6 +550,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     private void onSuccessRename(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             dismissDialog(dialogRename);
+            refreshMySign();
             initData();
         }
     }
@@ -550,7 +563,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     private void onSuccessDelete(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             dismissDialog(deleteDialog);
-            initData();
+            refreshMySign();
+            back();
+
         }
     }
 
@@ -575,9 +590,9 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                utilFile.downloadFileAPI29((util.makeBitmap(pd)), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                utilFile.downloadFileAPI29(pd, type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }else{
-                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
+                utilFile.downloadFile(pd, type, typeShare, detailModel.getTitle()+detailModel.getInitiatedOn());
             }
         }
     }
@@ -592,6 +607,7 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
     private void onSuccessInvite(SimpleResponse simpleResponse) {
         if(simpleResponse != null){
             util.toastMisc(this, "Successfully Add Signers!");
+            refreshMySign();
             back();
         }
     }
@@ -654,4 +670,10 @@ public class ResultSignature extends AppCompatActivity implements View.OnClickLi
         timePickerDialog.show();
 
     }
+
+
+    private void refreshMySign(){
+        SignCollabState.getSubject().onNext(refresh.MY_SIGN);
+    }
+
 }

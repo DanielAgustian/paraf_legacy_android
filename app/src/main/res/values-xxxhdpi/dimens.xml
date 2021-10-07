@@ -30,6 +30,8 @@
     <dimen name="icon_40">40dp</dimen>
     <dimen name="ic_45">46dp</dimen>
     <dimen name="ic_60">60dp</dimen>
+    <dimen name="ic_65">65dp</dimen>
+
     <dimen name="ic_80">80dp</dimen>
 
     <dimen name="margin_25">28dp</dimen>

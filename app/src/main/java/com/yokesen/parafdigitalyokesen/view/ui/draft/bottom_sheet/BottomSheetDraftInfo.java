@@ -2,6 +2,7 @@ package com.yokesen.parafdigitalyokesen.view.ui.draft.bottom_sheet;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,7 +60,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
     String token;
     ArrayList<String> typeShare =  new ArrayList<>();
     UtilWidget utilWidget = new UtilWidget(getContext());
-    PictureDrawable pd;
+    Bitmap pd;
     /*
     * where is identifier where are they from
     *  0=> Draft My Sign Fragment
@@ -114,7 +115,7 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         pd = util.makeQRCOde(sign.getQr_code());
 
         ImageView iv = v.findViewById(R.id.ivBotNavInfo);
-        iv.setImageDrawable(pd);
+        iv.setImageBitmap(pd);
 
         if(where == 1){
             llRegenerate.setVisibility(View.GONE);
@@ -445,9 +446,9 @@ public class BottomSheetDraftInfo extends BottomSheetDialogFragment implements V
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                utilFile.downloadFileAPI29((util.makeBitmap(pd)), type, typeShare, sign.getTitle());
+                utilFile.downloadFileAPI29(pd, type, typeShare, sign.getTitle());
             }else{
-                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, sign.getTitle());
+                utilFile.downloadFile(pd, type, typeShare, sign.getTitle());
             }
         }
     }

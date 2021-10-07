@@ -88,7 +88,9 @@ public class DraftMyRequestFragment extends Fragment {
     View root;
     RecyclerView rvToday;
     List<SignModel> sign;
+    LinearLayout llLoading;
     ImageView ivGrid, ivList;
+    int positionSpinner = 0;
     boolean isGrid = false;
     DisposableObserver disposableRefresh;
     @Override
@@ -96,18 +98,32 @@ public class DraftMyRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root =  inflater.inflate(R.layout.fragment_today, container, false);
+        initLoadingComp(root);
         //initData();
         initSpinner(root);
         observe();
         return root;
 
     }
+    private void initLoadingComp(View root) {
+        llLoading = root.findViewById(R.id.llLoading);
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+    }
     private void observe() {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
             public void onNext(@NonNull refresh refresh) {
                 if(refresh == com.yokesen.parafdigitalyokesen.constant.refresh.MY_REQ){
-                    initData();
+                    if(positionSpinner == 0){
+                        initData();
+                    }else if (positionSpinner == 1){
+                        initDataAccepted();
+                    } else if (positionSpinner == 2){
+                        initDataRejected();
+                    } else{
+                        initData();
+                    }
+
                 }
             }
 
@@ -126,10 +142,11 @@ public class DraftMyRequestFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initData();
+        //initData();
     }
 
     private void initData() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -199,6 +216,7 @@ public class DraftMyRequestFragment extends Fragment {
         //rvToday.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvToday.setLayoutManager(isGrid ? new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL):new LinearLayoutManager(getActivity()));
         rvToday.setAdapter(adapter);
+        endLoading();
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
@@ -215,6 +233,7 @@ public class DraftMyRequestFragment extends Fragment {
         spinnerLatest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                positionSpinner = i;
                 if (i == 0){
                     initData();
                 } else if (i==1){
@@ -226,11 +245,13 @@ public class DraftMyRequestFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                initData();
+
+                //initData();
             }
         });
     }
     private void initDataRejected() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -240,6 +261,7 @@ public class DraftMyRequestFragment extends Fragment {
         getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
     private void initDataAccepted() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -247,5 +269,15 @@ public class DraftMyRequestFragment extends Fragment {
         Log.d("HomeTOKEN", token);
         Observable<GetSignatureModel> getSignatureList = apiInterface.getMyReqAccList(token);
         getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
+    }
+
+    void beginLoading(){
+        llLoading.setVisibility(View.VISIBLE);
+        rvToday.setVisibility(View.GONE);
+    }
+
+    void endLoading(){
+        llLoading.setVisibility(View.GONE);
+        rvToday.setVisibility(View.VISIBLE);
     }
 }

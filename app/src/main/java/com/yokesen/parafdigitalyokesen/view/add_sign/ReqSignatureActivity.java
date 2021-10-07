@@ -43,6 +43,7 @@ import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.InviteSignersModel;
 import com.yokesen.parafdigitalyokesen.model.TypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
+import com.yokesen.parafdigitalyokesen.view.ui.collab.CollabResultActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
 import java.io.File;
@@ -426,18 +427,26 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
     //-----------------------Method for Category Spinner -----------------------
 
@@ -544,7 +553,7 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
     }
     void gotoResultPage(int id){
         this.finish();
-        Intent intent = new Intent(this, ResultReqSignActivity.class);
+        Intent intent = new Intent(this, CollabResultActivity.class);
 
         intent.putExtra("id", id);
         startActivity(intent);

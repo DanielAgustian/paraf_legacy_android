@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.View;
@@ -138,16 +140,23 @@ public class Util {
         return body;
     }
 
-    public PictureDrawable makeQRCOde(String qr){
-        SVG svg = null;
-        try {
-            svg = SVG.getFromString(qr);
-        } catch (SVGParseException e) {
-            e.printStackTrace();
-        }
-        PictureDrawable pd = new PictureDrawable(svg.renderToPicture());
+//    public PictureDrawable makeQRCOde(String qr){
+//        SVG svg = null;
+//        try {
+//            svg = SVG.getFromString(qr);
+//        } catch (SVGParseException e) {
+//            e.printStackTrace();
+//        }
+//        PictureDrawable pd = new PictureDrawable(svg.renderToPicture());
+//
+//        return pd;
+//    }
 
-        return pd;
+    public Bitmap makeQRCOde(String qr){
+
+        byte[] decodedString = Base64.decode(qr, Base64.NO_WRAP);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return bitmap;
     }
     public Bitmap makeBitmap(PictureDrawable pd){
         Bitmap bitmap = Bitmap.createBitmap(pd.getIntrinsicWidth(), pd.getIntrinsicHeight(),Bitmap.Config.ARGB_8888);

@@ -3,6 +3,7 @@ package com.yokesen.parafdigitalyokesen.util;
 import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,8 +22,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getCacheDir;
 
 public class UtilFile {
     Context context;
@@ -180,5 +185,43 @@ public class UtilFile {
         Util util = new Util();
         util.toastMisc(context,"Downloaded with title "+ fileName);
     }
+    public File convertURiToFile(Uri uri){
+        File fileCopy = new File(getCacheDir(), getNameFile(uri));
+        int maxBufferSize = 1 * 1024 * 1024;
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            Log.e("GETFILE","Size " + inputStream);
+            int  bytesAvailable = inputStream.available();
 
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            final byte[] buffers = new byte[bufferSize];
+            FileOutputStream outputStream = new FileOutputStream(fileCopy);
+            int read = 0;
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+            Log.e("File Size","Size " + fileCopy.length());
+            inputStream.close();
+            outputStream.close();
+
+            Log.e("GETFILE","path " + fileCopy.getPath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fileCopy;
+    }
+
+     public String getNameFile(Uri uri){
+        Cursor cursor = context.getContentResolver()
+                .query(uri, null, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            String displayName = cursor.getString(
+                    cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            Log.i("GETFILE", "Display Name: " + displayName);
+            return displayName;
+        } else{
+            return "Unkwnown";
+        }
+    }
 }

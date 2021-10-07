@@ -1,6 +1,7 @@
 package com.yokesen.parafdigitalyokesen.view.ui.collab.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class FragmentAccepted extends Fragment {
     ImageView ivList, ivGrid;
     boolean isGrid = false;
     RecyclerView rvToday;
+    LinearLayout llLoading;
     List<SignModel> sign;
     View root;
     Util util = new Util();
@@ -54,12 +56,18 @@ public class FragmentAccepted extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_child_collab, container, false);
 
-
+        initLoadingComp(root);
         initSpinner(root);
         initData();
         observe();
         return root;
     }
+
+    private void initLoadingComp(View root) {
+        llLoading = root.findViewById(R.id.llLoading);
+        rvToday = root.findViewById(R.id.rvListGridDraft);
+    }
+
     private void observe() {
         disposableRefresh = SignCollabState.getSubject().subscribeWith(new DisposableObserver<refresh>() {
             @Override
@@ -89,10 +97,11 @@ public class FragmentAccepted extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initData();
+        //initData();
     }
 
     private void initData() {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -102,6 +111,7 @@ public class FragmentAccepted extends Fragment {
         getSignatureList.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);
     }
     private void initDataSort(String sort) {
+        beginLoading();
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         PreferencesRepo preferencesRepo = new PreferencesRepo(getActivity());
 
@@ -128,7 +138,7 @@ public class FragmentAccepted extends Fragment {
     }
     private void emptyList(View root) {
 
-        rvToday = root.findViewById(R.id.rvListGridDraft);
+        //rvToday = root.findViewById(R.id.rvListGridDraft);
         LinearLayout llEmptyList = root.findViewById(R.id.llEmptyList);
         rvToday.setVisibility(View.GONE);
         llEmptyList.setVisibility(View.VISIBLE);
@@ -160,15 +170,48 @@ public class FragmentAccepted extends Fragment {
         });
     }
     private void initRecyclerView(View root){
-        rvToday = root.findViewById(R.id.rvListGridDraft);
+        //rvToday = root.findViewById(R.id.rvListGridDraft);
 
         FragmentManager fragmentManager = getParentFragmentManager();
 
         DraftListAdapter adapter = new DraftListAdapter(sign, isGrid, fragmentManager,3);
 
         //rvToday.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvToday.setLayoutManager(isGrid ? new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL):new LinearLayoutManager(getActivity()));
+        //rvToday.setLayoutManager(isGrid ? new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL):new LinearLayoutManager(getActivity()));
+        rvToday.setLayoutManager(isGrid ? new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL){
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+
+                //endLoading();
+//                final int firstVisibleItemPosition = findFirstVisibleItemPositions();
+//                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+//                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+//
+//                if(itemsShown >= adapter.getItemCount()){
+//                    endLoading();
+//                }
+            }
+        }
+                :new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false){
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+
+
+                //endLoading();
+//                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+//                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+//                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+//                Log.d("LayoutCompleted", "itemsShown"+ itemsShown);
+//                util.toastMisc(getActivity(), "itemsShown "+ itemsShown + "itemCount"+ adapter.getItemCount());
+//                if(itemsShown == adapter.getItemCount()){
+//                    endLoading();
+//                }
+            }
+        });
         rvToday.setAdapter(adapter);
+        endLoading();
     }
     public void initSpinner(View root){
         String[] spinnerLatestList = new String[]{
@@ -199,5 +242,15 @@ public class FragmentAccepted extends Fragment {
             }
         });
 
+    }
+
+    void beginLoading(){
+        llLoading.setVisibility(View.VISIBLE);
+        rvToday.setVisibility(View.GONE);
+    }
+
+    void endLoading(){
+        llLoading.setVisibility(View.GONE);
+        rvToday.setVisibility(View.VISIBLE);
     }
 }

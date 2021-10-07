@@ -36,10 +36,10 @@ public class PreferencesRepo {
     }
 
     //----------------------- Allow Biometric Pattern ---------------------------------------//
-    public void setBiometric(){
+    public void setBiometric(int allow){
         SharedPreferences sharedPref = context.getSharedPreferences("LOGIN", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(ALLOW_BIOMETRIC, 1);
+        editor.putInt(ALLOW_BIOMETRIC, allow);
         editor.apply();
     }
     public int getBiometric(){

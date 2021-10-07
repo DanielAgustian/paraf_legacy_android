@@ -2,6 +2,7 @@ package com.yokesen.parafdigitalyokesen.view.ui.collab.bottom_sheet;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class BottomSheetSeeQR extends BottomSheetDialogFragment implements View.
     ImageView ivQR;
     View v;
     Util util = new Util();
-    PictureDrawable pd;
+    Bitmap pd;
 
     ArrayList<String> typeShare =  new ArrayList<>();
     @Nullable
@@ -80,7 +81,7 @@ public class BottomSheetSeeQR extends BottomSheetDialogFragment implements View.
 
         if(qr_code != null && !qr_code.equals("")){
             pd = util.makeQRCOde(qr_code);
-            ivQR.setImageDrawable(pd);
+            ivQR.setImageBitmap(pd);
         }
 
         String status = sign.getStatus().trim().toLowerCase();
@@ -198,9 +199,9 @@ public class BottomSheetSeeQR extends BottomSheetDialogFragment implements View.
         if(type.equals("") ){
         }else{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                utilFile.downloadFileAPI29((util.makeBitmap(pd)), type, typeShare, sign.getName()+util.milisNow());
+                utilFile.downloadFileAPI29(pd, type, typeShare, sign.getName()+util.milisNow());
             }else{
-                utilFile.downloadFile(util.makeBitmap(pd), type, typeShare, sign.getName()+util.milisNow());
+                utilFile.downloadFile(pd, type, typeShare, sign.getName()+util.milisNow());
             }
         }
     }

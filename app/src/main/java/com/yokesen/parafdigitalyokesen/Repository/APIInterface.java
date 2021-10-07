@@ -4,6 +4,7 @@ package com.yokesen.parafdigitalyokesen.Repository;
 
 import com.google.gson.annotations.SerializedName;
 import com.yokesen.parafdigitalyokesen.model.AuthModel;
+import com.yokesen.parafdigitalyokesen.model.GetCollabCounterModel;
 import com.yokesen.parafdigitalyokesen.model.GetCollabViewModel;
 import com.yokesen.parafdigitalyokesen.model.GetConnectModel;
 import com.yokesen.parafdigitalyokesen.model.GetDownloadModel;
@@ -14,7 +15,9 @@ import com.yokesen.parafdigitalyokesen.model.GetNotifListModel;
 import com.yokesen.parafdigitalyokesen.model.GetNotifSettingsModel;
 import com.yokesen.parafdigitalyokesen.model.GetPasscodeModel;
 import com.yokesen.parafdigitalyokesen.model.GetProfileModel;
+import com.yokesen.parafdigitalyokesen.model.GetQRSignModel;
 import com.yokesen.parafdigitalyokesen.model.GetSaveAllSign;
+import com.yokesen.parafdigitalyokesen.model.GetSignCounterModel;
 import com.yokesen.parafdigitalyokesen.model.GetSignDetailModel;
 import com.yokesen.parafdigitalyokesen.model.GetSignNumberModel;
 import com.yokesen.parafdigitalyokesen.model.GetSignatureModel;
@@ -92,6 +95,12 @@ public interface APIInterface {
     Observable<GetHomeModel> getHomeStat(@Header("Authorization") String token);
 
     //------------------------------ Profile API---------------
+    @Multipart
+    @POST("api/v1/user/upload-photo")
+    Observable<SimpleResponse> editPhoto(@Header("Authorization") String token,
+                                              @Part MultipartBody.Part file
+    );
+
     @GET("api/v1/user")
     Observable<GetProfileModel> getProfile(@Header("Authorization") String token);
 
@@ -518,5 +527,33 @@ public interface APIInterface {
     @GET("api/v1/notifications/settings/toggle-rejected")
     Observable<SimpleResponse> ToggleRejectedSetting(
             @Header("Authorization") String token
+    );
+
+    //----------------------------------- Tab Counter ----------------------------------//
+    @GET("api/v1/sign/total")
+    Observable<GetSignCounterModel> GetSignCounter(
+            @Header("Authorization") String token
+    );
+
+    @GET("api/v1/collab/total")
+    Observable<GetCollabCounterModel> GetCollabCounter(
+            @Header("Authorization") String token
+    );
+
+
+    //----------------------------------- GET QR SIGN -------------------------------------//
+
+    @GET("api/v1/c/{tokenLink}")
+    Observable<GetQRSignModel> GetSignQRData(
+            @Header("Authorization") String token,
+            @Path("tokenLink") String tokenLink
+    );
+
+    @FormUrlEncoded
+    @POST("api/v1/check-code")
+    Observable<GetQRSignModel> CheckQrPasscode(
+            @Header("Authorization") String token,
+            @Field("qr_code") String qrCode,
+            @Field("code") String code
     );
 }

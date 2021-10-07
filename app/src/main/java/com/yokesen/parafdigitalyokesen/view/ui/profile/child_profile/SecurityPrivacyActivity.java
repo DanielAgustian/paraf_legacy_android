@@ -1,13 +1,20 @@
 package com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
@@ -33,11 +41,15 @@ import com.yokesen.parafdigitalyokesen.viewModel.SecurityState;
 import com.yokesen.parafdigitalyokesen.viewModel.SignCollabState;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 public class SecurityPrivacyActivity extends AppCompatActivity implements View.OnClickListener{
     Switch switchFaceId;
@@ -48,6 +60,8 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
     Util util = new Util();
     boolean fromDialog = false;
     DisposableObserver observer;
+    int REQUEST_CODE_BIOMETRIC = 100;
+    int isActive = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +131,7 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
     private void onSuccessGetData(GetPasscodeModel getPasscodeModel) {
         if(getPasscodeModel!=null){
             PasscodeModel model= getPasscodeModel.getData();
-            int isActive = model.getIsActive();
+            isActive = model.getIsActive();
             String passcode = model.getPasscode();
 
             preferencesRepo.setPasscode(passcode);
@@ -135,13 +149,22 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
     public void initComponent(boolean checkPasscode, String passcode){
         RelativeLayout rlPasscode = findViewById(R.id.rlChangePasscode);
         rlPasscode.setOnClickListener(this);
+
         switchFaceId = findViewById(R.id.switchFaceID);
+        int allowBiometric = preferencesRepo.getBiometric();
+        if(allowBiometric == 0){
+            switchFaceId.setChecked(false);
+        }else{
+            switchFaceId.setChecked(true);
+        }
 
         switchFaceId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     dialogFaceID();
+                } else{
+                    preferencesRepo.setBiometric(0);
                 }
             }
         });
@@ -247,9 +270,9 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         TextView tvTitle = dialog.findViewById(R.id.tvTitleDialog);
-        tvTitle.setText("Do you want to allow “Paraf” to use Face ID?");
+        tvTitle.setText("Do you want to allow “Paraf” to use Fingerprint ID?");
         TextView tvData = dialog.findViewById(R.id.tvTitleData);
-        tvData.setText("Paraf can use Face ID to verify your identitiy\n" +
+        tvData.setText("Paraf can use Fingerprint  to verify your identity\n" +
                 "and to secure your data.");
         Button btnCancel = dialog.findViewById(R.id.btnCancel);
         btnCancel.setText("Don't Allow");
@@ -258,6 +281,7 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
             public void onClick(View view) {
 
                 switchFaceId.setChecked(false);
+                preferencesRepo.setBiometric(0);
                 dialog.dismiss();
 
             }
@@ -268,7 +292,7 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                //biometricPrompt();
+                biometricPrompt();
             }
         });
     }
@@ -276,11 +300,11 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
         Intent intent = new Intent(this, child);
         startActivity(intent);
     }
-    private void biometricPrompt() {
-        util.toastMisc(this, "Begin biomteric");
-        UtilWidget utilWidget = new UtilWidget(this);
-        utilWidget.biometricPrompt();
-    }
+//    private void biometricPrompt() {
+////        util.toastMisc(this, "Begin biomteric");
+//        UtilWidget utilWidget = new UtilWidget(this);
+//        utilWidget.biometricPrompt();
+//    }
 
     private void toggleSwitch(){
         Observable<SimpleResponse> callPasscode = apiInterface.TogglePasscode(token);
@@ -289,6 +313,13 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
 
     private void onSuccessToggle(SimpleResponse simpleResponse) {
         util.toastMisc(this, "Success!");
+        if(isActive == 0){
+            isActive = 1;
+            preferencesRepo.setAllowPasscode(1);
+        }else{
+            isActive = 0;
+            preferencesRepo.setAllowPasscode(0);
+        }
     }
 
     private void onFailedToggle(Throwable throwable) {
@@ -317,17 +348,121 @@ public class SecurityPrivacyActivity extends AppCompatActivity implements View.O
         super.onResume();
         String passcode = preferencesRepo.getPasscode();
         int isActive = preferencesRepo.getAllowPasscode();
+        long intervetion = 30 * 60 * 1000;
+        long milisNow = Calendar.getInstance().getTimeInMillis();
+        long milisSelisih = milisNow - milisStart;
 
-        if(isActive == 1 && passcode!= null && passcode.equals("")){
-            long intervetion = 30 * 60 * 1000;
-            long milisNow = Calendar.getInstance().getTimeInMillis();
-            long milisSelisih = milisNow - milisStart;
+        if(isActive == 1 && passcode!= null && !passcode.equals("")){
+
             if(intervetion < milisSelisih && milisSelisih!= milisNow){
                 Intent intent = new Intent(this, PasscodeView.class);
                 startActivity(intent);
             }
         }
 
-        //biometricPrompt();
+        int isBiometricActive = preferencesRepo.getBiometric();
+        if(isBiometricActive == 1){
+            if(intervetion < milisSelisih && milisSelisih!= milisNow){
+                UtilWidget uw = new UtilWidget(this);
+                uw.biometricPrompt();
+            }
+        }
+
     }
+
+    public void biometricPrompt(){
+//        BiometricManager biometricManager = BiometricManager.from(this);
+//
+//        switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
+//            case BiometricManager.BIOMETRIC_SUCCESS:
+//                Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
+//                util.toastMisc(this, "Success!");
+//                break;
+//            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+//                Log.e("MY_APP_TAG", "No biometric features available on this device.");
+//                switchFaceId.setChecked(false);
+//                util.toastMisc(this, "No biometric features available on this device.");
+//                break;
+//            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+//                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
+//                switchFaceId.setChecked(false);
+//                util.toastMisc(this, "Biometric features are currently unavailable.");
+//                break;
+//            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                // Prompts the user to create credentials that your app accepts.
+//                final Intent enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+//                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                        BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
+//                startActivityForResult(enrollIntent, REQUEST_CODE_BIOMETRIC);
+//                break;
+//        }
+
+        Executor executor;
+        BiometricPrompt biometricPrompt;
+        BiometricPrompt.PromptInfo promptInfo;
+        executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode,
+                                              @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                switchFaceId.setChecked(false);
+                String error = errString.toString().toLowerCase();
+                if(error.contains("enrolled")){
+                    util.toastMisc(SecurityPrivacyActivity.this,"You dont have any fingerprint recorded. Please record new one and try again.");
+                    Intent intent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+                    startActivity(intent);
+                }else if(error.contains("unavailable")|| error.contains("biometric sensor")){
+                    util.toastMisc(SecurityPrivacyActivity.this,"Your device isnt compatible with this feature.");
+
+                }else if(error.contains("have pin")){
+                    util.toastMisc(SecurityPrivacyActivity.this,"You need pin, pattern, or password in this device to use fingerprint feature");
+                }
+                else{
+                    Toast.makeText(SecurityPrivacyActivity.this,
+                            "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                            .show();
+                }
+                preferencesRepo.setBiometric(0);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(
+                    @NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(SecurityPrivacyActivity.this,
+                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                switchFaceId.setChecked(true);
+                preferencesRepo.setBiometric(1);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(SecurityPrivacyActivity.this, "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show();
+                switchFaceId.setChecked(false);
+                preferencesRepo.setBiometric(0);
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for Teken")
+                .setSubtitle("Log in using your biometric credential")
+                .setNegativeButtonText("Use account password")
+                .build();
+
+        biometricPrompt.authenticate(promptInfo);
+
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == REQUEST_CODE_BIOMETRIC && resultCode == RESULT_OK){
+//            switchFaceId.setChecked(true);
+//        }
+//    }
 }

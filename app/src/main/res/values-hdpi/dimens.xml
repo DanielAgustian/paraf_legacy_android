@@ -37,7 +37,7 @@
     <dimen name= "ic_16">15dp</dimen>
     <dimen name="ic_80">72dp</dimen>
     <dimen name="ic_60">55dp</dimen>
-
+    <dimen name="ic_65">60dp</dimen>
     <dimen name="empty_pic_height">195dp</dimen>
     <dimen name="empty_pic_width">165dp</dimen>
 

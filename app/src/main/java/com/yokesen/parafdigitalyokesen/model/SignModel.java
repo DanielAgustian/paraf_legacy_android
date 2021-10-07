@@ -41,9 +41,9 @@ public class SignModel {
     }
 
     public String getQr_code() {
-        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
-        String text = new String(data, StandardCharsets.UTF_8);
-        return text;
+//        byte[] data = Base64.decode(qr_code, Base64.DEFAULT);
+//        String text = new String(data, StandardCharsets.UTF_8);
+        return qr_code;
     }
 
     public String getLocation() {

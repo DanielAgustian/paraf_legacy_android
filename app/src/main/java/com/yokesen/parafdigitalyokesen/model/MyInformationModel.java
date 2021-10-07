@@ -13,6 +13,10 @@ public class MyInformationModel {
     @SerializedName("phone")
     String phone;
 
+
+    @SerializedName("photo")
+    String photo;
+
     @SerializedName("initial")
     String initial;
 
@@ -77,5 +81,9 @@ public class MyInformationModel {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getPhoto() {
+        return photo;
     }
 }

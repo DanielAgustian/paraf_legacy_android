@@ -43,40 +43,46 @@
                 android:id="@+id/toolbar_titleSY" />
         </androidx.appcompat.widget.Toolbar>
         <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_bg"
+            android:id="@+id/llInfo"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/margin_15"
-            android:paddingVertical="@dimen/margin_15"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/ivQRScan"
-                android:layout_marginVertical="@dimen/margin_15"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@color/colorPrimary"
-                android:layout_gravity="center_horizontal"/>
+            <LinearLayout
 
-            <TextView
-                android:id="@+id/tvStatusSign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/margin_15"
-                android:text="Your signature was created successfully"
-                android:textColor="@color/colorSuccess"
-                android:textSize="14sp"
-                 />
-            <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
-                android:background="@color/colorBackgroundBlue"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_bg"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/margin_15"
+                android:paddingVertical="@dimen/margin_15"
+                >
+
+                <ImageView
+                    android:id="@+id/ivQRScan"
+                    android:layout_marginVertical="@dimen/margin_15"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/tvStatusSign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_15"
+                    android:text="Your signature was created successfully"
+                    android:textColor="@color/colorSuccess"
+                    android:textSize="14sp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/colorBackgroundBlue"/>
                 <LinearLayout
 
                     android:layout_marginVertical="@dimen/margin_15"
@@ -127,7 +133,7 @@
                             android:text="nanas.kuning@gmail.com"/>
                     </LinearLayout>
                 </LinearLayout>
-                     <LinearLayout
+                <LinearLayout
 
                     android:layout_marginBottom="@dimen/margin_15"
                     android:orientation="horizontal"
@@ -172,424 +178,451 @@
                     android:layout_height="1sp"
                     android:background="@color/colorBackgroundBlue"/>
 
+                <LinearLayout
+                    android:layout_marginVertical="10dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginBottom="7dp"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document Name"/>
+                    <TextView
+                        android:id="@+id/tvDocName"
+                        android:textSize="@dimen/font_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pengajuan HKI 3 in 1 Ekspresiku Boardgame"
+                        />
+                    <TextView
+                        android:layout_marginTop="@dimen/margin_20"
+
+                        android:layout_marginBottom="7dp"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description"/>
+                    <TextView
+                        android:id="@+id/tvDescRes"
+                        android:textSize="@dimen/font_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pengalihan Hak Cipta-HKI/ Nanas Kuning-UMN No. Surat : 00000033104/UMN/HKI"
+                        />
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="@dimen/font_12"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Category"/>
+                            <TextView
+                                android:id="@+id/tvCategoryRes"
+                                android:textSize="@dimen/font_13"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Surat Pribadi"
+                                />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="0.1"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+
+
+                                android:layout_marginBottom="7dp"
+                                android:textSize="@dimen/font_12"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Type"/>
+                            <TextView
+                                android:id="@+id/tvTypeRes"
+                                android:textSize="@dimen/font_13"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dokumen Resmi"
+                                />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginTop="@dimen/margin_20"
+
+                        android:layout_marginBottom="7dp"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Document Link"/>
+                    <TextView
+                        android:id="@+id/tvLinkRes"
+                        android:textSize="@dimen/font_13"
+                        android:textColor="@color/colorBlue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Google.com/plceholderLink"
+                        />
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/margin_20"
+
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginBottom="7dp"
+                                android:textSize="@dimen/font_12"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status"/>
+                            <TextView
+                                android:id="@+id/tvStatusRes"
+                                android:textSize="@dimen/font_13"
+                                android:textColor="@color/colorSuccess"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Signed"
+                                android:layout_marginBottom="10dp"
+
+                                />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="0.1"
+                            android:layout_height="wrap_content"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.45"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvSizeTitle"
+                                android:layout_marginBottom="7dp"
+                                android:textSize="@dimen/font_12"
+                                android:textColor="@color/colorLightGrayText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Size"/>
+                            <TextView
+                                android:id="@+id/tvSizeRes"
+                                android:textSize="@dimen/font_13"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="156 KB"
+                                android:layout_marginBottom="10dp"
+                                />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
             <LinearLayout
-                android:layout_marginVertical="10dp"
+                android:id="@+id/llPersonRespond"
+                android:paddingVertical="5dp"
+                android:background="@color/colorBackgroundBlue"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvPersonRespond"
+                    android:textSize="@dimen/font_13"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:text="2 Person is left to sign"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginHorizontal="@dimen/margin_20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSigners"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_marginBottom="7dp"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Document Name"/>
-                <TextView
-                    android:id="@+id/tvDocName"
-                    android:textSize="@dimen/font_13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pengajuan HKI 3 in 1 Ekspresiku Boardgame"
-                    />
-                <TextView
-                    android:layout_marginTop="@dimen/margin_20"
-
-                    android:layout_marginBottom="7dp"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Description"/>
-                <TextView
-                    android:id="@+id/tvDescRes"
-                    android:textSize="@dimen/font_13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pengalihan Hak Cipta-HKI/ Nanas Kuning-UMN No. Surat : 00000033104/UMN/HKI"
-                    />
-                <LinearLayout
-                    android:layout_marginTop="@dimen/margin_20"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.45"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-
-
-                            android:layout_marginBottom="7dp"
-                            android:textSize="@dimen/font_12"
-                            android:textColor="@color/colorLightGrayText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Category"/>
-                        <TextView
-                            android:id="@+id/tvCategoryRes"
-                            android:textSize="@dimen/font_13"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Surat Pribadi"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_weight="0.1"
-                        android:layout_height="wrap_content"/>
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.45"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-
-
-                            android:layout_marginBottom="7dp"
-                            android:textSize="@dimen/font_12"
-                            android:textColor="@color/colorLightGrayText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Type"/>
-                        <TextView
-                            android:id="@+id/tvTypeRes"
-                            android:textSize="@dimen/font_13"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Dokumen Resmi"
-                            />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <TextView
-                    android:layout_marginTop="@dimen/margin_20"
-
-                    android:layout_marginBottom="7dp"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Document Link"/>
-                <TextView
-                    android:id="@+id/tvLinkRes"
-                    android:textSize="@dimen/font_13"
-                    android:textColor="@color/colorBlue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Google.com/plceholderLink"
-                    />
-                <LinearLayout
-                    android:layout_marginTop="@dimen/margin_20"
-
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.45"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_marginBottom="7dp"
-                            android:textSize="@dimen/font_12"
-                            android:textColor="@color/colorLightGrayText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Status"/>
-                        <TextView
-                            android:id="@+id/tvStatusRes"
-                            android:textSize="@dimen/font_13"
-                            android:textColor="@color/colorSuccess"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Signed"
-                            android:layout_marginBottom="10dp"
-
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_weight="0.1"
-                        android:layout_height="wrap_content"/>
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.45"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_marginBottom="7dp"
-                            android:textSize="@dimen/font_12"
-                            android:textColor="@color/colorLightGrayText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Size"/>
-                        <TextView
-                            android:id="@+id/tvSizeRes"
-                            android:textSize="@dimen/font_13"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="156 KB"
-                            android:layout_marginBottom="10dp"
-                            />
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-
-            </LinearLayout>
-        <LinearLayout
-            android:id="@+id/llPersonRespond"
-            android:paddingVertical="5dp"
-            android:background="@color/colorBackgroundBlue"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvPersonRespond"
-                android:textSize="@dimen/font_13"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:text="2 Person is left to sign"
-                />
+                android:paddingHorizontal="@dimen/margin_15"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/colorBackgroundBlue"/>
+                <LinearLayout
+                    android:id="@+id/llSave"
+                    android:clickable="true"
+                    android:focusable="true"
+
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_save"
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Save"
+                        android:textColor="@color/colorLightGrayText"
+                        android:textSize="@dimen/font_12" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llShare"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_share"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Share"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/llDuplicate"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_duplicate"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Duplicate"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llInvite"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_invite"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Invite Signers"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llRegen"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_regen"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Re-create"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llRename"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorLightGrayText"
+                        android:src="@drawable/ic_rename"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Rename"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorLightGrayText"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llDelete"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/button_flat_background"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="8dp"
+                    android:layout_width="match_parent"
+                    android:weightSum="1.0"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:tint="@color/colorError"
+                        android:src="@drawable/ic_delete"
+
+                        android:layout_width="@dimen/ic_20"
+                        android:layout_height="@dimen/ic_20"
+                        />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_15"
+                        android:text="Delete"
+                        android:textSize="@dimen/font_12"
+                        android:textColor="@color/colorError"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginHorizontal="@dimen/margin_20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewSigners"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/emptyLL"
+            android:gravity="center"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/margin_15"
-            >
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1sp"
-                android:background="@color/colorBackgroundBlue"/>
-            <LinearLayout
-                android:id="@+id/llSave"
-                android:clickable="true"
-                android:focusable="true"
+            android:layout_height="match_parent">
 
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ic_teken_logo"
+                android:layout_width="@dimen/qr_width"
+                android:layout_height="@dimen/qr_width"/>
 
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_save"
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Save"
-                    android:textColor="@color/colorLightGrayText"
-                    android:textSize="@dimen/font_12" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llShare"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_share"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Share"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/llDuplicate"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_duplicate"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Duplicate"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llInvite"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_invite"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Invite Signers"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llRegen"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_regen"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Re-create"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llRename"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorLightGrayText"
-                    android:src="@drawable/ic_rename"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Rename"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorLightGrayText"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llDelete"
-                android:focusable="true"
-                android:clickable="true"
-                android:background="@drawable/button_flat_background"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="8dp"
-                android:layout_width="match_parent"
-                android:weightSum="1.0"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:tint="@color/colorError"
-                    android:src="@drawable/ic_delete"
-
-                    android:layout_width="@dimen/ic_20"
-                    android:layout_height="@dimen/ic_20"
-                    />
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:text="Delete"
-                    android:textSize="@dimen/font_12"
-                    android:textColor="@color/colorError"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"/>
-
+            <TextView
+                android:layout_marginHorizontal="@dimen/margin_15"
+                android:id="@+id/messageError"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_15"
+                android:textColor="@color/colorPrimary"
+                android:text="Unathorized"
+                android:textSize="@dimen/font_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 
