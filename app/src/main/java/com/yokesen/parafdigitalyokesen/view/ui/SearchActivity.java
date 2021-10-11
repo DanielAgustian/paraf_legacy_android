@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     Util util = new Util();
-    LinearLayout llLoading;
+    LinearLayout llLoading, llEmptyList;
     SearchModel modelSearch = new SearchModel();
     RecyclerView rvSearch;
     @Override
@@ -109,6 +109,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private void initLoadingComp() {
         llLoading = findViewById(R.id.llLoading);
         rvSearch = findViewById(R.id.rvSearchSuggest);
+        llEmptyList = findViewById(R.id.llEmptyList);
     }
 
 
@@ -248,8 +249,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         if(getSignatureModel != null){
             modelSearch.setType(4);
             modelSearch.setSign(getSignatureModel.getData());
+            if(modelSearch.getSign().size()<1){
+                deterEmptyList();
+            }else{
+                setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            }
 
-            setRecyclerView(modelSearch.getSign(), modelSearch.getType());
         }
     }
 
@@ -258,7 +263,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             modelSearch.setType(3);
             modelSearch.setSign(getSignatureModel.getData());
 
-            setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            if(modelSearch.getSign().size()<1){
+                deterEmptyList();
+            }else{
+                setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            }
         }
     }
 
@@ -267,7 +276,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             modelSearch.setType(2);
             modelSearch.setSign(getSignatureModel.getData());
 
-            setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            if(modelSearch.getSign().size()<1){
+                deterEmptyList();
+            }else{
+                setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            }
         }
     }
 
@@ -276,7 +289,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             modelSearch.setType(1);
             modelSearch.setSign(getSignatureModel.getData());
 
-            setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            if(modelSearch.getSign().size()<1){
+                deterEmptyList();
+            }else{
+                setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            }
         }
     }
 
@@ -285,11 +302,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             modelSearch.setType(0);
             modelSearch.setSign(getSignatureModel.getData());
 
-            setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            if(modelSearch.getSign().size()<1){
+                deterEmptyList();
+            }else{
+                setRecyclerView(modelSearch.getSign(), modelSearch.getType());
+            }
         }
     }
 
     private void onFailedSearchData(Throwable throwable){
+        endLoading();
         util.toastError(this, "API SEARCH", throwable);
     }
 
@@ -350,4 +372,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         llLoading.setVisibility(View.GONE);
         rvSearch.setVisibility(View.VISIBLE);
     }
+    void deterEmptyList(){
+        endLoading();
+
+        llEmptyList.setVisibility(View.VISIBLE);
+        rvSearch.setVisibility(View.GONE);
+
+    }
+
 }

@@ -41,6 +41,7 @@ import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.util.UtilFile;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.MainActivity;
+import com.yokesen.parafdigitalyokesen.view.ui.PDFEditorActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.qr_scanner.QrScannerActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.ChangePasswordActivity;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.HelpActivity;
@@ -73,6 +74,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
     GoogleSignInClient googleSignInClient;
+    LinearLayout llVerifyNotice;
     UtilWidget uw = new UtilWidget(getActivity());
     Util util = new Util();
     @Override
@@ -130,6 +132,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             MyInformationModel myInfo = model.getHome();
             tvName.setText(myInfo.getName());
             tvEmail.setText(myInfo.getEmail());
+
+            if(myInfo.isEmailVerified()){
+                llVerifyNotice.setVisibility(View.GONE);
+            } else{
+                llVerifyNotice.setVisibility(View.VISIBLE);
+            }
+
             if (myInfo.getPhoto() != null){
                 new UtilWidget.DownLoadImageTask(circleAvatar).execute(myInfo.getPhoto());
             }
@@ -140,12 +149,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         tvName = root.findViewById(R.id.tvProfileName);
         tvEmail = root.findViewById(R.id.tvProfileEmail);
         circleAvatar = root.findViewById(R.id.circleAvatarProfile);
+        llVerifyNotice = root.findViewById(R.id.llVerifyNotice);
 
         RelativeLayout rlMyInfo = root.findViewById(R.id.rlMyInfo);
         rlMyInfo.setOnClickListener(this);
 
         RelativeLayout rlChangePassword = root.findViewById(R.id.rlChangePassword);
         rlChangePassword.setOnClickListener(this);
+
+        RelativeLayout rlPDFEditor = root.findViewById(R.id.rlPDFEditor);
+        rlPDFEditor.setOnClickListener(this);
+        rlPDFEditor.setVisibility(View.GONE);
 
         RelativeLayout rlMyContact = root.findViewById(R.id.rlMyContact);
         rlMyContact.setOnClickListener(this);
@@ -188,7 +202,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void clickVerify() {
-        util.toastMisc(getContext(), "clicked");
+        String token = preferencesRepo.getToken();
+
+        Observable<SimpleResponse> callResend = apiInterface.resendVerificationEmail(token);
+        try {
+            callResend.subscribeOn(Schedulers.io()).
+                    observeOn(AndroidSchedulers.mainThread()).
+                    subscribe(this::onSuccessResend, this::onFailedResend);
+        } catch (Exception e){
+            Log.e("ProfileCrash", e.getMessage());
+        }
+    }
+
+    private void onFailedResend(Throwable throwable){
+        util.toastMisc(getActivity(), "Email failed to be sent.");
+    }
+
+    private void onSuccessResend(SimpleResponse response) {
+        util.toastMisc(getContext(), "Email has been succesfully sent!");
     }
 
     @Override
@@ -220,6 +251,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.editPPLL:
                 editProfilePicture();
+                break;
+            case R.id.rlPDFEditor:
+                gotoProfileChild(PDFEditorActivity.class);
                 break;
             default:
                 Log.d("ProfileFragment", "Error Data");

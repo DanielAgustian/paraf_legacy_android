@@ -131,6 +131,7 @@ public class FragmentAccepted extends Fragment {
                 initRecyclerView(root);
                 initComponent(root);
             }else{
+                endLoading();
                 emptyList(root);
             }
 

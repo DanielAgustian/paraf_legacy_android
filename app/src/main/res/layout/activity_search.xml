@@ -116,17 +116,43 @@
         </LinearLayout>
     </com.google.android.flexbox.FlexboxLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
         android:layout_marginTop="@dimen/margin_10"
         android:id="@+id/rvSearchSuggest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <LinearLayout
+        android:visibility="visible"
         android:id="@+id/llLoading"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/llEmptyList"
+        android:layout_marginBottom="100dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@drawable/ic_emptysign"
+            android:layout_width="@dimen/empty_pic_width"
+            android:layout_height="@dimen/empty_pic_height"/>
+        <TextView
+            android:id="@+id/tvEmptyNotice"
+            android:layout_marginTop="@dimen/margin_15"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextEmptyState"
+            android:gravity="center_horizontal"
+            android:text="You do not have any signature yet"
+            android:layout_marginHorizontal="@dimen/margin_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

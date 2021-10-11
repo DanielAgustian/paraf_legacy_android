@@ -179,6 +179,7 @@ public class DraftMySIgnatureFragment extends Fragment {
                 initRecyclerView(root);
                 initComponent(root);
             }else{
+                endLoading();
                 emptyList(root);
             }
 

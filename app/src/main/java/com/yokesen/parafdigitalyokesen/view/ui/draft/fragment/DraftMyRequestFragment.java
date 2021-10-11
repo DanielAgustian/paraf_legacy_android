@@ -168,6 +168,7 @@ public class DraftMyRequestFragment extends Fragment {
                 initRecyclerView(root);
                 initComponent(root);
             }else{
+                endLoading();
                 emptyList(root);
             }
 

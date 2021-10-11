@@ -196,7 +196,7 @@ public class ConfirmPasscode extends AppCompatActivity implements View.OnClickLi
                     data.append(element);
                 }
                 String password = data.toString();
-                util.toastMisc(this, "password= " +password);
+
                 //gotoConfirmPasscode();
                 sentToDB(password);
             }

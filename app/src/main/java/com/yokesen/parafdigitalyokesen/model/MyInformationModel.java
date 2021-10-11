@@ -26,6 +26,9 @@ public class MyInformationModel {
     @SerializedName("company")
     String company;
 
+    @SerializedName("is_email_verified")
+    boolean emailVerified;
+
     public MyInformationModel(String name, String email, String phone, String initial, String position, String company) {
         this.name = name;
         this.email = email;
@@ -85,5 +88,9 @@ public class MyInformationModel {
 
     public String getPhoto() {
         return photo;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
     }
 }

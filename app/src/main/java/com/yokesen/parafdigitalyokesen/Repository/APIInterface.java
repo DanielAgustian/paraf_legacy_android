@@ -101,14 +101,29 @@ public interface APIInterface {
                                               @Part MultipartBody.Part file
     );
 
+    @GET("api/v1/verify/{tokenEmail}")
+    Observable<SimpleResponse> verifyEmail(@Path("tokenEmail") String tokenEmail);
+
+    @GET("api/v1/user/resend-email")
+    Observable<SimpleResponse> resendVerificationEmail(@Header("Authorization") String token);
+
     @GET("api/v1/user")
     Observable<GetProfileModel> getProfile(@Header("Authorization") String token);
 
     @GET("api/v1/user/my-information")
     Observable<GetMyInfoModel> getMyInfo(@Header("Authorization") String token);
 
+
+
+    @FormUrlEncoded
     @PUT("api/v1/user/my-information")
-    Observable<SimpleResponse> putMyInfo(@Header("Authorization") String token, @Body MyInformationModel model);
+    Observable<SimpleResponse> putMyInfo(@Header("Authorization") String token,
+                                         @Field("name") String name,
+                                         @Field("email") String email,
+                                         @Field("phone") String phone,
+                                         @Field("initial") String initial,
+                                         @Field("company") String company
+                                         );
 
     @FormUrlEncoded
     @PUT("api/v1/user/change-password")

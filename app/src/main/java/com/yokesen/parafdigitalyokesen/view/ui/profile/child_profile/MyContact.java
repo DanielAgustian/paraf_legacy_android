@@ -186,6 +186,7 @@ public class MyContact extends AppCompatActivity {
                 contactList = contact;
                 initRecyclerView(contact);
             }else{
+                endLoading();
                 emptyList();
             }
         }

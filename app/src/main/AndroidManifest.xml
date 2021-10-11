@@ -10,14 +10,11 @@
         android:roundIcon="@mipmap/ic_teken_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParafDigitalYokesen">
-        <activity android:name=".view.ui.QrScanResultActivity"></activity>
-        <activity android:name=".view.ui.profile.child_profile.security.qr_scanner.QrScannerActivity"></activity>
-
-
+        <activity android:name=".view.ui.PDFEditorActivity"></activity>
+        <activity android:name=".view.ui.QrScanResultActivity" />
+        <activity android:name=".view.ui.profile.child_profile.security.qr_scanner.QrScannerActivity" />
         <activity android:name=".view.ui.profile.child_profile.security.PasscodeView" />
-
         <activity android:name=".view.ui.collab.RecreateCollabActivity" />
-
         <activity android:name=".view.ui.collab.CollabResultActivity" />
         <activity android:name=".view.add_sign.child_result.RecreateSignActivity" />
         <activity android:name=".view.ui.profile.child_profile.child_help.AddContactActivity" />
@@ -32,6 +29,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".view.ui.collab.FinalDocumentActivity" />
         <activity android:name=".view.ui.profile.child_profile.child_help.PrivacyPolicyActivity" />
         <activity android:name=".view.ui.profile.child_profile.child_help.TermConditionActivity" />
@@ -68,18 +76,18 @@
         <activity android:name=".view.ui.draft.RespondSignature" />
         <activity android:name=".view.register_activity" />
         <activity android:name=".view.MainActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
     </application>
+
     <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
 </manifest>

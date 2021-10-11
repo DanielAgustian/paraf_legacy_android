@@ -1,6 +1,7 @@
 package com.yokesen.parafdigitalyokesen.view;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,7 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,11 +35,13 @@ import com.yokesen.parafdigitalyokesen.Repository.APIClient;
 import com.yokesen.parafdigitalyokesen.Repository.APIInterface;
 import com.yokesen.parafdigitalyokesen.Repository.PreferencesRepo;
 import com.yokesen.parafdigitalyokesen.constant.Variables;
+import com.yokesen.parafdigitalyokesen.model.GetNotifListModel;
 import com.yokesen.parafdigitalyokesen.model.GetPasscodeModel;
 import com.yokesen.parafdigitalyokesen.model.GetProfileModel;
 import com.yokesen.parafdigitalyokesen.model.GetTypeCategoryModel;
 import com.yokesen.parafdigitalyokesen.model.PasscodeModel;
 import com.yokesen.parafdigitalyokesen.model.ProfileModel;
+import com.yokesen.parafdigitalyokesen.model.SimpleResponse;
 import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.add_sign.ResultSignature;
@@ -58,10 +65,11 @@ public class NavBarActivity  extends AppCompatActivity {
     Util util = new Util();
     long milisStart = 0;
     PreferencesRepo preferencesRepo;
-
+    APIInterface apiInterface;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navbar);
+        apiInterface = APIClient.getClient().create(APIInterface.class);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -89,7 +97,7 @@ public class NavBarActivity  extends AppCompatActivity {
     }
 
     private void getPasscodeData() {
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
         preferencesRepo = new PreferencesRepo(this);
         String token = preferencesRepo.getToken();
         Observable<GetPasscodeModel> getProfile= apiInterface.GetPasscode(token);
@@ -109,7 +117,7 @@ public class NavBarActivity  extends AppCompatActivity {
     }
 
     void getProfile(){
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
         preferencesRepo = new PreferencesRepo(this);
         String token = preferencesRepo.getToken();
         Observable<GetProfileModel> getProfile= apiInterface.getProfile(token);
@@ -185,7 +193,10 @@ public class NavBarActivity  extends AppCompatActivity {
                             deepLink = pendingDynamicLinkData.getLink();
                             myLink = deepLink.toString();
                             String [] data =  myLink.split("/");
-                            if(data[3].equals("c")){
+                            if(data[3].equals("verify")){
+                                String tokenEmail = data[4];
+                                doVerify(tokenEmail);
+                            } else if(data[3].equals("c")){
                                 Intent intent= new Intent(NavBarActivity.this, QrScanResultActivity.class);
                                 intent.putExtra("qrCode", data[4]);
                                 startActivity(intent);
@@ -227,5 +238,39 @@ public class NavBarActivity  extends AppCompatActivity {
                 });
     }
 
+    private void doVerify(String tokenEmail) {
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        preferencesRepo = new PreferencesRepo(this);
 
+
+        Observable<SimpleResponse> verifyEmail = apiInterface.verifyEmail(tokenEmail);
+        verifyEmail.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                this::onSuccessVerify, this::onFailedVerify);
+    }
+
+    private void onFailedVerify(Throwable throwable) {
+        util.toastError(this, "API Verify Email", throwable);
+    }
+
+    private void onSuccessVerify(SimpleResponse response) {
+        openDialogVerify();
+    }
+
+
+    private void openDialogVerify(){
+        Dialog dialog  = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_verification);
+        dialog.setCancelable(true);
+        dialog.show();
+        ImageView ivClose = dialog.findViewById(R.id.ivClose);
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+    }
 }

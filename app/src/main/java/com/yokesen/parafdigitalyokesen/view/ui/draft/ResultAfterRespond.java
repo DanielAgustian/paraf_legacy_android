@@ -42,7 +42,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ResultAfterRespond extends AppCompatActivity implements View.OnClickListener {
 
-    int result, id;
+    //int result,
+    int search;
+    int id;
     String token;
     APIInterface apiInterface;
     PreferencesRepo preferencesRepo;
@@ -103,7 +105,7 @@ public class ResultAfterRespond extends AppCompatActivity implements View.OnClic
 
 
     private void initData(){
-        result = getIntent().getIntExtra("Result", -1) ;
+        //result = getIntent().getIntExtra("Result", -1) ;
         id = getIntent().getIntExtra("id", id);
         Observable<GetMyReqDetailModel> getDetails = apiInterface.getMyRequestDetail(token, id);
         getDetails.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccess, this::onFailed);

@@ -3,7 +3,12 @@ package com.yokesen.parafdigitalyokesen.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.yokesen.parafdigitalyokesen.R;
@@ -15,6 +20,8 @@ import com.yokesen.parafdigitalyokesen.util.Util;
 import com.yokesen.parafdigitalyokesen.util.UtilWidget;
 import com.yokesen.parafdigitalyokesen.view.ui.profile.child_profile.security.PasscodeView;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         FirebaseApp.initializeApp(this);
+        //initFacebook();
         Timer obRunTime = new Timer();
         obRunTime.schedule(new TimerTask() {
             @Override
@@ -37,8 +45,24 @@ public class SplashScreenActivity extends AppCompatActivity {
                 gotoMainActivity();
             }
         },2000);
-    }
 
+    }
+//    void initFacebook(){
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.yokesen.parafdigitalyokesen",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        }
+//        catch (PackageManager.NameNotFoundException e) {
+//        }
+//        catch (NoSuchAlgorithmException e) {
+//        }
+//    }
     private void gotoMainActivity() {
         PreferencesRepo preferencesRepo = new PreferencesRepo(this);
         String token = preferencesRepo.getToken();

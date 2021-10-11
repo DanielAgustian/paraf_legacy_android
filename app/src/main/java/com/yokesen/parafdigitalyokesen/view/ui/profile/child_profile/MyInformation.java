@@ -178,7 +178,14 @@ public class MyInformation extends AppCompatActivity {
         PreferencesRepo preferencesRepo = new PreferencesRepo(this);
 
         String token = preferencesRepo.getToken();
-        Observable<SimpleResponse> callHome = apiInterface.putMyInfo(token, model);
+        Observable<SimpleResponse> callHome = apiInterface.putMyInfo(
+                token,
+                model.getName(),
+                model.getEmail(),
+                model.getPhone(),
+                model.getInitial(),
+                model.getCompany()
+                );
         try {
             callHome.subscribeOn(Schedulers.io()).
                     observeOn(AndroidSchedulers.mainThread()).

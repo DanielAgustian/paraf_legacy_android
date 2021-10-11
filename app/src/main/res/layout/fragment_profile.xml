@@ -155,6 +155,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/margin_10"/>
                     <LinearLayout
+                        android:id="@+id/llVerifyNotice"
+                        android:layout_marginBottom="@dimen/margin_10"
                         android:orientation="horizontal"
                         android:padding="5dp"
                         android:background="@drawable/verification_notice_bg"
@@ -175,9 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_10"/>
+
                     <RelativeLayout
                         android:background="@drawable/button_flat_white"
                         android:focusable="true"
@@ -204,7 +204,27 @@
                         android:layout_height="1dp"
                         android:background="@color/colorBackground"
                         />
+                    <RelativeLayout
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/button_flat_white"
+                        android:id="@+id/rlPDFEditor"
+                        android:paddingVertical="@dimen/margin_15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/font_14"
 
+                            android:text="PDF Editor"/>
+                        <ImageView
+                            android:layout_width="@dimen/ic_20"
+                            android:layout_height="@dimen/ic_20"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLightGrayText"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
                     <RelativeLayout
                         android:focusable="true"
                         android:clickable="true"

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.yokesen.parafdigitalyokesen.R;
 import com.yokesen.parafdigitalyokesen.Repository.APIClient;
@@ -21,6 +22,8 @@ import io.reactivex.schedulers.Schedulers;
 public class VerifyEmailActivity extends AppCompatActivity implements View.OnClickListener{
     Button btnSendEmail;
     EditText etTokenEmail;
+    TextView tvResendCode;
+    Util util = new Util();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,8 @@ public class VerifyEmailActivity extends AppCompatActivity implements View.OnCli
         btnSendEmail.setOnClickListener(this);
 
         etTokenEmail = findViewById(R.id.etTokenEmail);
+        tvResendCode = findViewById(R.id.tvResendCode);
+        tvResendCode.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +42,9 @@ public class VerifyEmailActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()){
             case R.id.btnSendEmail:
                 gotoNewPassword();
+                break;
+            case  R.id.tvResendCode:
+
                 break;
         }
     }
@@ -64,6 +72,34 @@ public class VerifyEmailActivity extends AppCompatActivity implements View.OnCli
             Intent intent = new Intent(this, NewPassword.class);
             intent.putExtra("email",getIntent().getStringExtra("email") );
             startActivity(intent);
+        }
+    }
+
+    ///----------------------- Resend Code-------------------------------------
+
+    public void gotoVerify() {
+
+
+        String email = getIntent().getStringExtra("email");
+
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+
+        Observable<SimpleResponse> callForgotPassword = apiInterface.forgotPassword(email);
+        callForgotPassword.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSuccessResend, this::onFailedResend);
+
+
+
+    }
+
+    private void onFailedResend(Throwable throwable) {
+        Util util = new Util();
+        util.toastError(this, "API Forgot Password", throwable);
+    }
+
+    private void onSuccessResend(SimpleResponse simpleResponse) {
+        if(simpleResponse != null){
+            util.toastMisc(this, "Code has been sent. \nPlease check your email.");
         }
     }
 }
