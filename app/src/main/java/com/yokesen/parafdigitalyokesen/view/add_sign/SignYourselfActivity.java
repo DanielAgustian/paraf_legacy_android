@@ -502,11 +502,12 @@ public class SignYourselfActivity extends AppCompatActivity  {
 
     //Method to get Trigger File Picker
     private void filePicker() {
-
+        String[] mimeTypes =  {"image/*","application/pdf","application/msword"};
 
         Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
         chooseFile.setType("*/*");
+        chooseFile.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         chooseFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         chooseFile = Intent.createChooser(chooseFile, "Choose a file");
 
@@ -527,8 +528,8 @@ public class SignYourselfActivity extends AppCompatActivity  {
                 llUploadData.setVisibility(View.GONE);
                 llWaitingData.setVisibility(View.VISIBLE);
                 TextView tvWaitingData = findViewById(R.id.tvWaitingUpload);
-                tvWaitingData.setText(fileUri.getPath());
-                setProgressValue(fileUri.getPath());
+                tvWaitingData.setText(getNameFile(fileUri));
+                setProgressValue(getNameFile(fileUri));
             }
         }
     }
@@ -575,6 +576,7 @@ public class SignYourselfActivity extends AppCompatActivity  {
     int progress = 0;
     //For progress bar
     private void setProgressValue(String filePath) {
+        progress = 0;
         ProgressBar simpleProgressBar = findViewById(R.id.simpleProgressBar);
         // set the progress
 

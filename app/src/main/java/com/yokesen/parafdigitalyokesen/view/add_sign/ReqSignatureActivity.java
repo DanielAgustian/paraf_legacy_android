@@ -150,8 +150,8 @@ public class ReqSignatureActivity extends AppCompatActivity implements View.OnCl
                 llUploadData.setVisibility(View.GONE);
                 llWaitingData.setVisibility(View.VISIBLE);
                 TextView tvWaitingData = findViewById(R.id.tvWaitingUploadReq);
-                tvWaitingData.setText(fileUri.getPath());
-                setProgressValue(fileUri.getPath());
+                tvWaitingData.setText(getNameFile(fileUri));
+                setProgressValue(getNameFile(fileUri));
             }
         }
     }
